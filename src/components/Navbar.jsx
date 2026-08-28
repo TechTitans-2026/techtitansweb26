@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { scrollToContact } from '../pages/Home';
 import { useAuth } from '../contexts/AuthContext';
@@ -8,6 +8,17 @@ export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, profile } = useAuth();
+
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
 
   const handleContactClick = () => {
     if (location.pathname !== '/' && location.pathname !== '/home') {
