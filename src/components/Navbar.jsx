@@ -61,11 +61,11 @@ export default function Navbar() {
         {mobileMenuOpen && (
             <div className="md:hidden absolute w-full bg-[#1a1b22]/98 backdrop-blur-xl border-b border-white/5 pb-8 pt-4 shadow-2xl">
                 <div className="flex flex-col px-6 space-y-5 text-sm font-semibold tracking-widest text-[#8c8d96]">
-                    <Link to="/home" className={`nav-link text-lg py-2 w-fit ${(location.pathname === '/' || location.pathname === '/home') ? 'active-link' : ''}`} onClick={() => setMobileMenuOpen(false)}>HOME</Link>
-                    <Link to="/about" className={`nav-link text-lg py-2 w-fit ${location.pathname === '/about' ? 'active-link' : ''}`} onClick={() => setMobileMenuOpen(false)}>ABOUT US</Link>
-                    <Link to="/events" className={`nav-link text-lg py-2 w-fit ${location.pathname === '/events' ? 'active-link' : ''}`} onClick={() => setMobileMenuOpen(false)}>EVENTS</Link>
-                    <Link to="/members" className={`nav-link text-lg py-2 w-fit ${location.pathname === '/members' ? 'active-link' : ''}`} onClick={() => setMobileMenuOpen(false)}>MEMBERS</Link>
-                    <Link to="/quests" onClick={() => setMobileMenuOpen(false)} className={`nav-link text-lg py-2 w-fit ${location.pathname === '/quests' ? 'active-link' : ''}`}>QUESTS</Link>
+                    <Link to="/home" className={`nav-link block w-full text-lg py-3 ${(location.pathname === '/' || location.pathname === '/home') ? 'active-link' : ''}`} onClick={() => setMobileMenuOpen(false)}>HOME</Link>
+                    <Link to="/about" className={`nav-link block w-full text-lg py-3 ${location.pathname === '/about' ? 'active-link' : ''}`} onClick={() => setMobileMenuOpen(false)}>ABOUT US</Link>
+                    <Link to="/events" className={`nav-link block w-full text-lg py-3 ${location.pathname === '/events' ? 'active-link' : ''}`} onClick={() => setMobileMenuOpen(false)}>EVENTS</Link>
+                    <Link to="/members" className={`nav-link block w-full text-lg py-3 ${location.pathname === '/members' ? 'active-link' : ''}`} onClick={() => setMobileMenuOpen(false)}>MEMBERS</Link>
+                    <Link to="/quests" onClick={() => setMobileMenuOpen(false)} className={`nav-link block w-full text-lg py-3 ${location.pathname === '/quests' ? 'active-link' : ''}`}>QUESTS</Link>
 
                     <div className="pt-4 border-t border-white/10 flex flex-col gap-3">
                         {(profile?.role === 'admin' || profile?.role === 'head') && (
