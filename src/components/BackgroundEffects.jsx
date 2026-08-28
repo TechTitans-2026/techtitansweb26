@@ -20,7 +20,7 @@ const BackgroundEffects = () => {
       <div className="circuit-layer"></div>
       
       {/* Background Logo Watermark */}
-      <div className="fixed inset-0 z-0 flex items-center justify-center pointer-events-none opacity-[0.07]">
+      <div className="fixed top-0 left-0 w-full z-0 flex items-center justify-center pointer-events-none opacity-[0.07]" style={{ height: '100vh', height: '100svh' }}>
         <img 
           src="/logo.jpg" 
           alt="" 
