@@ -47,16 +47,20 @@ function App() {
     <AuthProvider>
       <Router>
         <Routes>
-          {/* Landing page — full-screen, no Navbar or BackgroundEffects */}
+          {/* Landing page — full-screen 3D entry point */}
+          <Route path="/" element={
+            <Suspense fallback={<div className="min-h-screen bg-[#080a12]" />}>
+              <TechTitansLanding prefersReducedMotion={prefersReducedMotion} />
+            </Suspense>
+          } />
           <Route path="/landing" element={
             <Suspense fallback={<div className="min-h-screen bg-[#080a12]" />}>
               <TechTitansLanding prefersReducedMotion={prefersReducedMotion} />
             </Suspense>
           } />
 
-          {/* All other pages — wrapped in MainLayout */}
+          {/* All other portal pages — wrapped in MainLayout with Navbar and BackgroundEffects */}
           <Route element={<MainLayout />}>
-            <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/events" element={<Events />} />
@@ -84,7 +88,7 @@ function App() {
             } />
 
             {/* Catch all fallback — inside MainLayout so unmatched paths get navbar */}
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="*" element={<Navigate to="/home" replace />} />
           </Route>
         </Routes>
       </Router>
