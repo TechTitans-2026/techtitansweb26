@@ -1,3 +1,0 @@
-# This is a Node.js (React + Vite) project.
-# Dependencies are managed via package.json and installed via npm install.
-# There are no Python dependencies required to run this frontend application.

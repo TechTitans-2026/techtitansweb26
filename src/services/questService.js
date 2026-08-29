@@ -2,51 +2,60 @@ import { supabase } from '../lib/supabase';
 
 export const questService = {
   async fetchActiveQuests() {
-    const { data, error } = await supabase
-      .from('quests')
-      .select('*')
-      .in('status', ['Active', 'Upcoming'])
-      .order('created_at', { ascending: false });
-    
-    if (error) {
-      console.error('Error fetching quests:', error);
-      throw error;
+    try {
+      const { data, error } = await supabase
+        .from('quests')
+        .select('*')
+        .in('status', ['Active', 'Upcoming'])
+        .order('created_at', { ascending: false });
+      
+      if (error) {
+        console.warn('Quests table info:', error.message);
+        return [];
+      }
+      return data || [];
+    } catch {
+      return [];
     }
-    return data;
   },
 
   async fetchUserHistory(userId) {
-    const { data, error } = await supabase
-      .from('user_quest_history')
-      .select(`
-        *,
-        quests (*)
-      `)
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false });
-    
-    if (error) {
-      console.error('Error fetching user history:', error);
-      throw error;
+    try {
+      const { data, error } = await supabase
+        .from('user_quest_history')
+        .select(`
+          *,
+          quests (*)
+        `)
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false });
+      
+      if (error) {
+        console.warn('User quest history info:', error.message);
+        return [];
+      }
+      return data || [];
+    } catch {
+      return [];
     }
-    return data;
   },
 
   async fetchLeaderboard() {
-    const { data, error } = await supabase
-      .from('leaderboard')
-      .select(`
-        *,
-        profiles!inner(full_name, avatar_url)
-      `)
-      .order('total_points', { ascending: false })
-      .limit(5);
-    
-    if (error) {
-      console.error('Error fetching leaderboard:', error);
-      throw error;
+    try {
+      const { data, error } = await supabase
+        .from('leaderboard')
+        .select('*')
+        .order('total_points', { ascending: false })
+        .limit(5);
+      
+      if (error) {
+        console.warn('Leaderboard info:', error.message);
+        return [];
+      }
+      return data || [];
+    } catch {
+      return [];
     }
-    return data;
   },
 
   async registerForQuest(userId, questId) {
@@ -56,8 +65,9 @@ export const questService = {
         user_id: userId,
         quest_id: questId,
         status: 'participated',
-        xp_awarded: 0 // Base XP can be applied later via admin or trigger
-      });
+        xp_awarded: 0
+      })
+      .select();
     
     if (error) {
       console.error('Error registering for quest:', error);

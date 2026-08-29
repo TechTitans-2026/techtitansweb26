@@ -1,0 +1,586 @@
+/* ============================================================
+   TechTitansLanding.css
+   All selectors scoped under .landing-page to prevent
+   collision with Home.css / Quests.jsx class names.
+   All former ID selectors converted to classes.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&family=JetBrains+Mono:wght@400;600;800&display=swap');
+
+/* ---- Root Container ---- */
+.landing-page {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: radial-gradient(
+    circle at 50% 40%,
+    #262d3c 0%,
+    #1c212d 100%
+  );
+  font-family: 'Outfit', sans-serif;
+  color: white;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: geometricPrecision;
+}
+
+/* ---- Three.js Canvas Container ---- */
+.landing-page .canvas-container {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.landing-page .canvas-container canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  outline: none;
+}
+
+/* ---- Boot Screen ---- */
+.landing-page .boot-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 20000;
+  background: #1c212d;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+  transition: opacity 0.4s ease;
+  padding: 0 6vw;
+  text-align: left;
+}
+
+.landing-page .boot-lines {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  color: #b89eff;
+  min-height: 9.5em;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+  text-shadow: 0 2px 7px rgba(184, 158, 255, 0.45);
+  width: min(700px, 90vw);
+}
+
+.landing-page .boot-lines div {
+  opacity: 0.9;
+}
+
+.landing-page .boot-lines div.ok {
+  color: #8fd19e;
+  text-shadow: 0 2px 7px rgba(143, 209, 158, 0.45);
+}
+
+.landing-page .boot-lines .cursor {
+  display: inline-block;
+  width: 0.5em;
+  height: 1.1em;
+  background: white;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: landingBootCursor 0.8s steps(1) infinite;
+}
+
+@keyframes landingBootCursor {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+.landing-page .boot-percent {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: white;
+  letter-spacing: 0.15em;
+}
+
+.landing-page .boot-bar-track {
+  width: 280px;
+  max-width: 70vw;
+  height: 4px;
+  background: rgba(184, 158, 255, 0.18);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.landing-page .boot-bar-fill {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #b89eff, white);
+  transition: width 1s cubic-bezier(0.3, 0.7, 0.3, 1);
+}
+
+/* ---- Boot Flash ---- */
+.landing-page .boot-flash {
+  position: fixed;
+  inset: 0;
+  z-index: 20001;
+  background: white;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.landing-page .boot-flash.fire {
+  animation: landingBootFlash 0.35s ease-out forwards;
+}
+
+@keyframes landingBootFlash {
+  0% { opacity: 0; }
+  15% { opacity: 0.9; }
+  100% { opacity: 0; }
+}
+
+/* ---- Static Fallback ---- */
+.landing-page .static-fallback {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  padding: 25px;
+  background: #1c212d;
+}
+
+.landing-page .static-fallback h1 {
+  margin: 0 0 15px;
+  font-size: clamp(2.5rem, 10vw, 5rem);
+  font-weight: 900;
+  color: white;
+  text-shadow: 0 3px 15px rgba(184, 158, 255, 0.35);
+}
+
+.landing-page .static-fallback p {
+  margin-bottom: 30px;
+  color: #b89eff;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.landing-page .fallback-btn {
+  border: 0;
+  padding: 16px 30px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #b89eff, #8a64c8);
+  color: #0f0f13;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 900;
+  font-size: 1rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  box-shadow: 0 8px 25px rgba(184, 158, 255, 0.3);
+}
+
+/* ---- Transition Overlay ---- */
+.landing-page .transition-overlay {
+  position: fixed;
+  inset: 0;
+  background: #1c212d;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ---- UI Layer ---- */
+.landing-page .ui-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding-top: 10vh;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  text-align: center;
+}
+
+/* ---- Subtitle ---- */
+.landing-page .subtitle {
+  color: white;
+  letter-spacing: 0.8em;
+  text-transform: uppercase;
+  font-weight: 800;
+  font-size: 0.95rem;
+  margin-bottom: 2rem;
+  text-shadow: 0 2px 8px rgba(184, 158, 255, 0.35);
+  opacity: 0;
+  max-width: 90vw;
+}
+
+/* ---- Title (scoped — does NOT collide with Home.css) ---- */
+.landing-page .title-container {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(3.5rem, 9vw, 8rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  margin-bottom: 1.5rem;
+  line-height: 0.95;
+  opacity: 0;
+  transform: scale(0.9) translateY(20px);
+  max-width: 95vw;
+  -webkit-font-smoothing: antialiased;
+}
+
+.landing-page .title-tech {
+  color: #ffffff;
+  text-shadow:
+    -1px -1px 0 #ffffff,
+    0 1px 0 #e4e4e7,
+    0 2px 0 #a1a1aa,
+    0 3px 0 #71717a,
+    0 5px 15px rgba(0, 0, 0, 0.7),
+    0 0 35px rgba(255, 255, 255, 0.4);
+}
+
+.landing-page .title-titans {
+  color: #b89eff;
+  text-shadow:
+    -1px -1px 0 #e9d5ff,
+    0 1px 0 #a855f7,
+    0 2px 0 #9333ea,
+    0 3px 0 #7e22ce,
+    0 5px 15px rgba(0, 0, 0, 0.8),
+    0 0 35px rgba(184, 158, 255, 0.9),
+    0 0 70px rgba(168, 85, 247, 0.6);
+}
+
+/* ---- Ceremony Text ---- */
+.landing-page .ceremony-text {
+  color: white;
+  letter-spacing: 0.6em;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 3rem;
+  text-transform: uppercase;
+  opacity: 0;
+  border-bottom: 2px solid rgba(184, 158, 255, 0.65);
+  padding: 0 10px 0.8rem;
+  text-shadow: 0 2px 8px rgba(184, 158, 255, 0.30);
+  box-shadow: 0 8px 12px -10px rgba(184, 158, 255, 0.45);
+  max-width: 90vw;
+}
+
+/* ---- Enter Button ---- */
+.landing-page .enter-btn-wrapper {
+  opacity: 0;
+  pointer-events: auto;
+}
+
+.landing-page .enter-btn {
+  background: linear-gradient(135deg, #b89eff 0%, #9b75da 100%);
+  color: #05030a;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 900;
+  font-size: 1.3rem;
+  padding: 1.5rem 4.5rem;
+  border-radius: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  position: relative;
+  box-shadow:
+    inset 0 3px 8px rgba(255, 255, 255, 0.75),
+    0 8px 0 #12141c,
+    0 12px 30px rgba(184, 158, 255, 0.35);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+  overflow: hidden;
+  animation: landingBtnNeonIdle 2.2s ease-in-out 1.4s infinite;
+}
+
+@keyframes landingBtnNeonIdle {
+  0%, 100% {
+    box-shadow:
+      inset 0 2px 6px rgba(255, 255, 255, 0.7),
+      0 8px 0 #12141c,
+      0 10px 22px rgba(184, 158, 255, 0.30);
+  }
+  50% {
+    box-shadow:
+      inset 0 2px 8px rgba(255, 255, 255, 0.8),
+      0 8px 0 #12141c,
+      0 12px 30px rgba(184, 158, 255, 0.45);
+  }
+}
+
+.landing-page .enter-btn::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 100%
+  );
+  transform: rotate(45deg) translate(-100%, -100%);
+  transition: transform 0.6s ease;
+}
+
+.landing-page .enter-btn:hover::after {
+  transform: rotate(45deg) translate(100%, 100%);
+}
+
+.landing-page .enter-btn:hover {
+  background: linear-gradient(135deg, white, #00f3ff);
+  color: #0f1016;
+  transform: translateY(-4px) scale(1.03);
+}
+
+.landing-page .enter-btn:active {
+  transform: translateY(5px);
+}
+
+.landing-page .enter-btn.btn-loading {
+  transform: translateY(5px) !important;
+  background: white !important;
+  color: #12141c !important;
+  box-shadow: 0 0 40px rgba(184, 158, 255, 0.45) !important;
+  pointer-events: none;
+  animation: none !important;
+}
+
+/* ---- Departments Tag ---- */
+.landing-page .depts {
+  position: fixed;
+  left: 6%;
+  bottom: 15%;
+  font-size: 0.95rem;
+  color: white;
+  line-height: 2;
+  font-weight: 800;
+  font-family: 'Outfit', sans-serif;
+  text-shadow:
+    0 2px 8px rgba(184, 158, 255, 0.3),
+    0 4px 12px rgba(0, 0, 0, 0.8);
+  border-left: 4px solid #b89eff;
+  padding-left: 1.5rem;
+  opacity: 0;
+  z-index: 10;
+  box-shadow: -8px 0 15px -10px rgba(184, 158, 255, 0.45);
+}
+
+/* ---- Reveal Animations ---- */
+.landing-page.revealed .subtitle {
+  animation: landingFadeInDown 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.landing-page.revealed .title-container {
+  animation: landingPopIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.1) 0.12s forwards;
+}
+
+.landing-page.revealed .ceremony-text {
+  animation: landingFadeInUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 0.32s forwards;
+}
+
+.landing-page.revealed .enter-btn-wrapper {
+  animation: landingFadeInUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 0.48s forwards;
+}
+
+.landing-page.revealed .depts {
+  animation: landingFadeInRight 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 0.62s forwards;
+}
+
+@keyframes landingFadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes landingFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes landingFadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes landingPopIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.85) translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ---- Tablet Adjustments ---- */
+@media (max-width: 1024px) {
+  .landing-page .title-container {
+    font-size: 6rem;
+  }
+  .landing-page .enter-btn {
+    padding: 1.3rem 3.5rem;
+    font-size: 1.15rem;
+  }
+  .landing-page .depts {
+    bottom: 12%;
+  }
+}
+
+/* ---- Mobile Adjustments ---- */
+@media (max-width: 768px) {
+  .landing-page .ui-layer {
+    padding-top: max(7vh, 55px);
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .landing-page .subtitle {
+    font-size: clamp(0.52rem, 2.2vw, 0.68rem);
+    letter-spacing: clamp(0.18em, 1.5vw, 0.35em);
+    margin-bottom: 1rem;
+    max-width: 95vw;
+    white-space: nowrap;
+  }
+
+  .landing-page .title-container {
+    width: 100%;
+    flex-direction: column;
+    gap: 0;
+    font-size: clamp(2.7rem, 13vw, 4rem);
+    line-height: 0.9;
+    margin-bottom: 1rem;
+    letter-spacing: -0.045em;
+  }
+
+  .landing-page .ceremony-text {
+    font-size: clamp(0.58rem, 2.7vw, 0.75rem);
+    letter-spacing: clamp(0.14em, 1.2vw, 0.28em);
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+    padding: 0 5px 0.6rem;
+    max-width: 92vw;
+  }
+
+  .landing-page .enter-btn-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .landing-page .enter-btn {
+    width: min(78vw, 320px);
+    padding: 1rem 1.5rem;
+    font-size: clamp(0.78rem, 3.2vw, 0.95rem);
+    letter-spacing: 0.1em;
+    border-radius: 12px;
+  }
+
+  .landing-page .depts {
+    display: none;
+  }
+
+  .landing-page .boot-lines {
+    font-size: clamp(0.6rem, 2.8vw, 0.72rem);
+    min-height: 8.5em;
+    width: 90vw;
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (max-width: 420px) {
+  .landing-page .ui-layer {
+    padding-top: 6vh;
+  }
+
+  .landing-page .subtitle {
+    font-size: 0.52rem;
+    letter-spacing: 0.18em;
+    margin-bottom: 0.8rem;
+  }
+
+  .landing-page .title-container {
+    font-size: clamp(2.4rem, 13vw, 3.2rem);
+    margin-bottom: 0.8rem;
+  }
+
+  .landing-page .ceremony-text {
+    font-size: 0.57rem;
+    letter-spacing: 0.13em;
+    margin-bottom: 1.2rem;
+  }
+
+  .landing-page .enter-btn {
+    width: 82vw;
+    padding: 0.9rem 1rem;
+    font-size: 0.78rem;
+  }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+  .landing-page .ui-layer {
+    padding-top: 4vh;
+  }
+
+  .landing-page .subtitle {
+    margin-bottom: 0.4rem;
+    font-size: 0.55rem;
+  }
+
+  .landing-page .title-container {
+    flex-direction: row;
+    font-size: 2.5rem;
+    gap: 12px;
+    margin-bottom: 0.5rem;
+  }
+
+  .landing-page .ceremony-text {
+    font-size: 0.58rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .landing-page .enter-btn {
+    padding: 0.6rem 2rem;
+    font-size: 0.8rem;
+  }
+}

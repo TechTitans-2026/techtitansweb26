@@ -9,7 +9,8 @@ export default function Members() {
 
   useEffect(() => {
     // Simulate network load
-    setTimeout(() => setLoading(false), 600);
+    const timer = setTimeout(() => setLoading(false), 600);
+    return () => clearTimeout(timer);
   }, []);
 
   // Group members by team
@@ -70,7 +71,7 @@ export default function Members() {
       {selectedMember && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={() => setSelectedMember(null)}>
           <div 
-            className="bg-[#1a1b22] border border-[#31333e] rounded-2xl max-w-2xl w-full p-8 relative shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden"
+            className="bg-[#1a1b22] border border-[#31333e] rounded-2xl max-w-2xl w-full max-h-[90dvh] overflow-y-auto p-6 sm:p-8 relative shadow-[0_0_50px_rgba(0,0,0,0.8)]"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Decorative background blur */}
@@ -79,16 +80,17 @@ export default function Members() {
 
             <button 
               onClick={() => setSelectedMember(null)}
-              className="absolute top-6 right-6 text-gray-400 hover:text-white transition-colors z-10 p-2 bg-[#21222b] rounded-full hover:bg-white/10"
+              className="absolute top-5 right-5 text-gray-400 hover:text-white transition-colors z-10 p-2 bg-[#21222b] rounded-full hover:bg-white/10"
+              aria-label="Close member modal"
             >
-              <X size={20} />
+              <X size={18} />
             </button>
 
-            <div className="flex flex-col md:flex-row gap-8 relative z-10">
+            <div className="flex flex-col md:flex-row gap-6 sm:gap-8 relative z-10">
               {/* Photo Placeholder */}
               <div className="w-full md:w-1/3 flex flex-col items-center">
-                <div className="w-32 h-32 md:w-48 md:h-48 bg-[#21222b] rounded-2xl border border-[#31333e] flex items-center justify-center mb-4 shadow-inner">
-                  <User size={64} className="text-[#31333e]" />
+                <div className="w-28 h-28 sm:w-36 sm:h-36 md:w-48 md:h-48 bg-[#21222b] rounded-2xl border border-[#31333e] flex items-center justify-center mb-4 shadow-inner">
+                  <User size={52} className="text-[#31333e]" />
                 </div>
                 <div className="w-full text-center">
                   <span className="inline-block px-3 py-1 bg-[#00f3ff]/10 text-[#00f3ff] border border-[#00f3ff]/20 rounded text-xs font-mono tracking-wider">
@@ -99,23 +101,23 @@ export default function Members() {
 
               {/* Details */}
               <div className="w-full md:w-2/3 flex flex-col justify-center">
-                <h2 className="text-3xl font-black text-white mb-2">{selectedMember.name}</h2>
-                <h4 className="text-[#b89eff] font-mono text-sm mb-6 uppercase tracking-wider">{selectedMember.details}</h4>
+                <h2 className="text-2xl sm:text-3xl font-black text-white mb-1 sm:mb-2">{selectedMember.name}</h2>
+                <h4 className="text-[#b89eff] font-mono text-xs sm:text-sm mb-5 uppercase tracking-wider">{selectedMember.details}</h4>
                 
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                  <div className="bg-[#21222b] p-4 rounded-lg border border-white/5">
+                <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-5">
+                  <div className="bg-[#21222b] p-3.5 sm:p-4 rounded-lg border border-white/5">
                     <p className="text-[10px] text-gray-500 font-mono uppercase mb-1">Course</p>
-                    <p className="text-sm font-bold text-gray-200">{selectedMember.course}</p>
+                    <p className="text-xs sm:text-sm font-bold text-gray-200">{selectedMember.course}</p>
                   </div>
-                  <div className="bg-[#21222b] p-4 rounded-lg border border-white/5">
+                  <div className="bg-[#21222b] p-3.5 sm:p-4 rounded-lg border border-white/5">
                     <p className="text-[10px] text-gray-500 font-mono uppercase mb-1">Year</p>
-                    <p className="text-sm font-bold text-gray-200">{selectedMember.year}</p>
+                    <p className="text-xs sm:text-sm font-bold text-gray-200">{selectedMember.year}</p>
                   </div>
                 </div>
 
-                <div className="bg-black/30 p-4 rounded-lg border border-white/5">
-                  <p className="text-[10px] text-gray-500 font-mono uppercase mb-2">Connect</p>
-                  <p className="text-[#8c8d96] font-mono text-sm">Reach out via the club's official Discord or Contact Us form.</p>
+                <div className="bg-black/30 p-3.5 sm:p-4 rounded-lg border border-white/5">
+                  <p className="text-[10px] text-gray-500 font-mono uppercase mb-1.5">Connect</p>
+                  <p className="text-[#8c8d96] font-mono text-xs sm:text-sm">Reach out via the club's official Discord or Contact Us form.</p>
                 </div>
               </div>
             </div>

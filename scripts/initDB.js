@@ -6,7 +6,7 @@ dotenv.config();
 
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const SUPABASE_DB_URL = process.env.SUPABASE_DB_URL; // Required for DDL
+const SUPABASE_DB_URL = process.env.SUPABASE_DB_URL;
 
 if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
   console.warn("⚠️ Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY in .env. Skipping database initialization.");
@@ -19,11 +19,7 @@ async function initDB() {
   console.log("Initializing database...");
   
   if (!SUPABASE_DB_URL) {
-    console.warn("⚠️ SUPABASE_DB_URL is missing in .env. We cannot run DDL (CREATE TABLE) commands via the standard REST API.");
-    console.warn("Please add SUPABASE_DB_URL (the Postgres connection string) to your .env file to enable self-creating tables.");
-    console.warn("Alternatively, run the SQL manually in your Supabase dashboard.");
-    
-    // We can at least try to seed quests if they don't exist, assuming tables are there.
+    console.warn("⚠️ SUPABASE_DB_URL is missing in .env. Run supabase/setup.sql manually in Supabase Dashboard.");
   } else {
     const { Client } = pg;
     const client = new Client({ connectionString: SUPABASE_DB_URL });
@@ -32,75 +28,69 @@ async function initDB() {
       console.log("Connected to PostgreSQL for schema initialization.");
 
       const schemaSQL = `
-        -- 1. Create quests table
-        CREATE TABLE IF NOT EXISTS public.quests (
-          id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
-          title text NOT NULL,
-          description text,
-          base_xp integer DEFAULT 0,
-          bonus_xp integer DEFAULT 0,
-          rewards text,
-          active_week integer DEFAULT 1,
-          difficulty text CHECK (difficulty IN ('easy', 'medium', 'hard', 'Beginner', 'Intermediate', 'Advanced')) DEFAULT 'medium',
-          status text CHECK (status IN ('Active', 'Upcoming', 'Closed')) DEFAULT 'Active',
-          created_at timestamptz DEFAULT now()
+        CREATE TABLE IF NOT EXISTS public.profiles (
+          id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
+          username TEXT UNIQUE,
+          full_name TEXT,
+          email TEXT,
+          avatar_url TEXT,
+          team TEXT DEFAULT 'General Members',
+          role TEXT CHECK (role IN ('member', 'head', 'admin')) DEFAULT 'member' NOT NULL,
+          xp INTEGER DEFAULT 0 NOT NULL,
+          created_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now()) NOT NULL
         );
 
-        -- 2. Create user_quest_history table
+        CREATE TABLE IF NOT EXISTS public.events (
+          id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+          title TEXT NOT NULL,
+          description TEXT,
+          event_date TIMESTAMPTZ,
+          status TEXT CHECK (status IN ('upcoming', 'ongoing', 'completed')) DEFAULT 'upcoming' NOT NULL,
+          image_url TEXT,
+          created_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now()) NOT NULL
+        );
+
+        CREATE TABLE IF NOT EXISTS public.quests (
+          id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+          title TEXT NOT NULL,
+          description TEXT,
+          base_xp INTEGER DEFAULT 100 NOT NULL,
+          bonus_xp INTEGER DEFAULT 50 NOT NULL,
+          rewards TEXT DEFAULT 'Digital Certificate',
+          active_week INTEGER DEFAULT 1,
+          difficulty TEXT CHECK (difficulty IN ('Beginner', 'Intermediate', 'Advanced', 'easy', 'medium', 'hard')) DEFAULT 'Beginner' NOT NULL,
+          status TEXT CHECK (status IN ('Active', 'Upcoming', 'Closed')) DEFAULT 'Active' NOT NULL,
+          created_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now()) NOT NULL
+        );
+
         CREATE TABLE IF NOT EXISTS public.user_quest_history (
-          id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
-          user_id uuid REFERENCES auth.users ON DELETE CASCADE,
-          quest_id uuid REFERENCES public.quests ON DELETE CASCADE,
-          status text CHECK (status IN ('participated', 'won', 'lost')) DEFAULT 'participated',
-          xp_awarded integer DEFAULT 0,
-          created_at timestamptz DEFAULT now(),
+          id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+          user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE NOT NULL,
+          quest_id UUID REFERENCES public.quests(id) ON DELETE CASCADE NOT NULL,
+          status TEXT CHECK (status IN ('participated', 'won', 'lost')) DEFAULT 'participated' NOT NULL,
+          xp_awarded INTEGER DEFAULT 0 NOT NULL,
+          created_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now()) NOT NULL,
           UNIQUE(user_id, quest_id)
         );
 
-        -- 3. Create leaderboard table
-        CREATE TABLE IF NOT EXISTS public.leaderboard (
-          id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
-          user_id uuid REFERENCES auth.users ON DELETE CASCADE UNIQUE,
-          total_points integer DEFAULT 0,
-          updated_at timestamptz DEFAULT now()
+        CREATE TABLE IF NOT EXISTS public.feedback (
+          id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+          name TEXT NOT NULL,
+          email TEXT NOT NULL,
+          message TEXT NOT NULL,
+          created_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now()) NOT NULL
         );
 
-        -- Enable RLS
-        ALTER TABLE public.quests ENABLE ROW LEVEL SECURITY;
-        ALTER TABLE public.user_quest_history ENABLE ROW LEVEL SECURITY;
-        ALTER TABLE public.leaderboard ENABLE ROW LEVEL SECURITY;
-
-        -- RLS Policies for quests (Read-only for all)
-        DO $$ 
-        BEGIN
-            IF NOT EXISTS (
-                SELECT 1 FROM pg_policies WHERE tablename = 'quests' AND policyname = 'Quests are viewable by everyone'
-            ) THEN
-                CREATE POLICY "Quests are viewable by everyone" ON public.quests FOR SELECT USING (true);
-            END IF;
-        END $$;
-
-        -- RLS Policies for user_quest_history (Users can only see/insert their own)
-        DO $$ 
-        BEGIN
-            IF NOT EXISTS (
-                SELECT 1 FROM pg_policies WHERE tablename = 'user_quest_history' AND policyname = 'Users can view their own history'
-            ) THEN
-                CREATE POLICY "Users can view their own history" ON public.user_quest_history FOR SELECT USING (auth.uid() = user_id);
-                CREATE POLICY "Users can insert their own history" ON public.user_quest_history FOR INSERT WITH CHECK (auth.uid() = user_id);
-                CREATE POLICY "Users can update their own history" ON public.user_quest_history FOR UPDATE USING (auth.uid() = user_id);
-            END IF;
-        END $$;
-
-        -- RLS Policies for leaderboard (Viewable by everyone)
-        DO $$ 
-        BEGIN
-            IF NOT EXISTS (
-                SELECT 1 FROM pg_policies WHERE tablename = 'leaderboard' AND policyname = 'Leaderboard viewable by everyone'
-            ) THEN
-                CREATE POLICY "Leaderboard viewable by everyone" ON public.leaderboard FOR SELECT USING (true);
-            END IF;
-        END $$;
+        CREATE OR REPLACE VIEW public.leaderboard AS
+        SELECT 
+            p.id,
+            p.full_name,
+            p.avatar_url,
+            COALESCE(p.xp, 0) + COALESCE(SUM(h.xp_awarded), 0) AS total_points
+        FROM public.profiles p
+        LEFT JOIN public.user_quest_history h ON h.user_id = p.id
+        GROUP BY p.id, p.full_name, p.avatar_url, p.xp
+        ORDER BY total_points DESC;
       `;
 
       await client.query(schemaSQL);
@@ -118,15 +108,13 @@ async function initDB() {
   
   if (fetchError) {
     if (fetchError.code === '42P01') {
-      console.warn("⚠️ Quests table does not exist. Ensure SUPABASE_DB_URL is set or manually create tables.");
+      console.warn("⚠️ Quests table does not exist. Run supabase/setup.sql in Supabase Dashboard.");
     } else {
       console.error("Error fetching quests:", fetchError);
     }
   } else if (existingQuests && existingQuests.length === 0) {
     console.log("No quests found. Seeding initial quests...");
     
-    // We will simulate the static data here, or read it if we can.
-    // Instead of importing, we'll just hardcode the seed data from what we know to avoid module import issues.
     const questsToInsert = [
       {
         title: "Intro to React",
@@ -177,7 +165,7 @@ async function initDB() {
       console.log("✅ Seeded initial quests successfully.");
     }
   } else {
-    console.log("✅ Data already seeded. Bypassing initialization.");
+    console.log("✅ Data already seeded.");
   }
 }
 
