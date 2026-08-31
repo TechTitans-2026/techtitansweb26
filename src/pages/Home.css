@@ -421,3 +421,25 @@ footer {
     0%, 100% { opacity: 0.4; transform: scale(1); }
     50% { opacity: 0.9; transform: scale(1.06); }
 }
+
+/* ============================================ */
+/* Hero Button Centering Modifications          */
+/* ============================================ */
+.hero-cta,
+.cta-container,
+div:has(> .explore-events-btn),
+div:has(> .explore-btn) {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+.explore-events-btn,
+.explore-btn {
+    margin: 0 auto !important;
+    min-width: 200px;
+    text-align: center;
+}

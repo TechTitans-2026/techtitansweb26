@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -10,36 +10,49 @@ export default function Navbar() {
 
   useEffect(() => {
     if (mobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     }
     return () => {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     };
   }, [mobileMenuOpen]);
 
   const handleContactClick = () => {
     setMobileMenuOpen(false);
-    if (location.pathname !== '/' && location.pathname !== '/home') {
-      navigate('/home');
+    if (location.pathname !== "/" && location.pathname !== "/home") {
+      navigate("/home");
       setTimeout(() => {
-        const el = document.getElementById('contact-footer');
-        el?.scrollIntoView({ behavior: 'smooth' });
+        const el = document.getElementById("contact-footer");
+        el?.scrollIntoView({ behavior: "smooth" });
       }, 150);
     } else {
-      const el = document.getElementById('contact-footer');
-      el?.scrollIntoView({ behavior: 'smooth' });
+      const el = document.getElementById("contact-footer");
+      el?.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   return (
-    <nav className="fixed w-full z-50 top-0 transition-all duration-300" id="navbar">
-      <div className="absolute inset-0 bg-[#1a1b22]/90 backdrop-blur-md border-b border-white/5" id="nav-bg"></div>
+    <nav
+      className="fixed w-full z-50 top-0 transition-all duration-300"
+      id="navbar"
+    >
+      <div
+        className="absolute inset-0 bg-[#1a1b22]/90 backdrop-blur-md border-b border-white/5"
+        id="nav-bg"
+      ></div>
       <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 relative flex justify-between items-center h-20">
-        
-        <Link to="/home" className="flex items-center gap-2 cursor-pointer hover:scale-105 transition-transform shrink-0" onClick={() => setMobileMenuOpen(false)}>
-          <img src="/logo.jpg" alt="Tech Titans Logo" className="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover shadow-[0_0_15px_rgba(174,151,214,0.4)] border border-[#ae97d6]/30" />
+        <Link
+          to="/home"
+          className="flex items-center gap-2 cursor-pointer hover:scale-105 transition-transform shrink-0"
+          onClick={() => setMobileMenuOpen(false)}
+        >
+          <img
+            src="/logo.jpg"
+            alt="Tech Titans Logo"
+            className="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover shadow-[0_0_15px_rgba(174,151,214,0.4)] border border-[#ae97d6]/30"
+          />
           <span className="font-black text-lg tracking-tight text-white hidden xs:inline-block sm:inline-block">
             TECH<span className="text-accent">TITANS</span>
           </span>
@@ -47,32 +60,81 @@ export default function Navbar() {
 
         {/* Desktop Nav */}
         <div className="hidden md:flex flex-1 justify-evenly items-center text-sm font-semibold tracking-wide text-[#8c8d96] mx-8">
-          <Link to="/home" className={`nav-link transition-colors hover:text-accent ${(location.pathname === '/' || location.pathname === '/home') ? 'active-link' : ''}`}>HOME</Link>
-          <Link to="/about" className={`nav-link transition-colors hover:text-accent ${location.pathname === '/about' ? 'active-link' : ''}`}>ABOUT US</Link>
-          <Link to="/events" className={`nav-link transition-colors hover:text-accent ${location.pathname === '/events' ? 'active-link' : ''}`}>EVENTS</Link>
-          <Link to="/members" className={`nav-link transition-colors hover:text-accent ${location.pathname === '/members' ? 'active-link' : ''}`}>MEMBERS</Link>
-          <Link to="/quests" className={`nav-link transition-colors hover:text-accent ${location.pathname === '/quests' ? 'active-link' : ''}`}>QUESTS</Link>
+          <Link
+            to="/home"
+            className={`nav-link transition-colors hover:text-accent ${location.pathname === "/" || location.pathname === "/home" ? "active-link" : ""}`}
+          >
+            HOME
+          </Link>
+          <Link
+            to="/about"
+            className={`nav-link transition-colors hover:text-accent ${location.pathname === "/about" ? "active-link" : ""}`}
+          >
+            ABOUT US
+          </Link>
+          <Link
+            to="/events"
+            className={`nav-link transition-colors hover:text-accent ${location.pathname === "/events" ? "active-link" : ""}`}
+          >
+            EVENTS
+          </Link>
+          <Link
+            to="/members"
+            className={`nav-link transition-colors hover:text-accent ${location.pathname === "/members" ? "active-link" : ""}`}
+          >
+            MEMBERS
+          </Link>
+          <Link
+            to="/quests"
+            className={`nav-link transition-colors hover:text-accent ${location.pathname === "/quests" ? "active-link" : ""}`}
+          >
+            QUESTS
+          </Link>
         </div>
 
         <div className="hidden md:flex items-center gap-3 shrink-0">
-          {(profile?.role === 'admin' || profile?.role === 'head') && (
-            <button className="btn-keycap px-5 py-2.5 text-xs bg-red-900/50 text-red-300 border border-red-500/30 hover:bg-red-900/80 cursor-pointer" onClick={() => navigate('/admin')}>ADMIN</button>
+          {(profile?.role === "admin" || profile?.role === "head") && (
+            <button
+              className="btn-keycap px-5 py-2.5 text-xs bg-red-900/50 text-red-300 border border-red-500/30 hover:bg-red-900/80 cursor-pointer"
+              onClick={() => navigate("/admin")}
+            >
+              ADMIN
+            </button>
           )}
           {user ? (
-            <button className="btn-keycap px-5 py-2.5 text-xs cursor-pointer" onClick={() => navigate('/profile')}>PROFILE</button>
+            <button
+              className="btn-keycap px-5 py-2.5 text-xs cursor-pointer"
+              onClick={() => navigate("/profile")}
+            >
+              PROFILE
+            </button>
           ) : (
-            <button className="btn-keycap px-5 py-2.5 text-xs cursor-pointer" onClick={() => navigate('/auth')}>SIGN IN</button>
+            <button
+              className="btn-keycap px-5 py-2.5 text-xs cursor-pointer"
+              onClick={() => navigate("/auth")}
+            >
+              SIGN IN
+            </button>
           )}
-          <button className="bg-transparent border border-white/20 hover:border-white/50 text-white rounded-lg px-5 py-2.5 text-xs transition-colors cursor-pointer" onClick={handleContactClick}>CONTACT</button>
+          <button
+            className="bg-transparent border border-white/20 hover:border-white/50 text-white rounded-lg px-5 py-2.5 text-xs transition-colors cursor-pointer"
+            onClick={handleContactClick}
+          >
+            CONTACT
+          </button>
         </div>
 
         {/* Mobile Menu Button */}
         <button
           className="md:hidden text-white text-2xl p-2.5 min-w-[48px] min-h-[48px] flex items-center justify-center focus:outline-none cursor-pointer rounded-lg hover:bg-white/5 transition-colors"
-          aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+          aria-label={
+            mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"
+          }
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
-          <i className={`fas ${mobileMenuOpen ? 'fa-times text-accent' : 'fa-bars'}`}></i>
+          <i
+            className={`fas ${mobileMenuOpen ? "fa-times text-accent" : "fa-bars"}`}
+          ></i>
         </button>
       </div>
 
@@ -80,22 +142,81 @@ export default function Navbar() {
       {mobileMenuOpen && (
         <div className="md:hidden absolute w-full bg-[#1a1b22]/98 backdrop-blur-xl border-b border-white/5 max-h-[calc(100dvh-5rem)] overflow-y-auto shadow-2xl">
           <div className="flex flex-col px-6 py-6 space-y-4 text-sm font-semibold tracking-widest text-[#8c8d96]">
-            <Link to="/home" className={`nav-link block w-full text-base py-2.5 ${(location.pathname === '/' || location.pathname === '/home') ? 'active-link' : ''}`} onClick={() => setMobileMenuOpen(false)}>HOME</Link>
-            <Link to="/about" className={`nav-link block w-full text-base py-2.5 ${location.pathname === '/about' ? 'active-link' : ''}`} onClick={() => setMobileMenuOpen(false)}>ABOUT US</Link>
-            <Link to="/events" className={`nav-link block w-full text-base py-2.5 ${location.pathname === '/events' ? 'active-link' : ''}`} onClick={() => setMobileMenuOpen(false)}>EVENTS</Link>
-            <Link to="/members" className={`nav-link block w-full text-base py-2.5 ${location.pathname === '/members' ? 'active-link' : ''}`} onClick={() => setMobileMenuOpen(false)}>MEMBERS</Link>
-            <Link to="/quests" onClick={() => setMobileMenuOpen(false)} className={`nav-link block w-full text-base py-2.5 ${location.pathname === '/quests' ? 'active-link' : ''}`}>QUESTS</Link>
+            <Link
+              to="/home"
+              className={`nav-link block w-full text-base py-2.5 ${location.pathname === "/" || location.pathname === "/home" ? "active-link" : ""}`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              HOME
+            </Link>
+            <Link
+              to="/about"
+              className={`nav-link block w-full text-base py-2.5 ${location.pathname === "/about" ? "active-link" : ""}`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              ABOUT US
+            </Link>
+            <Link
+              to="/events"
+              className={`nav-link block w-full text-base py-2.5 ${location.pathname === "/events" ? "active-link" : ""}`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              EVENTS
+            </Link>
+            <Link
+              to="/members"
+              className={`nav-link block w-full text-base py-2.5 ${location.pathname === "/members" ? "active-link" : ""}`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              MEMBERS
+            </Link>
+            <Link
+              to="/quests"
+              onClick={() => setMobileMenuOpen(false)}
+              className={`nav-link block w-full text-base py-2.5 ${location.pathname === "/quests" ? "active-link" : ""}`}
+            >
+              QUESTS
+            </Link>
 
             <div className="pt-4 border-t border-white/10 flex flex-col gap-3">
-              {(profile?.role === 'admin' || profile?.role === 'head') && (
-                <button className="btn-keycap px-6 py-3.5 text-sm w-full bg-red-900/50 text-red-300 border border-red-500/30 hover:bg-red-900/80 cursor-pointer" onClick={() => { setMobileMenuOpen(false); navigate('/admin'); }}>ADMIN PANEL</button>
+              {(profile?.role === "admin" || profile?.role === "head") && (
+                <button
+                  className="btn-keycap px-6 py-3.5 text-sm w-full bg-red-900/50 text-red-300 border border-red-500/30 hover:bg-red-900/80 cursor-pointer"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    navigate("/admin");
+                  }}
+                >
+                  ADMIN PANEL
+                </button>
               )}
               {user ? (
-                <button className="btn-keycap px-6 py-3.5 text-sm w-full cursor-pointer" onClick={() => { setMobileMenuOpen(false); navigate('/profile'); }}>MY PROFILE</button>
+                <button
+                  className="btn-keycap px-6 py-3.5 text-sm w-full cursor-pointer"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    navigate("/profile");
+                  }}
+                >
+                  MY PROFILE
+                </button>
               ) : (
-                <button className="btn-keycap px-6 py-3.5 text-sm w-full cursor-pointer" onClick={() => { setMobileMenuOpen(false); navigate('/auth'); }}>SIGN IN</button>
+                <button
+                  className="btn-keycap px-6 py-3.5 text-sm w-full cursor-pointer"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    navigate("/auth");
+                  }}
+                >
+                  SIGN IN
+                </button>
               )}
-              <button className="bg-transparent border border-white/20 text-white rounded-lg px-6 py-3.5 text-sm w-full cursor-pointer hover:bg-white/5 transition-colors" onClick={handleContactClick}>CONTACT US</button>
+              <button
+                className="bg-transparent border border-white/20 text-white rounded-lg px-6 py-3.5 text-sm w-full cursor-pointer hover:bg-white/5 transition-colors"
+                onClick={handleContactClick}
+              >
+                CONTACT US
+              </button>
             </div>
           </div>
         </div>
