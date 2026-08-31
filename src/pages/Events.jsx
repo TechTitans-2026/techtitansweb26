@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 import './Home.css';
 
+const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSf5uJhoj9te0Lg9IRJ_Smc4KAHmxO-bRJJZwBnertLK0v893w/viewform?usp=dialog';
+
 export default function Events() {
-  const navigate = useNavigate();
-  const [regForm, setRegForm] = useState({ name: '', course: '', activity: '' });
+  const [isRegistrationFlipped, setIsRegistrationFlipped] = useState(false);
 
   useRevealOnScroll();
 
@@ -69,71 +69,54 @@ export default function Events() {
 
           {/* Participation Form */}
           <div className="max-w-3xl mx-auto w-full reveal">
-            <div className="glass-panel p-8 md:p-10 relative overflow-hidden bg-gradient-to-br from-[#161821] to-[#0f1015]">
-              <div className="text-center mb-8">
-                <h3 className="text-2xl font-bold text-white mb-2">Event Registration</h3>
-                <p className="text-gray-400 text-sm">Secure your spot for the Inauguration &amp; Games.</p>
-              </div>
-
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  navigate('/auth', { state: { pendingRegistration: regForm } });
+            <div className="min-h-[320px] cursor-pointer" style={{ perspective: '1200px' }}>
+              <div
+                className="relative h-[320px] w-full transition-transform duration-700"
+                style={{ transformStyle: 'preserve-3d', transform: isRegistrationFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }}
+                onClick={() => setIsRegistrationFlipped((flipped) => !flipped)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    setIsRegistrationFlipped((flipped) => !flipped);
+                  }
                 }}
-                className="space-y-5"
+                role="button"
+                tabIndex={0}
+                aria-label="Flip the event registration card"
               >
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wider">
-                      Full Name
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      className="input-glass"
-                      placeholder="John Doe"
-                      value={regForm.name}
-                      onChange={(e) => setRegForm({ ...regForm, name: e.target.value })}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wider">
-                      Course / Year
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      className="input-glass"
-                      placeholder="e.g. CS - SY"
-                      value={regForm.course}
-                      onChange={(e) => setRegForm({ ...regForm, course: e.target.value })}
-                    />
-                  </div>
+                <div
+                  className="glass-panel absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-gradient-to-br from-[#161821] to-[#0f1015]"
+                  style={{ backfaceVisibility: 'hidden' }}
+                >
+                  <span className="mb-5 flex h-14 w-14 items-center justify-center rounded-full border border-accent/30 bg-accent/10 text-accent">
+                    <i className="fas fa-calendar-check text-2xl"></i>
+                  </span>
+                  <h3 className="text-2xl font-bold text-white mb-2">Welcome to Event Registration</h3>
+                  <p className="text-gray-400 text-sm">Secure your spot for the Inauguration &amp; Games.</p>
+                  <p className="mt-8 text-xs font-bold uppercase tracking-[0.2em] text-accent">Click to register</p>
                 </div>
-                <div>
-                  <label className="block text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wider">
-                    Select Primary Activity
-                  </label>
-                  <select
-                    required
-                    className="input-glass appearance-none cursor-pointer"
-                    value={regForm.activity}
-                    onChange={(e) => setRegForm({ ...regForm, activity: e.target.value })}
+
+                <div
+                  className="glass-panel absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-gradient-to-br from-[#1b1f2d] to-[#0f1015]"
+                  style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
+                >
+                  <h3 className="text-2xl font-bold text-white mb-3">Ready to join?</h3>
+                  <p className="max-w-md text-sm leading-relaxed text-gray-400">
+                    Complete the Google Form registration to reserve your place in the event.
+                  </p>
+                  <button
+                    type="button"
+                    className="btn-keycap mt-8 w-full max-w-sm rounded-lg py-4 text-sm cursor-pointer"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      window.open(GOOGLE_FORM_URL, '_blank', 'noopener,noreferrer');
+                    }}
                   >
-                    <option value="" disabled>-- Choose your challenge --</option>
-                    <option value="prompt">Prompt Counter</option>
-                    <option value="fastest">Fastest Finger First</option>
-                    <option value="aivshuman">AI vs. Human Challenge</option>
-                    <option value="pictionary">Tech-Themed Pictionary</option>
-                    <option value="quiz">Generic Creation Quiz</option>
-                  </select>
-                </div>
-                <div className="pt-4 text-center">
-                  <button type="submit" id="regSubmitBtn" className="btn-keycap w-full py-4 text-sm rounded-lg cursor-pointer">
-                    Confirm Registration
+                    Open Google Form Registration <i className="fas fa-arrow-up-right-from-square ml-2"></i>
                   </button>
+                  <p className="mt-5 text-xs text-gray-500">Click anywhere on this card to flip it back.</p>
                 </div>
-              </form>
+              </div>
             </div>
           </div>
 
