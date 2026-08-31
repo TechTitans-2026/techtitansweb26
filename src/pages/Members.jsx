@@ -3,6 +3,8 @@ import { membersData } from '../data/members';
 import { X, User } from 'lucide-react';
 import './Home.css';
 
+const MEMBERS_PER_TEAM = 5;
+
 export default function Members() {
   const [loading, setLoading] = useState(true);
   const [selectedMember, setSelectedMember] = useState(null);
@@ -33,14 +35,36 @@ export default function Members() {
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-6 gap-y-16">
-            {teams.map(team => (
+            {teams.map(team => {
+              const teamMembers = membersData.filter((member) => member.team === team);
+              const openPositions = team === 'Core Leadership'
+                ? []
+                : Array.from(
+                    { length: Math.max(0, MEMBERS_PER_TEAM - teamMembers.length) },
+                    (_, index) => ({ isOpenPosition: true, slot: teamMembers.length + index + 1 })
+                  );
+
+              return (
               <div key={team} className={`reveal in-view ${team === 'Core Leadership' ? 'lg:col-span-3' : ''}`}>
                 <h3 className="text-2xl font-bold text-white mb-6 border-b border-[#31333e] pb-4 flex items-center gap-3">
                   <span className="w-2 h-6 bg-[#00f3ff] inline-block rounded"></span>
-                  {team}
+                  {team}{team !== 'Core Leadership' && ` (${MEMBERS_PER_TEAM} SLOTS)`}
                 </h3>
                 <div className={team === 'Core Leadership' ? 'grid grid-cols-1 sm:grid-cols-3 gap-5 max-w-3xl mx-auto' : 'grid grid-cols-1 gap-3'}>
-                  {membersData.filter(m => m.team === team).map(member => (
+                  {[...teamMembers, ...openPositions].map(member => member.isOpenPosition ? (
+                    <div
+                      key={`${team}-open-${member.slot}`}
+                      className="glass-panel p-3 rounded-xl border border-dashed border-white/10 bg-black/10 opacity-55 flex items-center gap-3 text-left"
+                    >
+                      <div className="w-11 h-11 shrink-0 rounded-lg bg-black/20 flex items-center justify-center border border-white/5 text-lg font-mono text-gray-500">
+                        +
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-sm font-mono text-gray-400">Open Position</p>
+                        <p className="text-[10px] font-mono uppercase tracking-wider text-gray-600 mt-1">Slot {member.slot} · Recruitment open</p>
+                      </div>
+                    </div>
+                  ) : (
                     <button 
                       key={member.id}
                       onClick={() => setSelectedMember(member)}
@@ -66,7 +90,8 @@ export default function Members() {
                   ))}
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
