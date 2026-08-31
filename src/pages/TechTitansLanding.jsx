@@ -265,10 +265,11 @@ export default function TechTitansLanding({ prefersReducedMotion = false }) {
       if (prefersReducedMotion) return;
       objectsToUpdate.forEach(obj => {
         obj.body.wakeUp();
+        const isKeyboard = obj.mesh === kb.mesh;
         obj.body.velocity.set(
-          (Math.random() - 0.5) * (isMobile ? 0.4 : 0.8),
-          (isMobile ? 16 : 24) + Math.random() * 2,
-          (Math.random() - 0.5) * (isMobile ? 0.4 : 0.8)
+          isKeyboard ? 0 : (Math.random() - 0.5) * (isMobile ? 0.4 : 0.8),
+          isKeyboard ? (isMobile ? 14 : 22) : (isMobile ? 16 : 24) + Math.random() * 2,
+          isKeyboard ? 0 : (Math.random() - 0.5) * (isMobile ? 0.4 : 0.8)
         );
         obj.body.angularVelocity.set(0, 0, 0);
         obj.launched = true;
@@ -341,6 +342,7 @@ export default function TechTitansLanding({ prefersReducedMotion = false }) {
     // ── OBJECT BUILDERS ──
     function createKeyboard() {
       const group = new THREE.Group();
+      const keys = [];
       const baseShape = createRoundedRectShape(17, 6, 0.5);
       const baseGeo = new THREE.ExtrudeGeometry(baseShape, {
         depth: 0.8, bevelEnabled: true, bevelSegments: isMobile ? 2 : 4,
@@ -362,11 +364,12 @@ export default function TechTitansLanding({ prefersReducedMotion = false }) {
       const startX = -7.8, startY = 2.2;
       for (let row = 0; row < 5; row++) {
         for (let col = 0; col < 15; col++) {
+          const keyCol = col;
           let keyWidth = 1.0;
           let mat = matKeyDark;
 
           if (row === 4 && col === 4) {
-            keyWidth = 6.5; mat = matAccentPurple; col += 5; // Spacebar
+            keyWidth = 6.5; mat = matAccentPurple; col += 6; // Spacebar
           } else if (row === 3 && col === 0) {
             keyWidth = 2.2; mat = matKeyDark; col += 1; // Caps
           } else if (row === 2 && col === 13) {
@@ -389,14 +392,17 @@ export default function TechTitansLanding({ prefersReducedMotion = false }) {
             disposables.push(geo);
           }
           const key = new THREE.Mesh(geo, mat);
-          const kx = startX + col * 1.05 + (keyWidth > 1 ? (keyWidth - 1) * 0.525 : 0);
+          const kx = startX + keyCol * 1.05 + (keyWidth > 1 ? (keyWidth - 1) * 0.525 : 0);
           const ky = startY - row * 1.1;
           key.position.set(kx, ky, 0.25);
+          key.userData.baseZ = 0.25;
+          key.userData.pressPhase = row * 0.65 + keyCol * 0.18;
           key.castShadow = true;
           group.add(key);
+          keys.push(key);
         }
       }
-      return { mesh: group, shape: new CANNON.Box(new CANNON.Vec3(8.5, 3.0, 0.6)) };
+      return { mesh: group, shape: new CANNON.Box(new CANNON.Vec3(8.5, 3.0, 0.6)), keys };
     }
 
     function createCPU() {
@@ -889,6 +895,14 @@ export default function TechTitansLanding({ prefersReducedMotion = false }) {
           object.body.position.z
         );
         object.mesh.quaternion.copy(object.body.quaternion);
+      }
+
+      // Keyboard keys animate in a calm ripple after the boot sequence completes.
+      if (entranceStarted) {
+        kb.keys.forEach((key) => {
+          const press = Math.max(0, Math.sin(elapsedTime * 3.2 - key.userData.pressPhase));
+          key.position.z = key.userData.baseZ - press * 0.12;
+        });
       }
 
       // Ambient motion

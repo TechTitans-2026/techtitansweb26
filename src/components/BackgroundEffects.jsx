@@ -7,7 +7,7 @@ const FLOATING_ELEMENT_LOOPS = [
     items: [
       { type: 'icon', icon: 'fas fa-code', color: 'blue', depth: 18, top: '6%', left: '46%', size: '76px', anim: 'floatDrift 17s cubic-bezier(0.45,0,0.55,1) infinite', blurClass: 'depth-far' },
       { type: 'reticle-icon', icon: 'fas fa-microchip', color: 'glyph', depth: 55, top: '4%', left: '82%', size: '46px', reticleSize: '150px', anim: 'floatBob 12s ease-in-out infinite -4s', blurClass: 'depth-near' },
-      { type: 'icon', icon: 'fas fa-keyboard', color: 'glyph', depth: 30, top: '64%', left: '4%', size: '88px', anim: 'floatOrbit 21s cubic-bezier(0.37,0,0.63,1) infinite -9s', blurClass: 'depth-mid', hideMobile: true },
+      { type: 'icon', icon: 'fas fa-keyboard', color: 'glyph', depth: 22, top: '70%', left: '5%', size: '48px', anim: 'floatKeyboard 14s ease-in-out infinite', blurClass: 'depth-near', className: 'keyboard-element', hideMobile: true },
       { type: 'icon', icon: 'fas fa-atom', color: 'blue', depth: 60, top: '36%', left: '92%', size: '54px', anim: 'floatBob 9s ease-in-out infinite -2s', blurClass: 'depth-near' },
       { type: 'icon', icon: 'fas fa-folder', color: 'warm', depth: 26, top: '80%', left: '81%', size: '58px', anim: 'floatDrift 15s ease-in-out infinite -6s', blurClass: 'depth-mid', hideMobile: true },
       { type: 'text', text: '{ }', color: 'braces', depth: 16, top: '50%', left: '10%', size: '100px', anim: 'floatOrbit 24s cubic-bezier(0.45,0,0.55,1) infinite -12s', blurClass: 'depth-far', hideMobile: true }
@@ -149,7 +149,7 @@ const BackgroundEffects = () => {
             return (
               <div
                 key={idx}
-                className={`parallax-item ${item.blurClass} ${item.hideMobile ? 'hide-mobile' : ''}`}
+                className={`parallax-item ${item.blurClass} ${item.className || ''} ${item.hideMobile ? 'hide-mobile' : ''}`}
                 data-depth={item.depth}
                 style={{ top: item.top, left: item.left, width: item.reticleSize, height: item.reticleSize }}
               >

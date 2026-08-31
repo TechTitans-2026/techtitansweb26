@@ -32,31 +32,35 @@ export default function Members() {
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#b89eff]"></div>
           </div>
         ) : (
-          <div className="space-y-16">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-6 gap-y-16">
             {teams.map(team => (
-              <div key={team} className="reveal in-view">
+              <div key={team} className={`reveal in-view ${team === 'Core Leadership' ? 'lg:col-span-3' : ''}`}>
                 <h3 className="text-2xl font-bold text-white mb-6 border-b border-[#31333e] pb-4 flex items-center gap-3">
                   <span className="w-2 h-6 bg-[#00f3ff] inline-block rounded"></span>
                   {team}
                 </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <div className={team === 'Core Leadership' ? 'grid grid-cols-1 sm:grid-cols-3 gap-5 max-w-3xl mx-auto' : 'grid grid-cols-1 gap-3'}>
                   {membersData.filter(m => m.team === team).map(member => (
                     <button 
                       key={member.id}
                       onClick={() => setSelectedMember(member)}
-                      className="glass-panel p-6 rounded-xl hover:-translate-y-2 hover:shadow-[0_10px_25px_rgba(0,243,255,0.15)] transition-all group border border-white/5 relative overflow-hidden text-left w-full cursor-pointer"
+                      className={team === 'Core Leadership'
+                        ? 'glass-panel w-44 h-44 justify-self-center rounded-full p-4 hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(0,243,255,0.15)] transition-all group border border-white/5 relative overflow-hidden text-center flex flex-col items-center justify-center cursor-pointer'
+                        : 'glass-panel p-3 rounded-xl hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(0,243,255,0.15)] transition-all group border border-white/5 relative overflow-hidden text-left w-full cursor-pointer flex items-center gap-3'}
                     >
-                      <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-[#b89eff]/20 to-transparent rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-150"></div>
-                      <div className="w-14 h-14 bg-gradient-to-br from-[#21222b] to-[#16171d] rounded-full mb-4 flex items-center justify-center border border-[#31333e] shadow-inner group-hover:border-[#00f3ff]/50 transition-colors">
-                        <span className="font-mono font-bold text-xl text-[#00f3ff]">
+                      <div className="absolute top-0 right-0 w-12 h-12 bg-gradient-to-br from-[#b89eff]/20 to-transparent rounded-bl-full -mr-6 -mt-6 transition-transform group-hover:scale-150"></div>
+                      <div className={`w-11 h-11 bg-gradient-to-br from-[#21222b] to-[#16171d] rounded-full flex items-center justify-center border border-[#31333e] shadow-inner group-hover:border-[#00f3ff]/50 transition-colors ${team === 'Core Leadership' ? 'mb-3' : 'mb-0 shrink-0'}`}>
+                        <span className="font-mono font-bold text-base text-[#00f3ff]">
                           {member.name.charAt(0).toUpperCase()}
                         </span>
                       </div>
-                      <h3 className="text-lg font-bold mb-1 text-white group-hover:text-[#b89eff] transition-colors">{member.name}</h3>
-                      <p className="text-xs text-[#00f3ff] font-mono mb-2 uppercase tracking-wider">{member.details}</p>
-                      <div className="flex justify-between items-center mt-4 pt-4 border-t border-white/5">
-                        <span className="text-xs text-gray-400 font-mono">Course: {member.course}</span>
-                        <span className="text-xs text-gray-400 font-mono">Yr: {member.year}</span>
+                      <div className={team === 'Core Leadership' ? '' : 'min-w-0 flex-1'}>
+                        <h3 className="text-sm font-bold mb-1 text-white group-hover:text-[#b89eff] transition-colors truncate">{member.name}</h3>
+                        <p className="text-[10px] text-[#00f3ff] font-mono mb-2 uppercase tracking-wider line-clamp-2">{member.details}</p>
+                        <div className={`flex items-center mt-3 pt-3 border-t border-white/5 gap-2 ${team === 'Core Leadership' ? 'justify-center' : 'justify-between'}`}>
+                          <span className="text-[10px] text-gray-400 font-mono truncate">{member.course}</span>
+                          <span className="text-[10px] text-gray-400 font-mono shrink-0">Yr {member.year}</span>
+                        </div>
                       </div>
                     </button>
                   ))}
@@ -79,8 +83,9 @@ export default function Members() {
             <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-[#00f3ff]/10 rounded-full blur-3xl pointer-events-none"></div>
 
             <button 
+              type="button"
               onClick={() => setSelectedMember(null)}
-              className="absolute top-5 right-5 text-gray-400 hover:text-white transition-colors z-10 p-2 bg-[#21222b] rounded-full hover:bg-white/10"
+              className="absolute top-5 right-5 text-gray-400 hover:text-white transition-all duration-200 z-20 p-2 bg-[#21222b] rounded-full hover:bg-white/10 hover:scale-110 hover:rotate-90 cursor-pointer"
               aria-label="Close member modal"
             >
               <X size={18} />
