@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 import './Home.css';
 
-const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSf5uJhoj9te0Lg9IRJ_Smc4KAHmxO-bRJJZwBnertLK0v893w/viewform?usp=dialog';
+const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSf5uJhoj9te0Lg9IRJ_Smc4KAHmxO-bRJJZwBnertLK0v893w/viewform?embedded=true';
 
 export default function Events() {
   const [isRegistrationFlipped, setIsRegistrationFlipped] = useState(false);
@@ -153,14 +153,14 @@ export default function Events() {
 
           {isFormModalOpen && (
             <div
-              className="fixed inset-0 z-50 flex bg-black/80 backdrop-blur-sm"
+              className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/85 backdrop-blur-md"
               role="dialog"
               aria-modal="true"
               aria-labelledby="registration-form-title"
               onClick={() => setIsFormModalOpen(false)}
             >
               <div
-                className="event-form-modal relative flex h-full w-full flex-col overflow-hidden bg-[#10121b] shadow-2xl"
+                className="event-form-modal relative flex h-[92vh] max-w-4xl w-full flex-col overflow-hidden rounded-2xl bg-[#10121b] border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.8)]"
                 onClick={(event) => event.stopPropagation()}
               >
                 <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">

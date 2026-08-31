@@ -250,13 +250,13 @@ export default function Home() {
           </section>
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 relative z-10 flex flex-col gap-16 sm:gap-24">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-16">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 sm:gap-16 items-start">
               {/* Story Column */}
-              <div className="reveal">
-                <h2 className="text-2xl section-title mb-6 sm:mb-8">
+              <div className="reveal flex flex-col h-full">
+                <h2 className="section-heading text-2xl mb-6 sm:mb-8">
                   Our Story &amp; Purpose
                 </h2>
-                <div className="glass-panel p-6 sm:p-8 relative h-full flex flex-col justify-center overflow-hidden">
+                <div className="glass-panel p-6 sm:p-8 relative flex-1 flex flex-col justify-center overflow-hidden">
                   <p className="text-[#8c8d96] text-sm sm:text-base leading-relaxed mb-6">
                     Tech Titans was formed to bridge the gap between academic
                     theory and high-impact engineering. We are a collective of
@@ -272,11 +272,11 @@ export default function Home() {
               </div>
 
               {/* Latest Updates Feed */}
-              <div className="reveal">
-                <h2 className="text-2xl section-title mb-6 sm:mb-8">
+              <div className="reveal flex flex-col h-full mt-8 lg:mt-0">
+                <h2 className="section-heading text-2xl mb-6 sm:mb-8">
                   Latest Updates
                 </h2>
-                <div className="space-y-4">
+                <div className="flex-1 space-y-4">
                   {latestEvent ? (
                     <div className="glass-panel p-5 sm:p-6 flex items-start gap-4 hover:border-accent/40 transition-colors">
                       <div className="p-3 rounded-lg bg-black/40 text-accent border border-white/5 shrink-0">

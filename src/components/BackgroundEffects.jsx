@@ -34,7 +34,7 @@ const FLOATING_ELEMENT_LOOPS = [
       { type: 'icon', icon: 'fas fa-terminal', color: 'green', depth: 30, top: '60%', left: '7%', size: '40px', anim: 'floatOrbit 22s cubic-bezier(0.37,0,0.63,1) infinite -7s', blurClass: 'depth-near', hideMobile: true },
       { type: 'icon', icon: 'fas fa-server', color: 'blue', depth: 60, top: '34%', left: '88%', size: '44px', anim: 'floatBob 9s ease-in-out infinite -1s', blurClass: 'depth-near' },
       { type: 'icon', icon: 'fas fa-fingerprint', color: 'warm', depth: 25, top: '78%', left: '78%', size: '48px', anim: 'floatDrift 14s ease-in-out infinite -6s', blurClass: 'depth-near', hideMobile: true },
-      { type: 'text', text: '< / >', color: 'braces', depth: 16, top: '50%', left: '9%', size: '34px', anim: 'floatOrbit 23s cubic-bezier(0.45,0,0.55,1) infinite -11s', blurClass: 'depth-near', hideMobile: true }
+      { type: 'text', text: '< / >', color: 'braces', depth: 16, top: '50%', left: '9%', size: '28px', anim: 'floatOrbit 23s cubic-bezier(0.45,0,0.55,1) infinite -11s', blurClass: 'depth-near', hideMobile: true }
     ]
   },
   // LOOP 3: CLOUD & DATA STRUCTURES
