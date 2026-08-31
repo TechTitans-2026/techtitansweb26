@@ -6,6 +6,17 @@ const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSf5uJhoj9te0Lg
 
 export default function Events() {
   const [isRegistrationFlipped, setIsRegistrationFlipped] = useState(false);
+  const [isFormModalOpen, setIsFormModalOpen] = useState(false);
+
+  const handleRegistrationCardClick = () => {
+    if (isRegistrationFlipped) {
+      setIsRegistrationFlipped(false);
+      return;
+    }
+
+    setIsRegistrationFlipped(true);
+    window.setTimeout(() => setIsFormModalOpen(true), 650);
+  };
 
   useRevealOnScroll();
 
@@ -73,11 +84,11 @@ export default function Events() {
               <div
                 className="relative h-[320px] w-full transition-transform duration-700"
                 style={{ transformStyle: 'preserve-3d', transform: isRegistrationFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }}
-                onClick={() => setIsRegistrationFlipped((flipped) => !flipped)}
+                onClick={handleRegistrationCardClick}
                 onKeyDown={(event) => {
                   if (event.key === 'Enter' || event.key === ' ') {
                     event.preventDefault();
-                    setIsRegistrationFlipped((flipped) => !flipped);
+                    handleRegistrationCardClick();
                   }
                 }}
                 role="button"
@@ -109,7 +120,7 @@ export default function Events() {
                     className="btn-keycap mt-8 w-full max-w-sm rounded-lg py-4 text-sm cursor-pointer"
                     onClick={(event) => {
                       event.stopPropagation();
-                      window.open(GOOGLE_FORM_URL, '_blank', 'noopener,noreferrer');
+                      setIsFormModalOpen(true);
                     }}
                   >
                     Open Google Form Registration <i className="fas fa-arrow-up-right-from-square ml-2"></i>
@@ -119,6 +130,41 @@ export default function Events() {
               </div>
             </div>
           </div>
+
+          {isFormModalOpen && (
+            <div
+              className="fixed inset-0 z-50 flex bg-black/80 backdrop-blur-sm"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="registration-form-title"
+              onClick={() => setIsFormModalOpen(false)}
+            >
+              <div
+                className="event-form-modal relative flex h-full w-full flex-col overflow-hidden bg-[#10121b] shadow-2xl"
+                onClick={(event) => event.stopPropagation()}
+              >
+                <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
+                  <div>
+                    <h3 id="registration-form-title" className="font-bold text-white">Event Registration</h3>
+                    <p className="text-xs text-gray-400">Complete the form without leaving Tech Titans.</p>
+                  </div>
+                  <button
+                    type="button"
+                    className="flex h-9 w-9 items-center justify-center rounded-full text-xl text-gray-400 transition-colors hover:bg-white/10 hover:text-white"
+                    onClick={() => setIsFormModalOpen(false)}
+                    aria-label="Close registration form"
+                  >
+                    &times;
+                  </button>
+                </div>
+                <iframe
+                  title="Tech Titans event registration Google Form"
+                  src={GOOGLE_FORM_URL}
+                  className="min-h-0 w-full flex-1 bg-white"
+                />
+              </div>
+            </div>
+          )}
 
           {/* Past Events Section */}
           <div className="reveal">
