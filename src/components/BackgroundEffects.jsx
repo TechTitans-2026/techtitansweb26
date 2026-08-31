@@ -10,19 +10,19 @@ const FLOATING_ELEMENT_LOOPS = [
       { type: 'icon', icon: 'fas fa-keyboard', color: 'glyph', depth: 22, top: '70%', left: '5%', size: '48px', anim: 'floatKeyboard 14s ease-in-out infinite', blurClass: 'depth-near', className: 'keyboard-element', hideMobile: true },
       { type: 'icon', icon: 'fas fa-atom', color: 'blue', depth: 60, top: '36%', left: '92%', size: '54px', anim: 'floatBob 9s ease-in-out infinite -2s', blurClass: 'depth-near' },
       { type: 'icon', icon: 'fas fa-folder', color: 'warm', depth: 26, top: '80%', left: '81%', size: '58px', anim: 'floatDrift 15s ease-in-out infinite -6s', blurClass: 'depth-mid', hideMobile: true },
-      { type: 'text', text: '{ }', color: 'braces', depth: 16, top: '50%', left: '10%', size: '100px', anim: 'floatOrbit 24s cubic-bezier(0.45,0,0.55,1) infinite -12s', blurClass: 'depth-far', hideMobile: true }
+      { type: 'text', text: '{ }', color: 'braces', depth: 16, top: '50%', left: '10%', size: '48px', anim: 'floatOrbit 24s cubic-bezier(0.45,0,0.55,1) infinite -12s', blurClass: 'depth-near', hideMobile: true }
     ]
   },
   // LOOP 1: AI & DATA SCIENCE
   {
     name: '02 // AI & DATA SCIENCE',
     items: [
-      { type: 'icon', icon: 'fas fa-brain', color: 'cyan', depth: 20, top: '09%', left: '48%', size: '80px', anim: 'floatDrift 18s cubic-bezier(0.45,0,0.55,1) infinite', blurClass: 'depth-mid' },
+      { type: 'icon', icon: 'fas fa-brain', color: 'cyan', depth: 20, top: '16%', left: '42%', size: '64px', anim: 'floatDrift 18s cubic-bezier(0.45,0,0.55,1) infinite', blurClass: 'depth-near' },
       { type: 'reticle-icon', icon: 'fas fa-network-wired', color: 'cyan', depth: 55, top: '5%', left: '80%', size: '48px', reticleSize: '150px', anim: 'floatBob 13s ease-in-out infinite -3s', blurClass: 'depth-near' },
       { type: 'icon', icon: 'fas fa-chart-line', color: 'green', depth: 32, top: '66%', left: '5%', size: '82px', anim: 'floatOrbit 20s cubic-bezier(0.37,0,0.63,1) infinite -8s', blurClass: 'depth-mid', hideMobile: true },
       { type: 'icon', icon: 'fas fa-robot', color: 'blue', depth: 58, top: '38%', left: '90%', size: '56px', anim: 'floatBob 10s ease-in-out infinite -2s', blurClass: 'depth-near' },
       { type: 'icon', icon: 'fas fa-cubes', color: 'warm', depth: 28, top: '78%', left: '82%', size: '60px', anim: 'floatDrift 16s ease-in-out infinite -5s', blurClass: 'depth-mid', hideMobile: true },
-      { type: 'text', text: '[∑]', color: 'braces', depth: 15, top: '38%', left: '8%', size: '60px', anim: 'floatOrbit 25s cubic-bezier(0.45,0,0.55,1) infinite -10s', blurClass: 'depth-mid', hideMobile: true }
+      { type: 'text', text: '[∑]', color: 'braces', depth: 15, top: '38%', left: '8%', size: '32px', anim: 'floatOrbit 25s cubic-bezier(0.45,0,0.55,1) infinite -10s', blurClass: 'depth-near', hideMobile: true }
     ]
   },
   // LOOP 2: CYBERSECURITY & SYSTEMS
