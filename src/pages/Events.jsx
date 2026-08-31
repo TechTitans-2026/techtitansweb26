@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 import './Home.css';
 
@@ -7,6 +7,28 @@ const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSf5uJhoj9te0Lg
 export default function Events() {
   const [isRegistrationFlipped, setIsRegistrationFlipped] = useState(false);
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
+  const [isIframeLoading, setIsIframeLoading] = useState(true);
+
+  // Intercept browser back button when form modal is open so it closes modal instead of leaving Events page
+  useEffect(() => {
+    if (!isFormModalOpen) return;
+
+    window.history.pushState({ modalOpen: true }, '');
+
+    const handlePopState = () => {
+      setIsFormModalOpen(false);
+      setIsRegistrationFlipped(false);
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+      if (window.history.state?.modalOpen) {
+        window.history.back();
+      }
+    };
+  }, [isFormModalOpen]);
 
   const handleRegistrationCardClick = () => {
     if (isRegistrationFlipped) {
@@ -15,13 +37,15 @@ export default function Events() {
     }
 
     setIsRegistrationFlipped(true);
-    window.setTimeout(() => setIsFormModalOpen(true), 650);
+    setIsFormModalOpen(true);
   };
 
   useRevealOnScroll();
 
   return (
     <div className="home-body min-h-screen pt-24 pb-20 flex-grow flex flex-col">
+      {/* Hidden pre-fetch iframe so Google Form loads instantly when opened */}
+      <iframe src={GOOGLE_FORM_URL} className="hidden" aria-hidden="true" title="Preload Form" />
       <div id="view-events" className="page-view active flex-grow">
         <div className="max-w-6xl mx-auto px-6 py-16 relative z-10 flex flex-col gap-20">
 
@@ -67,10 +91,6 @@ export default function Events() {
                     <div className="bg-[#0f1015] border border-white/5 p-4 rounded-lg">
                       <h5 className="text-white font-bold text-sm mb-1">Tech Pictionary</h5>
                       <p className="text-xs text-gray-500">Drawing and guessing tech concepts.</p>
-                    </div>
-                    <div className="bg-[#0f1015] border border-white/5 p-4 rounded-lg sm:col-span-2">
-                      <h5 className="text-white font-bold text-sm mb-1">Generic Creation Quiz</h5>
-                      <p className="text-xs text-gray-500">Broad knowledge testing across domains.</p>
                     </div>
                   </div>
                 </div>
@@ -157,11 +177,25 @@ export default function Events() {
                     &times;
                   </button>
                 </div>
-                <iframe
-                  title="Tech Titans event registration Google Form"
-                  src={GOOGLE_FORM_URL}
-                  className="min-h-0 w-full flex-1 bg-white"
-                />
+                <div className="relative flex-1 w-full min-h-0 bg-[#10121b]">
+                  {isIframeLoading && (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#10121b] text-[#00f3ff] font-mono text-sm gap-3 z-10 px-4 text-center">
+                      <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-[#00f3ff] mb-1"></div>
+                      <span className="flex items-center justify-center gap-2 font-bold tracking-wide">
+                        <span className="text-xl animate-bounce">⏳</span> CONNECTING TO REGISTRATION PROTOCOL...
+                      </span>
+                      <span className="text-xs text-gray-400 font-mono animate-pulse mt-1">
+                        ⌛ Fetching live form servers... thanks for waiting! ⚡
+                      </span>
+                    </div>
+                  )}
+                  <iframe
+                    title="Tech Titans event registration Google Form"
+                    src={GOOGLE_FORM_URL}
+                    onLoad={() => setIsIframeLoading(false)}
+                    className={`w-full h-full border-none bg-white transition-opacity duration-300 ${isIframeLoading ? 'opacity-0' : 'opacity-100'}`}
+                  />
+                </div>
               </div>
             </div>
           )}

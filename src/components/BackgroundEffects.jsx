@@ -1,27 +1,27 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 const FLOATING_ELEMENT_LOOPS = [
-  // LOOP 0: CODE & COMPUTING (Exact match to HTML reference)
+  // LOOP 0: CODE & COMPUTING
   {
     name: '01 // CODE & COMPUTATION',
     items: [
-      { type: 'icon', icon: 'fas fa-code', color: 'blue', depth: 18, top: '8%', left: '46%', size: '76px', anim: 'floatDrift 17s cubic-bezier(0.45,0,0.55,1) infinite', blurClass: 'depth-far' },
-      { type: 'reticle-icon', icon: 'fas fa-microchip', color: 'glyph', depth: 55, top: '4%', left: '82%', size: '46px', reticleSize: '150px', anim: 'floatBob 12s ease-in-out infinite -4s', blurClass: 'depth-near' },
-      { type: 'icon', icon: 'fas fa-keyboard', color: 'glyph', depth: 22, top: '70%', left: '5%', size: '48px', anim: 'floatKeyboard 14s ease-in-out infinite', blurClass: 'depth-near', className: 'keyboard-element', hideMobile: true },
-      { type: 'icon', icon: 'fas fa-atom', color: 'blue', depth: 60, top: '36%', left: '92%', size: '54px', anim: 'floatBob 9s ease-in-out infinite -2s', blurClass: 'depth-near' },
-      { type: 'icon', icon: 'fas fa-folder', color: 'warm', depth: 26, top: '80%', left: '81%', size: '58px', anim: 'floatDrift 15s ease-in-out infinite -6s', blurClass: 'depth-mid', hideMobile: true },
-      { type: 'text', text: '{ }', color: 'braces', depth: 16, top: '50%', left: '10%', size: '48px', anim: 'floatOrbit 24s cubic-bezier(0.45,0,0.55,1) infinite -12s', blurClass: 'depth-near', hideMobile: true }
+      { type: 'icon', icon: 'fas fa-code', color: 'blue', depth: 18, top: '10%', left: '44%', size: '44px', anim: 'floatDrift 17s cubic-bezier(0.45,0,0.55,1) infinite', blurClass: 'depth-near' },
+      { type: 'reticle-icon', icon: 'fas fa-microchip', color: 'glyph', depth: 55, top: '6%', left: '80%', size: '42px', reticleSize: '130px', anim: 'floatBob 12s ease-in-out infinite -4s', blurClass: 'depth-near' },
+      { type: 'icon', icon: 'fas fa-keyboard', color: 'glyph', depth: 22, top: '68%', left: '6%', size: '46px', anim: 'floatKeyboard 14s ease-in-out infinite', blurClass: 'depth-near', className: 'keyboard-element', hideMobile: true },
+      { type: 'icon', icon: 'fas fa-atom', color: 'blue', depth: 60, top: '34%', left: '88%', size: '48px', anim: 'floatBob 9s ease-in-out infinite -2s', blurClass: 'depth-near' },
+      { type: 'icon', icon: 'fas fa-folder', color: 'warm', depth: 26, top: '76%', left: '78%', size: '46px', anim: 'floatDrift 15s ease-in-out infinite -6s', blurClass: 'depth-near', hideMobile: true },
+      { type: 'text', text: '{ }', color: 'braces', depth: 16, top: '48%', left: '9%', size: '42px', anim: 'floatOrbit 24s cubic-bezier(0.45,0,0.55,1) infinite -12s', blurClass: 'depth-near', hideMobile: true }
     ]
   },
   // LOOP 1: AI & DATA SCIENCE
   {
     name: '02 // AI & DATA SCIENCE',
     items: [
-      { type: 'icon', icon: 'fas fa-brain', color: 'cyan', depth: 20, top: '16%', left: '42%', size: '64px', anim: 'floatDrift 18s cubic-bezier(0.45,0,0.55,1) infinite', blurClass: 'depth-near' },
-      { type: 'reticle-icon', icon: 'fas fa-network-wired', color: 'cyan', depth: 55, top: '5%', left: '80%', size: '48px', reticleSize: '150px', anim: 'floatBob 13s ease-in-out infinite -3s', blurClass: 'depth-near' },
-      { type: 'icon', icon: 'fas fa-chart-line', color: 'green', depth: 32, top: '66%', left: '5%', size: '82px', anim: 'floatOrbit 20s cubic-bezier(0.37,0,0.63,1) infinite -8s', blurClass: 'depth-mid', hideMobile: true },
-      { type: 'icon', icon: 'fas fa-robot', color: 'blue', depth: 58, top: '38%', left: '90%', size: '56px', anim: 'floatBob 10s ease-in-out infinite -2s', blurClass: 'depth-near' },
-      { type: 'icon', icon: 'fas fa-cubes', color: 'warm', depth: 28, top: '78%', left: '82%', size: '60px', anim: 'floatDrift 16s ease-in-out infinite -5s', blurClass: 'depth-mid', hideMobile: true },
+      { type: 'icon', icon: 'fas fa-brain', color: 'cyan', depth: 20, top: '16%', left: '42%', size: '54px', anim: 'floatDrift 18s cubic-bezier(0.45,0,0.55,1) infinite', blurClass: 'depth-near' },
+      { type: 'reticle-icon', icon: 'fas fa-network-wired', color: 'cyan', depth: 55, top: '6%', left: '78%', size: '42px', reticleSize: '130px', anim: 'floatBob 13s ease-in-out infinite -3s', blurClass: 'depth-near' },
+      { type: 'icon', icon: 'fas fa-chart-line', color: 'green', depth: 32, top: '64%', left: '6%', size: '48px', anim: 'floatOrbit 20s cubic-bezier(0.37,0,0.63,1) infinite -8s', blurClass: 'depth-near', hideMobile: true },
+      { type: 'icon', icon: 'fas fa-robot', color: 'blue', depth: 58, top: '36%', left: '88%', size: '46px', anim: 'floatBob 10s ease-in-out infinite -2s', blurClass: 'depth-near' },
+      { type: 'icon', icon: 'fas fa-cubes', color: 'warm', depth: 28, top: '76%', left: '79%', size: '44px', anim: 'floatDrift 16s ease-in-out infinite -5s', blurClass: 'depth-near', hideMobile: true },
       { type: 'text', text: '[∑]', color: 'braces', depth: 15, top: '38%', left: '8%', size: '32px', anim: 'floatOrbit 25s cubic-bezier(0.45,0,0.55,1) infinite -10s', blurClass: 'depth-near', hideMobile: true }
     ]
   },
@@ -29,24 +29,24 @@ const FLOATING_ELEMENT_LOOPS = [
   {
     name: '03 // CYBERSECURITY & SYSTEMS',
     items: [
-      { type: 'icon', icon: 'fas fa-shield-alt', color: 'cyan', depth: 18, top: '7%', left: '50%', size: '78px', anim: 'floatDrift 16s cubic-bezier(0.45,0,0.55,1) infinite', blurClass: 'depth-far' },
-      { type: 'reticle-icon', icon: 'fas fa-lock', color: 'pink', depth: 55, top: '4%', left: '82%', size: '44px', reticleSize: '150px', anim: 'floatBob 11s ease-in-out infinite -4s', blurClass: 'depth-near' },
-      { type: 'icon', icon: 'fas fa-terminal', color: 'green', depth: 30, top: '62%', left: '6%', size: '84px', anim: 'floatOrbit 22s cubic-bezier(0.37,0,0.63,1) infinite -7s', blurClass: 'depth-mid', hideMobile: true },
-      { type: 'icon', icon: 'fas fa-server', color: 'blue', depth: 60, top: '35%', left: '91%', size: '52px', anim: 'floatBob 9s ease-in-out infinite -1s', blurClass: 'depth-near' },
-      { type: 'icon', icon: 'fas fa-fingerprint', color: 'warm', depth: 25, top: '82%', left: '79%', size: '64px', anim: 'floatDrift 14s ease-in-out infinite -6s', blurClass: 'depth-mid', hideMobile: true },
-      { type: 'text', text: '< / >', color: 'braces', depth: 16, top: '52%', left: '10%', size: '85px', anim: 'floatOrbit 23s cubic-bezier(0.45,0,0.55,1) infinite -11s', blurClass: 'depth-far', hideMobile: true }
+      { type: 'icon', icon: 'fas fa-shield-alt', color: 'cyan', depth: 18, top: '10%', left: '46%', size: '48px', anim: 'floatDrift 16s cubic-bezier(0.45,0,0.55,1) infinite', blurClass: 'depth-near' },
+      { type: 'reticle-icon', icon: 'fas fa-lock', color: 'pink', depth: 55, top: '5%', left: '80%', size: '40px', reticleSize: '130px', anim: 'floatBob 11s ease-in-out infinite -4s', blurClass: 'depth-near' },
+      { type: 'icon', icon: 'fas fa-terminal', color: 'green', depth: 30, top: '60%', left: '7%', size: '40px', anim: 'floatOrbit 22s cubic-bezier(0.37,0,0.63,1) infinite -7s', blurClass: 'depth-near', hideMobile: true },
+      { type: 'icon', icon: 'fas fa-server', color: 'blue', depth: 60, top: '34%', left: '88%', size: '44px', anim: 'floatBob 9s ease-in-out infinite -1s', blurClass: 'depth-near' },
+      { type: 'icon', icon: 'fas fa-fingerprint', color: 'warm', depth: 25, top: '78%', left: '78%', size: '48px', anim: 'floatDrift 14s ease-in-out infinite -6s', blurClass: 'depth-near', hideMobile: true },
+      { type: 'text', text: '< / >', color: 'braces', depth: 16, top: '50%', left: '9%', size: '34px', anim: 'floatOrbit 23s cubic-bezier(0.45,0,0.55,1) infinite -11s', blurClass: 'depth-near', hideMobile: true }
     ]
   },
   // LOOP 3: CLOUD & DATA STRUCTURES
   {
     name: '04 // CLOUD & DATA STRUCTURES',
     items: [
-      { type: 'icon', icon: 'fas fa-cloud', color: 'blue', depth: 18, top: '8%', left: '46%', size: '82px', anim: 'floatDrift 17s cubic-bezier(0.45,0,0.55,1) infinite', blurClass: 'depth-far' },
-      { type: 'reticle-icon', icon: 'fas fa-database', color: 'cyan', depth: 55, top: '5%', left: '83%', size: '46px', reticleSize: '150px', anim: 'floatBob 12s ease-in-out infinite -3s', blurClass: 'depth-near' },
-      { type: 'icon', icon: 'fas fa-sitemap', color: 'glyph', depth: 30, top: '65%', left: '5%', size: '80px', anim: 'floatOrbit 21s cubic-bezier(0.37,0,0.63,1) infinite -9s', blurClass: 'depth-mid', hideMobile: true },
-      { type: 'icon', icon: 'fas fa-layer-group', color: 'cyan', depth: 58, top: '36%', left: '89%', size: '54px', anim: 'floatBob 10s ease-in-out infinite -2s', blurClass: 'depth-near' },
-      { type: 'icon', icon: 'fas fa-hdd', color: 'warm', depth: 26, top: '79%', left: '82%', size: '58px', anim: 'floatDrift 15s ease-in-out infinite -5s', blurClass: 'depth-mid', hideMobile: true },
-      { type: 'text', text: '0101', color: 'braces', depth: 16, top: '48%', left: '9%', size: '80px', anim: 'floatOrbit 24s cubic-bezier(0.45,0,0.55,1) infinite -12s', blurClass: 'depth-far', hideMobile: true }
+      { type: 'icon', icon: 'fas fa-cloud', color: 'blue', depth: 18, top: '10%', left: '44%', size: '50px', anim: 'floatDrift 17s cubic-bezier(0.45,0,0.55,1) infinite', blurClass: 'depth-near' },
+      { type: 'reticle-icon', icon: 'fas fa-database', color: 'cyan', depth: 55, top: '6%', left: '80%', size: '42px', reticleSize: '130px', anim: 'floatBob 12s ease-in-out infinite -3s', blurClass: 'depth-near' },
+      { type: 'icon', icon: 'fas fa-sitemap', color: 'glyph', depth: 30, top: '62%', left: '6%', size: '46px', anim: 'floatOrbit 21s cubic-bezier(0.37,0,0.63,1) infinite -9s', blurClass: 'depth-near', hideMobile: true },
+      { type: 'icon', icon: 'fas fa-layer-group', color: 'cyan', depth: 58, top: '35%', left: '88%', size: '44px', anim: 'floatBob 10s ease-in-out infinite -2s', blurClass: 'depth-near' },
+      { type: 'icon', icon: 'fas fa-hdd', color: 'warm', depth: 26, top: '77%', left: '78%', size: '44px', anim: 'floatDrift 15s ease-in-out infinite -5s', blurClass: 'depth-near', hideMobile: true },
+      { type: 'text', text: '0101', color: 'braces', depth: 16, top: '46%', left: '9%', size: '34px', anim: 'floatOrbit 24s cubic-bezier(0.45,0,0.55,1) infinite -12s', blurClass: 'depth-near', hideMobile: true }
     ]
   }
 ];
@@ -99,76 +99,73 @@ const BackgroundEffects = () => {
 
     const handleMouse = (e) => {
       if (!isFinePointer) return;
-      const nx = e.clientX / window.innerWidth - 0.5;
-      const ny = e.clientY / window.innerHeight - 0.5;
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      const mouseX = (e.clientX - centerX) / centerX;
+      const mouseY = (e.clientY - centerY) / centerY;
+
       elements.forEach((item) => {
-        item.targetX = nx * item.depth;
-        item.targetY = ny * item.depth * 0.7;
+        const factor = (item.depth / 100) * 45;
+        item.targetX = mouseX * factor;
+        item.targetY = mouseY * factor;
       });
+    };
+
+    const updateParallax = () => {
+      elements.forEach((item) => {
+        item.curX += (item.targetX - item.curX) * 0.08;
+        item.curY += (item.targetY - item.curY) * 0.08;
+        item.el.style.transform = `translate3d(${item.curX}px, ${item.curY}px, 0)`;
+      });
+      animId = requestAnimationFrame(updateParallax);
     };
 
     window.addEventListener('mousemove', handleMouse);
-
-    const tick = () => {
-      elements.forEach((item) => {
-        item.curX += (item.targetX - item.curX) * 0.06;
-        item.curY += (item.targetY - item.curY) * 0.06;
-        item.el.style.transform = `translate3d(${item.curX.toFixed(2)}px, ${item.curY.toFixed(2)}px, 0)`;
-      });
-      animId = requestAnimationFrame(tick);
-    };
-
-    animId = requestAnimationFrame(tick);
+    animId = requestAnimationFrame(updateParallax);
 
     return () => {
-      cancelAnimationFrame(animId);
       window.removeEventListener('mousemove', handleMouse);
+      cancelAnimationFrame(animId);
     };
   }, [activeLoop]);
 
-  const currentSet = FLOATING_ELEMENT_LOOPS[activeLoop];
+  const currentLoop = FLOATING_ELEMENT_LOOPS[activeLoop];
 
   return (
     <>
-      {/* Ambient Background System */}
+      {/* 1. Subtle Circuit Overlay */}
       <div className="circuit-layer"></div>
-      <div className="cursor-glow" id="cursor-glow" ref={cursorRef}></div>
+
+      {/* 2. Cursor Radial Glow */}
+      <div ref={cursorRef} className="cursor-glow"></div>
+
+      {/* 3. Film Grain Texture */}
       <div className="grain-layer"></div>
 
-      {/* Circuit Nodes */}
-      <div className="circuit-node" style={{ top: '18%', left: '8%', animationDelay: '0s' }}></div>
-      <div className="circuit-node" style={{ top: '32%', left: '92%', animationDelay: '0.8s' }}></div>
-      <div className="circuit-node" style={{ top: '68%', left: '6%', animationDelay: '1.6s' }}></div>
-      <div className="circuit-node" style={{ top: '82%', left: '88%', animationDelay: '2.4s' }}></div>
-      <div className="circuit-node" style={{ top: '48%', left: '50%', animationDelay: '3.2s' }}></div>
+      {/* 4. Interactive Floating Tech Elements */}
+      <div ref={containerRef} className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        {currentLoop.items.map((item, index) => {
+          const hideClass = item.hideMobile ? 'hidden md:block' : 'block';
 
-      {/* Parallax Floating Tech Elements Container */}
-      <div ref={containerRef} key={activeLoop}>
-        {currentSet.items.map((item, idx) => {
           if (item.type === 'reticle-icon') {
             return (
               <div
-                key={idx}
-                className={`parallax-item ${item.blurClass} ${item.className || ''} ${item.hideMobile ? 'hide-mobile' : ''}`}
+                key={index}
+                className={`parallax-item ${hideClass}`}
                 data-depth={item.depth}
-                style={{ top: item.top, left: item.left, width: item.reticleSize, height: item.reticleSize }}
+                style={{ top: item.top, left: item.left }}
               >
-                <div className="reticle depth-far" style={{ position: 'absolute', inset: 0 }}>
+                <div
+                  className="reticle flex items-center justify-center"
+                  style={{ width: item.reticleSize, height: item.reticleSize }}
+                >
                   <div className="reticle-dashed"></div>
                   <div className="reticle-solid"></div>
+                  <i
+                    className={`${item.icon} float-icon icon-glyph ${item.color} ${item.blurClass}`}
+                    style={{ fontSize: item.size, animation: item.anim }}
+                  ></i>
                 </div>
-                <i
-                  className={`${item.icon} float-icon icon-glyph ${item.color}`}
-                  style={{
-                    position: 'absolute',
-                    inset: 0,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: item.size,
-                    animation: item.anim,
-                  }}
-                ></i>
               </div>
             );
           }
@@ -176,18 +173,14 @@ const BackgroundEffects = () => {
           if (item.type === 'text') {
             return (
               <div
-                key={idx}
-                className={`parallax-item ${item.blurClass} ${item.hideMobile ? 'hide-mobile' : ''}`}
+                key={index}
+                className={`parallax-item ${hideClass}`}
                 data-depth={item.depth}
                 style={{ top: item.top, left: item.left }}
               >
                 <span
-                  className="float-icon icon-braces"
-                  style={{
-                    fontSize: item.size,
-                    display: 'block',
-                    animation: item.anim,
-                  }}
+                  className={`float-icon icon-braces ${item.blurClass}`}
+                  style={{ fontSize: item.size, animation: item.anim }}
                 >
                   {item.text}
                 </span>
@@ -197,36 +190,18 @@ const BackgroundEffects = () => {
 
           return (
             <div
-              key={idx}
-              className={`parallax-item ${item.blurClass} ${item.hideMobile ? 'hide-mobile' : ''}`}
+              key={index}
+              className={`parallax-item ${hideClass}`}
               data-depth={item.depth}
               style={{ top: item.top, left: item.left }}
             >
               <i
-                className={`${item.icon} float-icon icon-glyph ${item.color}`}
-                style={{
-                  fontSize: item.size,
-                  animation: item.anim,
-                }}
+                className={`${item.icon} float-icon icon-glyph ${item.color} ${item.blurClass} ${item.className || ''}`}
+                style={{ fontSize: item.size, animation: item.anim }}
               ></i>
             </div>
           );
         })}
-      </div>
-
-      {/* Discrete Technical Loop Telemetry Badge */}
-      <div className="fixed bottom-4 left-6 z-20 hidden lg:flex items-center gap-3 bg-black/40 border border-white/5 backdrop-blur-md px-3.5 py-1.5 rounded-full pointer-events-auto select-none opacity-50 hover:opacity-100 transition-opacity">
-        <span className="w-2 h-2 rounded-full bg-[#00f3ff] animate-pulse"></span>
-        <span className="text-[10px] font-mono text-gray-300 font-semibold tracking-wider">
-          {currentSet.name}
-        </span>
-        <button
-          onClick={() => setActiveLoop((prev) => (prev + 1) % 4)}
-          className="text-[9px] font-mono uppercase bg-white/10 hover:bg-[#ae97d6]/30 text-white px-2 py-0.5 rounded cursor-pointer transition-colors"
-          title="Cycle through background tech element loops"
-        >
-          CYCLE LOOP
-        </button>
       </div>
     </>
   );

@@ -368,17 +368,19 @@ export default function TechTitansLanding({ prefersReducedMotion = false }) {
           let keyWidth = 1.0;
           let mat = matKeyDark;
 
-          if (row === 4 && col === 4) {
-            keyWidth = 6.5; mat = matAccentPurple; col += 6; // Spacebar
-          } else if (row === 3 && col === 0) {
-            keyWidth = 2.2; mat = matKeyDark; col += 1; // Caps
+          if (row === 4 && col === 3) {
+            keyWidth = 5.8; mat = matAccentPurple; col += 5; // Spacebar
+          } else if (row === 2 && col === 0) {
+            keyWidth = 1.8; mat = matKeyDark; col += 1; // Caps Lock
           } else if (row === 2 && col === 13) {
-            keyWidth = 2.0; mat = matAccentPurple; col += 1; // Enter
+            keyWidth = 1.8; mat = matAccentPurple; col += 1; // Enter
+          } else if (row === 3 && col === 0) {
+            keyWidth = 2.2; mat = matKeyDark; col += 1; // Left Shift
           } else if (row === 0 && col === 0) {
             mat = matAccentPurple; // ESC
           } else if (row === 0 && col === 14) {
             mat = matKeyDark; // Backspace
-          } else if (row === 4 && col > 10) {
+          } else if (row === 4 && col >= 11) {
             mat = matAccentPurple; // Arrows
           }
 

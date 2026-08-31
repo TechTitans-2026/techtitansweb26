@@ -257,7 +257,6 @@ export default function Home() {
                   Our Story &amp; Purpose
                 </h2>
                 <div className="glass-panel p-6 sm:p-8 relative h-full flex flex-col justify-center overflow-hidden">
-                  <i className="fas fa-cog absolute -bottom-8 -left-8 text-6xl text-white/5 animate-[spin_10s_linear_infinite]"></i>
                   <p className="text-[#8c8d96] text-sm sm:text-base leading-relaxed mb-6">
                     Tech Titans was formed to bridge the gap between academic
                     theory and high-impact engineering. We are a collective of

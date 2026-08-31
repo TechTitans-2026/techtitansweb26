@@ -358,15 +358,15 @@ footer {
 }
 
 .depth-far {
-    filter: blur(6px);
+    filter: blur(1.5px);
 }
 
 .depth-mid {
-    filter: blur(3px);
+    filter: blur(0.8px);
 }
 
 .depth-near {
-    filter: blur(0.8px);
+    filter: blur(0px);
 }
 
 @keyframes floatBob {
@@ -387,6 +387,12 @@ footer {
     33%  { transform: translate(22px, 12px) rotate(-6deg); }
     66%  { transform: translate(-16px, 22px) rotate(5deg); }
     100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+@keyframes floatKeyboard {
+    0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+    33% { transform: translate(14px, -18px) rotate(4deg) scale(1.03); }
+    66% { transform: translate(-12px, -28px) rotate(-4deg) scale(0.97); }
 }
 
 .reticle {
