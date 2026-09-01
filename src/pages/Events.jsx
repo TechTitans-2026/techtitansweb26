@@ -9,9 +9,12 @@ export default function Events() {
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
   const [isIframeLoading, setIsIframeLoading] = useState(true);
 
-  // Intercept browser back button when form modal is open so it closes modal instead of leaving Events page
+  // Lock body scroll and intercept browser back button when form modal is open
   useEffect(() => {
     if (!isFormModalOpen) return;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
 
     window.history.pushState({ modalOpen: true }, '');
 
@@ -23,6 +26,7 @@ export default function Events() {
     window.addEventListener('popstate', handlePopState);
 
     return () => {
+      document.body.style.overflow = originalOverflow;
       window.removeEventListener('popstate', handlePopState);
       if (window.history.state?.modalOpen) {
         window.history.back();
@@ -153,14 +157,16 @@ export default function Events() {
 
           {isFormModalOpen && (
             <div
-              className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md"
+              className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md overscroll-contain"
+              style={{ overscrollBehavior: 'contain' }}
               role="dialog"
               aria-modal="true"
               aria-labelledby="registration-form-title"
               onClick={() => setIsFormModalOpen(false)}
             >
               <div
-                className="event-form-modal relative flex h-[88vh] max-w-4xl w-full flex-col overflow-hidden rounded-2xl bg-[#10121b] border border-white/15 shadow-[0_0_60px_rgba(0,0,0,0.9)]"
+                className="event-form-modal relative flex h-[88vh] max-w-4xl w-full flex-col overflow-hidden rounded-2xl bg-[#10121b] border border-white/15 shadow-[0_0_60px_rgba(0,0,0,0.9)] overscroll-contain"
+                style={{ overscrollBehavior: 'contain' }}
                 onClick={(event) => event.stopPropagation()}
               >
                 <div className="flex items-center justify-between border-b border-white/10 px-6 py-4 bg-[#161821] shrink-0">
@@ -177,7 +183,7 @@ export default function Events() {
                     &times;
                   </button>
                 </div>
-                <div className="relative flex-1 w-full min-h-0 bg-[#10121b]">
+                <div className="relative flex-1 w-full min-h-0 bg-[#10121b] overscroll-contain" style={{ overscrollBehavior: 'contain' }}>
                   {isIframeLoading && (
                     <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#10121b] text-[#00f3ff] font-mono text-sm gap-3 z-10 px-4 text-center">
                       <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-[#00f3ff] mb-1"></div>
