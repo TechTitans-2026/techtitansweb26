@@ -153,12 +153,16 @@ export default function Events() {
 
           {isFormModalOpen && (
             <div
-              className="fixed inset-0 z-[100] flex flex-col h-screen w-screen bg-[#10121b] overflow-hidden"
+              className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md"
               role="dialog"
               aria-modal="true"
               aria-labelledby="registration-form-title"
+              onClick={() => setIsFormModalOpen(false)}
             >
-              <div className="event-form-modal relative flex h-full w-full flex-col overflow-hidden bg-[#10121b]">
+              <div
+                className="event-form-modal relative flex h-[88vh] max-w-4xl w-full flex-col overflow-hidden rounded-2xl bg-[#10121b] border border-white/15 shadow-[0_0_60px_rgba(0,0,0,0.9)]"
+                onClick={(event) => event.stopPropagation()}
+              >
                 <div className="flex items-center justify-between border-b border-white/10 px-6 py-4 bg-[#161821] shrink-0">
                   <div>
                     <h3 id="registration-form-title" className="font-bold text-white text-base sm:text-lg">Event Registration</h3>
@@ -166,7 +170,7 @@ export default function Events() {
                   </div>
                   <button
                     type="button"
-                    className="flex h-10 w-10 items-center justify-center rounded-full text-2xl text-gray-400 transition-colors hover:bg-white/10 hover:text-white cursor-pointer"
+                    className="flex h-9 w-9 items-center justify-center rounded-full text-xl text-gray-400 transition-colors hover:bg-white/10 hover:text-white cursor-pointer"
                     onClick={() => setIsFormModalOpen(false)}
                     aria-label="Close registration form"
                   >
