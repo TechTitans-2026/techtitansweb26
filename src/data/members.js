@@ -36,7 +36,7 @@ export const membersData = [
 
   // MEDIA
   { id: 21, name: "Rohan Vishwakarma", course: "IT", year: "SY", team: "Media" },
-  { id: 22, name: "Eldho paul", course: "CS", year: "FY", team: "Media" },
+  { id: 22, name: "Eldho paul", course: "CS", year: "FY", isCoLead: true, team: "Media" },
   { id: 23, name: "Milap Singh", course: "CS", year: "SY", team: "Media" },
   { id: 24, name: "Krutarth Kashikar", course: "BCOM", year: "SY", team: "Media" },
   { id: 25, name: "Vinay Pardesi", course: "IT", year: "SY", team: "Media" },

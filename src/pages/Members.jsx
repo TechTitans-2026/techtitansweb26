@@ -60,8 +60,12 @@ export default function Members() {
                         ? 'glass-panel w-24 h-24 min-[360px]:w-28 min-[360px]:h-28 sm:w-40 sm:h-40 md:w-44 md:h-44 justify-self-center rounded-full p-1 sm:p-4 hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(0,243,255,0.15)] transition-all group border border-white/5 relative overflow-hidden text-center flex flex-col items-center justify-center cursor-pointer'
                         : 'glass-panel p-2.5 sm:p-3 rounded-xl hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(0,243,255,0.15)] transition-all group border border-white/5 relative overflow-hidden text-left w-full cursor-pointer flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 min-h-[96px] sm:min-h-[104px]'}
                     >
-                      {team !== 'Core Leadership' && team !== 'General Members' && team !== 'Support Team' && idx === 0 && (
-                        <span className="absolute top-1.5 right-1.5 sm:top-2.5 sm:right-2.5 text-[8px] sm:text-[9px] font-mono px-1 sm:px-1.5 py-0.5 rounded border border-[#b89eff]/50 text-[#b89eff] bg-[#b89eff]/10 tracking-wider shrink-0 font-semibold leading-none z-10">[LEAD]</span>
+                      {team !== 'Core Leadership' && team !== 'General Members' && team !== 'Support Team' && (
+                        idx === 0 ? (
+                          <span className="absolute top-1.5 right-1.5 sm:top-2.5 sm:right-2.5 text-[8px] sm:text-[9px] font-mono px-1 sm:px-1.5 py-0.5 rounded border border-[#b89eff]/50 text-[#b89eff] bg-[#b89eff]/10 tracking-wider shrink-0 font-semibold leading-none z-10">[LEAD]</span>
+                        ) : (member.isCoLead || member.name.toLowerCase().includes('eldho paul')) ? (
+                          <span className="absolute top-1.5 right-1.5 sm:top-2.5 sm:right-2.5 text-[8px] sm:text-[9px] font-mono px-1 sm:px-1.5 py-0.5 rounded border border-[#b89eff]/50 text-[#b89eff] bg-[#b89eff]/10 tracking-wider shrink-0 font-semibold leading-none z-10">[CO-LEAD]</span>
+                        ) : null
                       )}
                       <div className="absolute top-0 right-0 w-12 h-12 bg-gradient-to-br from-[#b89eff]/20 to-transparent rounded-bl-full -mr-6 -mt-6 transition-transform group-hover:scale-150"></div>
                       <div className={`bg-gradient-to-br from-[#21222b] to-[#16171d] rounded-full flex items-center justify-center border border-[#31333e] shadow-inner group-hover:border-[#00f3ff]/50 transition-colors ${team === 'Core Leadership' ? 'w-7 h-7 min-[380px]:w-9 min-[380px]:h-9 sm:w-11 sm:h-11 mb-1 sm:mb-3' : 'w-9 h-9 sm:w-11 sm:h-11 mb-0 shrink-0'}`}>
