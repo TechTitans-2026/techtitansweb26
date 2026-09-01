@@ -51,34 +51,34 @@ export default function Members() {
                   <span className="w-2 h-6 bg-[#00f3ff] inline-block rounded shrink-0"></span>
                   <span className="truncate">{team}{team !== 'Core Leadership' && ` (${MEMBERS_PER_TEAM} SLOTS)`}</span>
                 </h3>
-                <div className={team === 'Core Leadership' ? 'grid grid-cols-1 sm:grid-cols-3 gap-5 max-w-3xl mx-auto w-full' : 'grid grid-cols-1 gap-3 w-full flex-1'}>
+                <div className={team === 'Core Leadership' ? 'grid grid-cols-3 gap-1.5 xs:gap-3 sm:gap-5 max-w-3xl mx-auto w-full justify-items-center' : 'grid grid-cols-2 sm:grid-cols-1 gap-2.5 sm:gap-3 w-full flex-1'}>
                   {teamMembers.map((member, idx) => (
                     <button 
                       key={member.id}
                       onClick={() => setSelectedMember(member)}
                       className={team === 'Core Leadership'
-                        ? 'glass-panel w-44 h-44 justify-self-center rounded-full p-4 hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(0,243,255,0.15)] transition-all group border border-white/5 relative overflow-hidden text-center flex flex-col items-center justify-center cursor-pointer'
-                        : 'glass-panel p-3 rounded-xl hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(0,243,255,0.15)] transition-all group border border-white/5 relative overflow-hidden text-left w-full cursor-pointer flex items-center gap-3 min-h-[104px]'}
+                        ? 'glass-panel w-[104px] h-[104px] min-[380px]:w-32 min-[380px]:h-32 sm:w-44 sm:h-44 justify-self-center rounded-full p-1.5 sm:p-4 hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(0,243,255,0.15)] transition-all group border border-white/5 relative overflow-hidden text-center flex flex-col items-center justify-center cursor-pointer'
+                        : 'glass-panel p-2.5 sm:p-3 rounded-xl hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(0,243,255,0.15)] transition-all group border border-white/5 relative overflow-hidden text-left w-full cursor-pointer flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 min-h-[96px] sm:min-h-[104px]'}
                     >
                       {team !== 'Core Leadership' && team !== 'General Members' && team !== 'Support Team' && idx === 0 && (
-                        <span className="absolute top-2.5 right-2.5 text-[9px] font-mono px-1.5 py-0.5 rounded border border-[#b89eff]/50 text-[#b89eff] bg-[#b89eff]/10 tracking-wider shrink-0 font-semibold leading-none z-10">[LEAD]</span>
+                        <span className="absolute top-1.5 right-1.5 sm:top-2.5 sm:right-2.5 text-[8px] sm:text-[9px] font-mono px-1 sm:px-1.5 py-0.5 rounded border border-[#b89eff]/50 text-[#b89eff] bg-[#b89eff]/10 tracking-wider shrink-0 font-semibold leading-none z-10">[LEAD]</span>
                       )}
                       <div className="absolute top-0 right-0 w-12 h-12 bg-gradient-to-br from-[#b89eff]/20 to-transparent rounded-bl-full -mr-6 -mt-6 transition-transform group-hover:scale-150"></div>
-                      <div className={`w-11 h-11 bg-gradient-to-br from-[#21222b] to-[#16171d] rounded-full flex items-center justify-center border border-[#31333e] shadow-inner group-hover:border-[#00f3ff]/50 transition-colors ${team === 'Core Leadership' ? 'mb-3' : 'mb-0 shrink-0'}`}>
-                        <span className="font-mono font-bold text-base text-[#00f3ff]">
+                      <div className={`bg-gradient-to-br from-[#21222b] to-[#16171d] rounded-full flex items-center justify-center border border-[#31333e] shadow-inner group-hover:border-[#00f3ff]/50 transition-colors ${team === 'Core Leadership' ? 'w-7 h-7 min-[380px]:w-9 min-[380px]:h-9 sm:w-11 sm:h-11 mb-1 sm:mb-3' : 'w-9 h-9 sm:w-11 sm:h-11 mb-0 shrink-0'}`}>
+                        <span className="font-mono font-bold text-xs min-[380px]:text-sm sm:text-base text-[#00f3ff]">
                           {member.name.charAt(0).toUpperCase()}
                         </span>
                       </div>
-                      <div className={team === 'Core Leadership' ? 'flex flex-col items-center justify-center text-center w-full' : 'min-w-0 flex-1'}>
-                        <h3 className={`text-sm font-bold mb-1 text-white group-hover:text-[#b89eff] transition-colors truncate ${team === 'Core Leadership' ? 'justify-center w-full text-center' : ''}`}>
+                      <div className={team === 'Core Leadership' ? 'flex flex-col items-center justify-center text-center w-full' : 'min-w-0 flex-1 w-full'}>
+                        <h3 className={`font-bold mb-0.5 sm:mb-1 text-white group-hover:text-[#b89eff] transition-colors truncate ${team === 'Core Leadership' ? 'text-xs min-[380px]:text-sm sm:text-sm justify-center w-full text-center' : 'text-xs sm:text-sm'}`}>
                           <span className="truncate">{member.name}</span>
                         </h3>
                         {member.details && (
-                          <p className="text-[10px] text-[#00f3ff] font-mono mb-1 uppercase tracking-wider truncate">{member.details}</p>
+                          <p className="text-[8px] min-[380px]:text-[10px] text-[#00f3ff] font-mono mb-0.5 sm:mb-1 uppercase tracking-wider truncate">{member.details}</p>
                         )}
-                        <div className={`flex items-center mt-2.5 pt-2.5 border-t border-white/5 gap-2 ${team === 'Core Leadership' ? 'justify-center' : 'justify-between'}`}>
-                          <span className="text-[10px] text-gray-400 font-mono truncate">{member.course}</span>
-                          <span className="text-[10px] text-gray-400 font-mono shrink-0">Yr {member.year}</span>
+                        <div className={`flex items-center mt-1 sm:mt-2.5 pt-1 sm:pt-2.5 border-t border-white/5 gap-1 sm:gap-2 ${team === 'Core Leadership' ? 'justify-center' : 'justify-between'}`}>
+                          <span className="text-[9px] sm:text-[10px] text-gray-400 font-mono truncate">{member.course}</span>
+                          <span className="text-[9px] sm:text-[10px] text-gray-400 font-mono shrink-0">Yr {member.year}</span>
                         </div>
                       </div>
                     </button>
@@ -86,18 +86,18 @@ export default function Members() {
                   {openPositions.map(member => (
                     <div
                       key={`${team}-open-${member.slot}`}
-                      className="glass-panel p-3 rounded-xl border border-dashed border-white/15 bg-black/15 hover:border-white/30 transition-all group relative overflow-hidden text-left w-full flex items-center gap-3 min-h-[104px] opacity-75 hover:opacity-100"
+                      className="glass-panel p-2.5 sm:p-3 rounded-xl border border-dashed border-white/15 bg-black/15 hover:border-white/30 transition-all group relative overflow-hidden text-left w-full flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 min-h-[96px] sm:min-h-[104px] opacity-75 hover:opacity-100"
                     >
                       <div className="absolute top-0 right-0 w-12 h-12 bg-gradient-to-br from-white/5 to-transparent rounded-bl-full -mr-6 -mt-6"></div>
-                      <div className="w-11 h-11 bg-gradient-to-br from-[#1c1d24] to-[#121318] rounded-full flex items-center justify-center border border-white/10 shrink-0 text-gray-400 font-mono text-lg font-bold">
+                      <div className="w-9 h-9 sm:w-11 sm:h-11 bg-gradient-to-br from-[#1c1d24] to-[#121318] rounded-full flex items-center justify-center border border-white/10 shrink-0 text-gray-400 font-mono text-sm sm:text-lg font-bold">
                         +
                       </div>
-                      <div className="min-w-0 flex-1">
-                        <h3 className="text-sm font-bold mb-1 text-gray-300 group-hover:text-white transition-colors truncate">Open Position</h3>
-                        <p className="text-[10px] text-gray-500 font-mono mb-1 uppercase tracking-wider truncate">Recruitment Active</p>
-                        <div className="flex items-center mt-2.5 pt-2.5 border-t border-white/5 justify-between gap-2">
-                          <span className="text-[10px] text-gray-400 font-mono truncate">Apply Now</span>
-                          <span className="text-[10px] text-gray-500 font-mono shrink-0">Slot #{member.slot}</span>
+                      <div className="min-w-0 flex-1 w-full">
+                        <h3 className="text-xs sm:text-sm font-bold mb-0.5 sm:mb-1 text-gray-300 group-hover:text-white transition-colors truncate">Open Position</h3>
+                        <p className="text-[8px] sm:text-[10px] text-gray-500 font-mono mb-0.5 sm:mb-1 uppercase tracking-wider truncate">Recruitment Active</p>
+                        <div className="flex items-center mt-1 sm:mt-2.5 pt-1 sm:pt-2.5 border-t border-white/5 justify-between gap-1 sm:gap-2">
+                          <span className="text-[9px] sm:text-[10px] text-gray-400 font-mono truncate">Apply Now</span>
+                          <span className="text-[9px] sm:text-[10px] text-gray-500 font-mono shrink-0">Slot #{member.slot}</span>
                         </div>
                       </div>
                     </div>
