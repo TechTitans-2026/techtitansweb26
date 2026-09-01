@@ -51,13 +51,13 @@ export default function Members() {
                   <span className="w-2 h-6 bg-[#00f3ff] inline-block rounded shrink-0"></span>
                   <span className="truncate">{team}{team !== 'Core Leadership' && ` (${MEMBERS_PER_TEAM} SLOTS)`}</span>
                 </h3>
-                <div className={team === 'Core Leadership' ? 'grid grid-cols-3 gap-1.5 xs:gap-3 sm:gap-5 max-w-3xl mx-auto w-full justify-items-center' : 'grid grid-cols-2 sm:grid-cols-1 gap-2.5 sm:gap-3 w-full flex-1'}>
+                <div className={team === 'Core Leadership' ? 'grid grid-cols-3 gap-3 sm:gap-6 lg:gap-8 max-w-3xl mx-auto w-full justify-items-center px-1 sm:px-4' : 'grid grid-cols-2 sm:grid-cols-1 gap-2.5 sm:gap-3 w-full flex-1'}>
                   {teamMembers.map((member, idx) => (
                     <button 
                       key={member.id}
                       onClick={() => setSelectedMember(member)}
                       className={team === 'Core Leadership'
-                        ? 'glass-panel w-[104px] h-[104px] min-[380px]:w-32 min-[380px]:h-32 sm:w-44 sm:h-44 justify-self-center rounded-full p-1.5 sm:p-4 hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(0,243,255,0.15)] transition-all group border border-white/5 relative overflow-hidden text-center flex flex-col items-center justify-center cursor-pointer'
+                        ? 'glass-panel w-24 h-24 min-[360px]:w-28 min-[360px]:h-28 sm:w-40 sm:h-40 md:w-44 md:h-44 justify-self-center rounded-full p-1 sm:p-4 hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(0,243,255,0.15)] transition-all group border border-white/5 relative overflow-hidden text-center flex flex-col items-center justify-center cursor-pointer'
                         : 'glass-panel p-2.5 sm:p-3 rounded-xl hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(0,243,255,0.15)] transition-all group border border-white/5 relative overflow-hidden text-left w-full cursor-pointer flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 min-h-[96px] sm:min-h-[104px]'}
                     >
                       {team !== 'Core Leadership' && team !== 'General Members' && team !== 'Support Team' && idx === 0 && (
