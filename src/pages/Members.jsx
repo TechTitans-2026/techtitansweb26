@@ -6,13 +6,11 @@ import './Home.css';
 const MEMBERS_PER_TEAM = 5;
 
 export default function Members() {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
 
   useEffect(() => {
-    // Simulate network load
-    const timer = setTimeout(() => setLoading(false), 600);
-    return () => clearTimeout(timer);
+    window.scrollTo(0, 0);
   }, []);
 
   // Group members by team

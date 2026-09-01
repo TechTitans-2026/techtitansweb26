@@ -44,10 +44,22 @@ function MainLayout() {
   );
 }
 
+// Scroll to top automatically on route changes
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
+
 function App() {
   return (
     <AuthProvider>
       <Router>
+        <ScrollToTop />
         <Routes>
           {/* Landing page — full-screen 3D entry point */}
           <Route path="/" element={

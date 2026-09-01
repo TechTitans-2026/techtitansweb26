@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 import './Home.css';
 
@@ -9,9 +9,15 @@ export default function Events() {
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
   const [isIframeLoading, setIsIframeLoading] = useState(true);
 
-  // Lock body scroll and intercept browser back button when form modal is open
+  const modalContainerRef = useRef(null);
+
+  // Lock body scroll, reset modal scroll to top, and intercept browser back button when form modal is open
   useEffect(() => {
     if (!isFormModalOpen) return;
+
+    if (modalContainerRef.current) {
+      modalContainerRef.current.scrollTop = 0;
+    }
 
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
@@ -183,7 +189,7 @@ export default function Events() {
                     &times;
                   </button>
                 </div>
-                <div className="relative flex-1 w-full min-h-0 bg-[#10121b] overscroll-contain" style={{ overscrollBehavior: 'contain' }}>
+                <div ref={modalContainerRef} className="relative flex-1 w-full min-h-0 bg-[#10121b] overscroll-contain overflow-y-auto" style={{ overscrollBehavior: 'contain' }}>
                   {isIframeLoading && (
                     <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#10121b] text-[#00f3ff] font-mono text-sm gap-3 z-10 px-4 text-center">
                       <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-[#00f3ff] mb-1"></div>
