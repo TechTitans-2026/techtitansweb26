@@ -41,12 +41,16 @@ export const membersData = [
   { id: 24, name: "Krutarth Kashikar", course: "BCOM", year: "SY", details: "Camera", team: "Media" },
   { id: 25, name: "Vinay Pardesi", course: "IT", year: "SY", details: "Scripter", team: "Media" },
 
-  // EVENTS
+   // EVENTS
+  { id: 28, name: "Sadiya Ghachi", course: "DS", year: "SY", details: "Operations", team: "Events" },
   { id: 26, name: "Prachee Singh", course: "CS", year: "TY", details: "Event Coordinator", team: "Events" },
   { id: 27, name: "Sakshi Singh", course: "CS", year: "TY", details: "Event Manager", team: "Events" },
-  { id: 28, name: "Sadiya Ghachi", course: "DS", year: "SY", details: "Operations", team: "Events" },
   { id: 29, name: "Shruna Patil", course: "DS", year: "SY", details: "Logistics", team: "Events" },
   { id: 30, name: "Priyani Mhatre", course: "CS", year: "SY", details: "Coordinator", team: "Events" },
+
+  // SUPPORT TEAM
+  { id: 40, name: "Sahinka Sarkar", course: "CS", year: "TY", details: "Event Support", team: "Support Team" },
+  { id: 41, name: "Vikas Navik", course: "CS", year: "TY", details: "Event Support", team: "Support Team" },
   
   // GENERAL MEMBERS
   { id: 31, name: "Awaiting Recruitments", course: "Any", year: "FY/SY/TY", details: "Recruitment Open", team: "General Members" }

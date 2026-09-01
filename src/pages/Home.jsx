@@ -249,11 +249,11 @@ export default function Home() {
             </div>
           </section>
 
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 relative z-10 flex flex-col gap-16 sm:gap-24">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 sm:gap-16 items-start">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 relative z-10 flex flex-col gap-12 sm:gap-16">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
               {/* Story Column */}
               <div className="reveal flex flex-col h-full">
-                <h2 className="section-heading text-2xl mb-6 sm:mb-8">
+                <h2 className="section-heading text-2xl mb-4 sm:mb-6">
                   Our Story &amp; Purpose
                 </h2>
                 <div className="glass-panel p-6 sm:p-8 relative flex-1 flex flex-col justify-center overflow-hidden">
@@ -272,8 +272,8 @@ export default function Home() {
               </div>
 
               {/* Latest Updates Feed */}
-              <div className="reveal flex flex-col h-full mt-8 lg:mt-0">
-                <h2 className="section-heading text-2xl mb-6 sm:mb-8">
+              <div className="reveal flex flex-col h-full">
+                <h2 className="section-heading text-2xl mb-4 sm:mb-6">
                   Latest Updates
                 </h2>
                 <div className="flex-1 space-y-4">

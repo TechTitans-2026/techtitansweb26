@@ -5,48 +5,48 @@ const FLOATING_ELEMENT_LOOPS = [
   {
     name: '01 // CODE & COMPUTATION',
     items: [
-      { type: 'icon', icon: 'fas fa-code', color: 'blue', depth: 18, top: '10%', left: '44%', size: '44px', anim: 'floatDrift 17s cubic-bezier(0.45,0,0.55,1) infinite', blurClass: 'depth-near' },
-      { type: 'reticle-icon', icon: 'fas fa-microchip', color: 'glyph', depth: 55, top: '6%', left: '80%', size: '42px', reticleSize: '130px', anim: 'floatBob 12s ease-in-out infinite -4s', blurClass: 'depth-near' },
-      { type: 'icon', icon: 'fas fa-keyboard', color: 'glyph', depth: 22, top: '68%', left: '6%', size: '46px', anim: 'floatKeyboard 14s ease-in-out infinite', blurClass: 'depth-near', className: 'keyboard-element', hideMobile: true },
-      { type: 'icon', icon: 'fas fa-atom', color: 'blue', depth: 60, top: '34%', left: '88%', size: '48px', anim: 'floatBob 9s ease-in-out infinite -2s', blurClass: 'depth-near' },
-      { type: 'icon', icon: 'fas fa-folder', color: 'warm', depth: 26, top: '76%', left: '78%', size: '46px', anim: 'floatDrift 15s ease-in-out infinite -6s', blurClass: 'depth-near', hideMobile: true },
-      { type: 'text', text: '{ }', color: 'braces', depth: 16, top: '48%', left: '9%', size: '42px', anim: 'floatOrbit 24s cubic-bezier(0.45,0,0.55,1) infinite -12s', blurClass: 'depth-near', hideMobile: true }
+      { type: 'icon', icon: 'fas fa-code', color: 'blue', depth: 18, top: '10%', left: '44%', size: '60px', anim: 'floatDrift 17s cubic-bezier(0.45,0,0.55,1) infinite', blurClass: 'depth-near' },
+      { type: 'reticle-icon', icon: 'fas fa-microchip', color: 'glyph', depth: 55, top: '6%', left: '80%', size: '52px', reticleSize: '150px', anim: 'floatBob 12s ease-in-out infinite -4s', blurClass: 'depth-near' },
+      { type: 'icon', icon: 'fas fa-keyboard', color: 'glyph', depth: 22, top: '68%', left: '6%', size: '56px', anim: 'floatKeyboard 14s ease-in-out infinite', blurClass: 'depth-near', className: 'keyboard-element', hideMobile: true },
+      { type: 'icon', icon: 'fas fa-atom', color: 'blue', depth: 60, top: '34%', left: '88%', size: '58px', anim: 'floatBob 9s ease-in-out infinite -2s', blurClass: 'depth-near' },
+      { type: 'icon', icon: 'fas fa-folder', color: 'warm', depth: 26, top: '76%', left: '78%', size: '56px', anim: 'floatDrift 15s ease-in-out infinite -6s', blurClass: 'depth-near', hideMobile: true },
+      { type: 'text', text: '{ }', color: 'braces', depth: 16, top: '48%', left: '9%', size: '50px', anim: 'floatOrbit 24s cubic-bezier(0.45,0,0.55,1) infinite -12s', blurClass: 'depth-near', hideMobile: true }
     ]
   },
   // LOOP 1: AI & DATA SCIENCE
   {
     name: '02 // AI & DATA SCIENCE',
     items: [
-      { type: 'icon', icon: 'fas fa-brain', color: 'cyan', depth: 20, top: '16%', left: '42%', size: '54px', anim: 'floatDrift 18s cubic-bezier(0.45,0,0.55,1) infinite', blurClass: 'depth-near' },
-      { type: 'reticle-icon', icon: 'fas fa-network-wired', color: 'cyan', depth: 55, top: '6%', left: '78%', size: '42px', reticleSize: '130px', anim: 'floatBob 13s ease-in-out infinite -3s', blurClass: 'depth-near' },
-      { type: 'icon', icon: 'fas fa-chart-line', color: 'green', depth: 32, top: '64%', left: '6%', size: '48px', anim: 'floatOrbit 20s cubic-bezier(0.37,0,0.63,1) infinite -8s', blurClass: 'depth-near', hideMobile: true },
-      { type: 'icon', icon: 'fas fa-robot', color: 'blue', depth: 58, top: '36%', left: '88%', size: '46px', anim: 'floatBob 10s ease-in-out infinite -2s', blurClass: 'depth-near' },
-      { type: 'icon', icon: 'fas fa-cubes', color: 'warm', depth: 28, top: '76%', left: '79%', size: '44px', anim: 'floatDrift 16s ease-in-out infinite -5s', blurClass: 'depth-near', hideMobile: true },
-      { type: 'text', text: '[∑]', color: 'braces', depth: 15, top: '38%', left: '8%', size: '32px', anim: 'floatOrbit 25s cubic-bezier(0.45,0,0.55,1) infinite -10s', blurClass: 'depth-near', hideMobile: true }
+      { type: 'icon', icon: 'fas fa-brain', color: 'cyan', depth: 20, top: '16%', left: '42%', size: '66px', anim: 'floatDrift 18s cubic-bezier(0.45,0,0.55,1) infinite', blurClass: 'depth-near' },
+      { type: 'reticle-icon', icon: 'fas fa-network-wired', color: 'cyan', depth: 55, top: '6%', left: '78%', size: '52px', reticleSize: '150px', anim: 'floatBob 13s ease-in-out infinite -3s', blurClass: 'depth-near' },
+      { type: 'icon', icon: 'fas fa-chart-line', color: 'green', depth: 32, top: '64%', left: '6%', size: '58px', anim: 'floatOrbit 20s cubic-bezier(0.37,0,0.63,1) infinite -8s', blurClass: 'depth-near', hideMobile: true },
+      { type: 'icon', icon: 'fas fa-robot', color: 'blue', depth: 58, top: '36%', left: '88%', size: '56px', anim: 'floatBob 10s ease-in-out infinite -2s', blurClass: 'depth-near' },
+      { type: 'icon', icon: 'fas fa-cubes', color: 'warm', depth: 28, top: '76%', left: '79%', size: '54px', anim: 'floatDrift 16s ease-in-out infinite -5s', blurClass: 'depth-near', hideMobile: true },
+      { type: 'text', text: '[∑]', color: 'braces', depth: 15, top: '38%', left: '8%', size: '40px', anim: 'floatOrbit 25s cubic-bezier(0.45,0,0.55,1) infinite -10s', blurClass: 'depth-near', hideMobile: true }
     ]
   },
   // LOOP 2: CYBERSECURITY & SYSTEMS
   {
     name: '03 // CYBERSECURITY & SYSTEMS',
     items: [
-      { type: 'icon', icon: 'fas fa-shield-alt', color: 'cyan', depth: 18, top: '10%', left: '46%', size: '48px', anim: 'floatDrift 16s cubic-bezier(0.45,0,0.55,1) infinite', blurClass: 'depth-near' },
-      { type: 'reticle-icon', icon: 'fas fa-lock', color: 'pink', depth: 55, top: '5%', left: '80%', size: '40px', reticleSize: '130px', anim: 'floatBob 11s ease-in-out infinite -4s', blurClass: 'depth-near' },
-      { type: 'icon', icon: 'fas fa-terminal', color: 'green', depth: 30, top: '60%', left: '7%', size: '40px', anim: 'floatOrbit 22s cubic-bezier(0.37,0,0.63,1) infinite -7s', blurClass: 'depth-near', hideMobile: true },
-      { type: 'icon', icon: 'fas fa-server', color: 'blue', depth: 60, top: '34%', left: '88%', size: '44px', anim: 'floatBob 9s ease-in-out infinite -1s', blurClass: 'depth-near' },
-      { type: 'icon', icon: 'fas fa-fingerprint', color: 'warm', depth: 25, top: '78%', left: '78%', size: '48px', anim: 'floatDrift 14s ease-in-out infinite -6s', blurClass: 'depth-near', hideMobile: true },
-      { type: 'text', text: '< / >', color: 'braces', depth: 16, top: '50%', left: '9%', size: '28px', anim: 'floatOrbit 23s cubic-bezier(0.45,0,0.55,1) infinite -11s', blurClass: 'depth-near', hideMobile: true }
+      { type: 'icon', icon: 'fas fa-shield-alt', color: 'cyan', depth: 18, top: '10%', left: '46%', size: '60px', anim: 'floatDrift 16s cubic-bezier(0.45,0,0.55,1) infinite', blurClass: 'depth-near' },
+      { type: 'reticle-icon', icon: 'fas fa-lock', color: 'pink', depth: 55, top: '5%', left: '80%', size: '50px', reticleSize: '150px', anim: 'floatBob 11s ease-in-out infinite -4s', blurClass: 'depth-near' },
+      { type: 'icon', icon: 'fas fa-terminal', color: 'green', depth: 30, top: '60%', left: '7%', size: '50px', anim: 'floatOrbit 22s cubic-bezier(0.37,0,0.63,1) infinite -7s', blurClass: 'depth-near', hideMobile: true },
+      { type: 'icon', icon: 'fas fa-server', color: 'blue', depth: 60, top: '34%', left: '88%', size: '54px', anim: 'floatBob 9s ease-in-out infinite -1s', blurClass: 'depth-near' },
+      { type: 'icon', icon: 'fas fa-fingerprint', color: 'warm', depth: 25, top: '78%', left: '78%', size: '58px', anim: 'floatDrift 14s ease-in-out infinite -6s', blurClass: 'depth-near', hideMobile: true },
+      { type: 'text', text: '< / >', color: 'braces', depth: 16, top: '50%', left: '9%', size: '38px', anim: 'floatOrbit 23s cubic-bezier(0.45,0,0.55,1) infinite -11s', blurClass: 'depth-near', hideMobile: true }
     ]
   },
   // LOOP 3: CLOUD & DATA STRUCTURES
   {
     name: '04 // CLOUD & DATA STRUCTURES',
     items: [
-      { type: 'icon', icon: 'fas fa-cloud', color: 'blue', depth: 18, top: '10%', left: '44%', size: '50px', anim: 'floatDrift 17s cubic-bezier(0.45,0,0.55,1) infinite', blurClass: 'depth-near' },
-      { type: 'reticle-icon', icon: 'fas fa-database', color: 'cyan', depth: 55, top: '6%', left: '80%', size: '42px', reticleSize: '130px', anim: 'floatBob 12s ease-in-out infinite -3s', blurClass: 'depth-near' },
-      { type: 'icon', icon: 'fas fa-sitemap', color: 'glyph', depth: 30, top: '62%', left: '6%', size: '46px', anim: 'floatOrbit 21s cubic-bezier(0.37,0,0.63,1) infinite -9s', blurClass: 'depth-near', hideMobile: true },
-      { type: 'icon', icon: 'fas fa-layer-group', color: 'cyan', depth: 58, top: '35%', left: '88%', size: '44px', anim: 'floatBob 10s ease-in-out infinite -2s', blurClass: 'depth-near' },
-      { type: 'icon', icon: 'fas fa-hdd', color: 'warm', depth: 26, top: '77%', left: '78%', size: '44px', anim: 'floatDrift 15s ease-in-out infinite -5s', blurClass: 'depth-near', hideMobile: true },
-      { type: 'text', text: '0101', color: 'braces', depth: 16, top: '46%', left: '9%', size: '34px', anim: 'floatOrbit 24s cubic-bezier(0.45,0,0.55,1) infinite -12s', blurClass: 'depth-near', hideMobile: true }
+      { type: 'icon', icon: 'fas fa-cloud', color: 'blue', depth: 18, top: '10%', left: '44%', size: '62px', anim: 'floatDrift 17s cubic-bezier(0.45,0,0.55,1) infinite', blurClass: 'depth-near' },
+      { type: 'reticle-icon', icon: 'fas fa-database', color: 'cyan', depth: 55, top: '6%', left: '80%', size: '52px', reticleSize: '150px', anim: 'floatBob 12s ease-in-out infinite -3s', blurClass: 'depth-near' },
+      { type: 'icon', icon: 'fas fa-sitemap', color: 'glyph', depth: 30, top: '62%', left: '6%', size: '56px', anim: 'floatOrbit 21s cubic-bezier(0.37,0,0.63,1) infinite -9s', blurClass: 'depth-near', hideMobile: true },
+      { type: 'icon', icon: 'fas fa-layer-group', color: 'cyan', depth: 58, top: '35%', left: '88%', size: '54px', anim: 'floatBob 10s ease-in-out infinite -2s', blurClass: 'depth-near' },
+      { type: 'icon', icon: 'fas fa-hdd', color: 'warm', depth: 26, top: '77%', left: '78%', size: '54px', anim: 'floatDrift 15s ease-in-out infinite -5s', blurClass: 'depth-near', hideMobile: true },
+      { type: 'text', text: '0101', color: 'braces', depth: 16, top: '46%', left: '9%', size: '42px', anim: 'floatOrbit 24s cubic-bezier(0.45,0,0.55,1) infinite -12s', blurClass: 'depth-near', hideMobile: true }
     ]
   }
 ];

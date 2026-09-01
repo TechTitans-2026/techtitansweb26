@@ -153,24 +153,20 @@ export default function Events() {
 
           {isFormModalOpen && (
             <div
-              className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/85 backdrop-blur-md"
+              className="fixed inset-0 z-[100] flex flex-col h-screen w-screen bg-[#10121b] overflow-hidden"
               role="dialog"
               aria-modal="true"
               aria-labelledby="registration-form-title"
-              onClick={() => setIsFormModalOpen(false)}
             >
-              <div
-                className="event-form-modal relative flex h-[92vh] max-w-4xl w-full flex-col overflow-hidden rounded-2xl bg-[#10121b] border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.8)]"
-                onClick={(event) => event.stopPropagation()}
-              >
-                <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
+              <div className="event-form-modal relative flex h-full w-full flex-col overflow-hidden bg-[#10121b]">
+                <div className="flex items-center justify-between border-b border-white/10 px-6 py-4 bg-[#161821] shrink-0">
                   <div>
-                    <h3 id="registration-form-title" className="font-bold text-white">Event Registration</h3>
+                    <h3 id="registration-form-title" className="font-bold text-white text-base sm:text-lg">Event Registration</h3>
                     <p className="text-xs text-gray-400">Complete the form without leaving Tech Titans.</p>
                   </div>
                   <button
                     type="button"
-                    className="flex h-9 w-9 items-center justify-center rounded-full text-xl text-gray-400 transition-colors hover:bg-white/10 hover:text-white"
+                    className="flex h-10 w-10 items-center justify-center rounded-full text-2xl text-gray-400 transition-colors hover:bg-white/10 hover:text-white cursor-pointer"
                     onClick={() => setIsFormModalOpen(false)}
                     aria-label="Close registration form"
                   >

@@ -54,7 +54,36 @@ export default function Members() {
                   <span className="truncate">{team}{team !== 'Core Leadership' && ` (${MEMBERS_PER_TEAM} SLOTS)`}</span>
                 </h3>
                 <div className={team === 'Core Leadership' ? 'grid grid-cols-1 sm:grid-cols-3 gap-5 max-w-3xl mx-auto w-full' : 'grid grid-cols-1 gap-3 w-full flex-1'}>
-                  {[...teamMembers, ...openPositions].map(member => member.isOpenPosition ? (
+                  {teamMembers.map((member, idx) => (
+                    <button 
+                      key={member.id}
+                      onClick={() => setSelectedMember(member)}
+                      className={team === 'Core Leadership'
+                        ? 'glass-panel w-44 h-44 justify-self-center rounded-full p-4 hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(0,243,255,0.15)] transition-all group border border-white/5 relative overflow-hidden text-center flex flex-col items-center justify-center cursor-pointer'
+                        : 'glass-panel p-3 rounded-xl hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(0,243,255,0.15)] transition-all group border border-white/5 relative overflow-hidden text-left w-full cursor-pointer flex items-center gap-3 min-h-[104px]'}
+                    >
+                      <div className="absolute top-0 right-0 w-12 h-12 bg-gradient-to-br from-[#b89eff]/20 to-transparent rounded-bl-full -mr-6 -mt-6 transition-transform group-hover:scale-150"></div>
+                      <div className={`w-11 h-11 bg-gradient-to-br from-[#21222b] to-[#16171d] rounded-full flex items-center justify-center border border-[#31333e] shadow-inner group-hover:border-[#00f3ff]/50 transition-colors ${team === 'Core Leadership' ? 'mb-3' : 'mb-0 shrink-0'}`}>
+                        <span className="font-mono font-bold text-base text-[#00f3ff]">
+                          {member.name.charAt(0).toUpperCase()}
+                        </span>
+                      </div>
+                      <div className={team === 'Core Leadership' ? '' : 'min-w-0 flex-1'}>
+                        <h3 className="text-sm font-bold mb-1 text-white group-hover:text-[#b89eff] transition-colors truncate flex items-center gap-1.5">
+                          <span className="truncate">{member.name}</span>
+                          {team !== 'Core Leadership' && team !== 'General Members' && team !== 'Support Team' && idx === 0 && (
+                            <span className="text-[9px] font-mono px-1 py-0.5 rounded border border-[#b89eff]/50 text-[#b89eff] bg-[#b89eff]/10 tracking-wider shrink-0 font-semibold leading-none">[LEAD]</span>
+                          )}
+                        </h3>
+                        <p className="text-[10px] text-[#00f3ff] font-mono mb-1 uppercase tracking-wider truncate">{member.details}</p>
+                        <div className={`flex items-center mt-2.5 pt-2.5 border-t border-white/5 gap-2 ${team === 'Core Leadership' ? 'justify-center' : 'justify-between'}`}>
+                          <span className="text-[10px] text-gray-400 font-mono truncate">{member.course}</span>
+                          <span className="text-[10px] text-gray-400 font-mono shrink-0">Yr {member.year}</span>
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                  {openPositions.map(member => (
                     <div
                       key={`${team}-open-${member.slot}`}
                       className="glass-panel p-3 rounded-xl border border-dashed border-white/15 bg-black/15 hover:border-white/30 transition-all group relative overflow-hidden text-left w-full flex items-center gap-3 min-h-[104px] opacity-75 hover:opacity-100"
@@ -72,29 +101,6 @@ export default function Members() {
                         </div>
                       </div>
                     </div>
-                  ) : (
-                    <button 
-                      key={member.id}
-                      onClick={() => setSelectedMember(member)}
-                      className={team === 'Core Leadership'
-                        ? 'glass-panel w-44 h-44 justify-self-center rounded-full p-4 hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(0,243,255,0.15)] transition-all group border border-white/5 relative overflow-hidden text-center flex flex-col items-center justify-center cursor-pointer'
-                        : 'glass-panel p-3 rounded-xl hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(0,243,255,0.15)] transition-all group border border-white/5 relative overflow-hidden text-left w-full cursor-pointer flex items-center gap-3 min-h-[104px]'}
-                    >
-                      <div className="absolute top-0 right-0 w-12 h-12 bg-gradient-to-br from-[#b89eff]/20 to-transparent rounded-bl-full -mr-6 -mt-6 transition-transform group-hover:scale-150"></div>
-                      <div className={`w-11 h-11 bg-gradient-to-br from-[#21222b] to-[#16171d] rounded-full flex items-center justify-center border border-[#31333e] shadow-inner group-hover:border-[#00f3ff]/50 transition-colors ${team === 'Core Leadership' ? 'mb-3' : 'mb-0 shrink-0'}`}>
-                        <span className="font-mono font-bold text-base text-[#00f3ff]">
-                          {member.name.charAt(0).toUpperCase()}
-                        </span>
-                      </div>
-                      <div className={team === 'Core Leadership' ? '' : 'min-w-0 flex-1'}>
-                        <h3 className="text-sm font-bold mb-1 text-white group-hover:text-[#b89eff] transition-colors truncate">{member.name}</h3>
-                        <p className="text-[10px] text-[#00f3ff] font-mono mb-1 uppercase tracking-wider truncate">{member.details}</p>
-                        <div className={`flex items-center mt-2.5 pt-2.5 border-t border-white/5 gap-2 ${team === 'Core Leadership' ? 'justify-center' : 'justify-between'}`}>
-                          <span className="text-[10px] text-gray-400 font-mono truncate">{member.course}</span>
-                          <span className="text-[10px] text-gray-400 font-mono shrink-0">Yr {member.year}</span>
-                        </div>
-                      </div>
-                    </button>
                   ))}
                 </div>
               </div>

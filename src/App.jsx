@@ -13,6 +13,8 @@ import Members from './pages/Members';
 import Auth from './pages/Auth';
 import Quests from './pages/Quests';
 import Profile from './pages/Profile';
+import ResetPassword from "./pages/ResetPassword"
+
 
 // Lazy-load heavy pages for code-splitting
 const Admin = lazy(() => import('./pages/Admin'));

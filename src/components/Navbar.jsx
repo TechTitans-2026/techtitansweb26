@@ -42,7 +42,7 @@ export default function Navbar() {
         className="absolute inset-0 bg-[#1a1b22]/90 backdrop-blur-md border-b border-white/5"
         id="nav-bg"
       ></div>
-      <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 relative flex justify-between items-center h-20">
+      <div className="w-full px-4 sm:px-8 xl:px-12 relative flex justify-between items-center h-20">
         <Link
           to="/home"
           className="flex items-center gap-2 cursor-pointer hover:scale-105 transition-transform shrink-0"
@@ -59,34 +59,34 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex flex-1 justify-evenly items-center text-sm font-semibold tracking-wide text-[#8c8d96] mx-8">
+        <div className="hidden md:flex items-center justify-center gap-3 lg:gap-6 xl:gap-10 text-xs lg:text-sm font-semibold tracking-wide text-[#8c8d96] mx-4 lg:mx-8">
           <Link
             to="/home"
-            className={`nav-link transition-colors hover:text-accent ${location.pathname === "/" || location.pathname === "/home" ? "active-link" : ""}`}
+            className={`nav-link whitespace-nowrap shrink-0 transition-colors hover:text-accent px-1.5 py-1 ${location.pathname === "/" || location.pathname === "/home" ? "active-link" : ""}`}
           >
             HOME
           </Link>
           <Link
             to="/about"
-            className={`nav-link transition-colors hover:text-accent ${location.pathname === "/about" ? "active-link" : ""}`}
+            className={`nav-link whitespace-nowrap shrink-0 transition-colors hover:text-accent px-1.5 py-1 ${location.pathname === "/about" ? "active-link" : ""}`}
           >
             ABOUT US
           </Link>
           <Link
             to="/events"
-            className={`nav-link transition-colors hover:text-accent ${location.pathname === "/events" ? "active-link" : ""}`}
+            className={`nav-link whitespace-nowrap shrink-0 transition-colors hover:text-accent px-1.5 py-1 ${location.pathname === "/events" ? "active-link" : ""}`}
           >
             EVENTS
           </Link>
           <Link
             to="/members"
-            className={`nav-link transition-colors hover:text-accent ${location.pathname === "/members" ? "active-link" : ""}`}
+            className={`nav-link whitespace-nowrap shrink-0 transition-colors hover:text-accent px-1.5 py-1 ${location.pathname === "/members" ? "active-link" : ""}`}
           >
             MEMBERS
           </Link>
           <Link
             to="/quests"
-            className={`nav-link transition-colors hover:text-accent ${location.pathname === "/quests" ? "active-link" : ""}`}
+            className={`nav-link whitespace-nowrap shrink-0 transition-colors hover:text-accent px-1.5 py-1 ${location.pathname === "/quests" ? "active-link" : ""}`}
           >
             QUESTS
           </Link>

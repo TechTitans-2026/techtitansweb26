@@ -38,6 +38,9 @@ export default function About() {
             </div>
           </div>
 
+          {/* Horizontal Divider Line */}
+          <div className="my-12 h-px w-full bg-gradient-to-r from-transparent via-[#ae97d6]/40 to-transparent reveal"></div>
+
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 reveal">
             <div className="glass-panel p-6 flex flex-col items-start border-t-2 border-transparent">
               <div className="w-10 h-10 rounded bg-[#161821] border border-white/10 flex items-center justify-center text-accent mb-4">

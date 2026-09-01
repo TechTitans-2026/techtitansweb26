@@ -358,15 +358,15 @@ footer {
 }
 
 .depth-far {
-    filter: blur(1.5px);
+    filter: blur(5px);
 }
 
 .depth-mid {
-    filter: blur(0.8px);
+    filter: blur(3.5px);
 }
 
 .depth-near {
-    filter: blur(0px);
+    filter: blur(2px);
 }
 
 @keyframes floatBob {
