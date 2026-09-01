@@ -78,7 +78,7 @@ export default function Members() {
                           <span className="truncate">{member.name}</span>
                         </h3>
                         {member.details && (
-                          <p className="text-[8px] min-[380px]:text-[10px] text-[#00f3ff] font-mono mb-0.5 sm:mb-1 uppercase tracking-wider truncate">{member.details}</p>
+                          <p className={`text-[#00f3ff] font-mono mb-0.5 sm:mb-1 uppercase tracking-tight sm:tracking-wider truncate px-1 max-w-full ${team === 'Core Leadership' ? 'text-[7px] min-[360px]:text-[8px] min-[400px]:text-[9px] sm:text-[10px]' : 'text-[8px] min-[380px]:text-[10px]'}`}>{member.details}</p>
                         )}
                         <div className={`flex items-center mt-1 sm:mt-2.5 pt-1 sm:pt-2.5 border-t border-white/5 gap-1 sm:gap-2 ${team === 'Core Leadership' ? 'justify-center' : 'justify-between'}`}>
                           <span className="text-[9px] sm:text-[10px] text-gray-400 font-mono truncate">{member.course}</span>
