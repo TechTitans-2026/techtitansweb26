@@ -26,7 +26,7 @@ export default function Profile() {
     loadData();
   }, [user]);
 
-  const handleLogout = async () => {
+  const handleLogout = async () =>{
     await signOut();
     navigate('/home');
   };
