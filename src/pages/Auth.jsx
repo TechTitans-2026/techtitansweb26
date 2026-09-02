@@ -118,6 +118,14 @@ const Auth = () => {
             'user',
             JSON.stringify(session.user)
           );
+
+          const oauthRedirectPath =
+            sessionStorage.getItem('oauthRedirectPath');
+
+          if (oauthRedirectPath) {
+            sessionStorage.removeItem('oauthRedirectPath');
+            navigate(oauthRedirectPath);
+          }
         }
       } catch (err) {
         console.error(
@@ -445,6 +453,39 @@ const Auth = () => {
       }
     };
   // ============================================================
+  // GOOGLE LOGIN
+  // ============================================================
+
+  const handleGoogleLogin = async () => {
+    if (loading) return;
+
+    setError('');
+    setNotice('');
+    setLoading(true);
+
+    try {
+      sessionStorage.setItem('oauthRedirectPath', fromPath);
+
+      const { error: oauthError } =
+        await supabase.auth.signInWithOAuth({
+          provider: 'google',
+          options: {
+            redirectTo: `${window.location.origin}/auth`,
+          },
+        });
+
+      if (oauthError) {
+        throw oauthError;
+      }
+    } catch (err) {
+      sessionStorage.removeItem('oauthRedirectPath');
+      console.error('Google authentication error:', err);
+      setError(getFriendlyError(err.message));
+      setLoading(false);
+    }
+  };
+
+  // ============================================================
 // SEND PASSWORD RESET EMAIL
 // ============================================================
 
@@ -606,6 +647,19 @@ const { error: resetError } =
             {error}
           </div>
         )}
+
+        <button
+          type="button"
+          onClick={handleGoogleLogin}
+          disabled={loading}
+          className={`btn-keycap w-full py-3.5 mb-4 text-sm ${
+            loading
+              ? 'opacity-60 cursor-not-allowed'
+              : 'cursor-pointer'
+          }`}
+        >
+          {loading ? 'PROCESSING...' : 'CONTINUE WITH GOOGLE'}
+        </button>
 
         {/* FORM */}
 
