@@ -76,7 +76,7 @@ export default function Events() {
                     The official launch of the Tech Titans collective. Join us for the premiere followed by intense, time-limited technical games.
                   </p>
                   <div className="flex items-center text-xs font-semibold text-gray-300 gap-2 bg-black/20 p-3 rounded-lg border border-white/5">
-                    <i className="fas fa-map-marker-alt text-accent"></i> Venue: Lab 2 (Pending Confirmation)
+                    <i className="fas fa-map-marker-alt text-accent"></i> Venue: Event Hall (Pending Confirmation)
                   </div>
                 </div>
 
