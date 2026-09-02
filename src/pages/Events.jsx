@@ -163,16 +163,14 @@ export default function Events() {
 
           {isFormModalOpen && (
             <div
-              className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md overscroll-contain"
-              style={{ overscrollBehavior: 'contain' }}
+              className="fixed inset-0 z-[100] overflow-y-auto flex items-start justify-center p-2 sm:p-6 bg-black/85 backdrop-blur-md"
               role="dialog"
               aria-modal="true"
               aria-labelledby="registration-form-title"
               onClick={() => setIsFormModalOpen(false)}
             >
               <div
-                className="event-form-modal relative flex h-[88vh] max-w-4xl w-full flex-col overflow-hidden rounded-2xl bg-[#10121b] border border-white/15 shadow-[0_0_60px_rgba(0,0,0,0.9)] overscroll-contain"
-                style={{ overscrollBehavior: 'contain' }}
+                className="event-form-modal relative flex h-[88vh] max-w-4xl w-full flex-col overflow-hidden rounded-2xl bg-[#10121b] border border-white/15 shadow-[0_0_60px_rgba(0,0,0,0.9)] my-auto sm:my-6"
                 onClick={(event) => event.stopPropagation()}
               >
                 <div className="flex items-center justify-between border-b border-white/10 px-6 py-4 bg-[#161821] shrink-0">
@@ -189,7 +187,7 @@ export default function Events() {
                     &times;
                   </button>
                 </div>
-                <div ref={modalContainerRef} className="relative flex-1 w-full min-h-0 bg-[#10121b] overscroll-contain overflow-y-auto" style={{ overscrollBehavior: 'contain' }}>
+                <div className="relative flex-1 w-full min-h-0 bg-[#10121b]">
                   {isIframeLoading && (
                     <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#10121b] text-[#00f3ff] font-mono text-sm gap-3 z-10 px-4 text-center">
                       <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-[#00f3ff] mb-1"></div>
