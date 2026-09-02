@@ -87,20 +87,20 @@ export default function Events() {
                   </h4>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div className="bg-[#0f1015] border border-white/5 p-4 rounded-lg">
-                      <h5 className="text-white font-bold text-sm mb-1">Prompt Counter</h5>
-                      <p className="text-xs text-gray-500">Precision execution &amp; logic timing.</p>
+                      <h5 className="text-white font-bold text-sm mb-1">Tech Sketch</h5>
+                      <p className="text-xs text-gray-500">Precision execution &amp; logic timing , Venue: Lab 3.</p>
                     </div>
                     <div className="bg-[#0f1015] border border-white/5 p-4 rounded-lg">
                       <h5 className="text-white font-bold text-sm mb-1">Fastest Finger First</h5>
-                      <p className="text-xs text-gray-500">Rapid-fire technical trivia.</p>
+                      <p className="text-xs text-gray-500">Rapid-fire technical trivia, Venue: Lab 4.</p>
                     </div>
                     <div className="bg-[#0f1015] border border-white/5 p-4 rounded-lg">
-                      <h5 className="text-white font-bold text-sm mb-1">AI vs Human</h5>
-                      <p className="text-xs text-gray-500">Content generation challenge (2:1 ratio).</p>
+                      <h5 className="text-white font-bold text-sm mb-1">Bot or Brain</h5>
+                      <p className="text-xs text-gray-500">Content generation challenge (2:1 ratio), Venue: Lab 3.</p>
                     </div>
                     <div className="bg-[#0f1015] border border-white/5 p-4 rounded-lg">
-                      <h5 className="text-white font-bold text-sm mb-1">Tech Pictionary</h5>
-                      <p className="text-xs text-gray-500">Drawing and guessing tech concepts.</p>
+                      <h5 className="text-white font-bold text-sm mb-1">Prompt Battle</h5>
+                      <p className="text-xs text-gray-500">Drawing and guessing tech concepts, Venue: Lab 4.</p>
                     </div>
                   </div>
                 </div>

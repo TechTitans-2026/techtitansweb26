@@ -51,14 +51,14 @@ export default function Members() {
                   <span className="w-2 h-6 bg-[#00f3ff] inline-block rounded shrink-0"></span>
                   <span className="truncate">{team}{team !== 'Core Leadership' && ` (${MEMBERS_PER_TEAM} SLOTS)`}</span>
                 </h3>
-                <div className={team === 'Core Leadership' ? 'flex flex-row items-center justify-between sm:justify-evenly w-full max-w-3xl mx-auto px-2 sm:px-6 gap-2 sm:gap-6' : 'grid grid-cols-2 sm:grid-cols-1 gap-2.5 sm:gap-3 w-full flex-1'}>
+                <div className={team === 'Core Leadership' ? 'flex flex-row items-center justify-between sm:justify-evenly w-full max-w-3xl mx-auto px-1 sm:px-6 gap-2 sm:gap-6' : 'grid grid-cols-1 gap-3.5 w-full flex-1'}>
                   {teamMembers.map((member, idx) => (
                     <button 
                       key={member.id}
                       onClick={() => setSelectedMember(member)}
                       className={team === 'Core Leadership'
-                        ? 'glass-panel w-[28%] max-w-[176px] aspect-square justify-self-center rounded-full p-1 sm:p-4 hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(0,243,255,0.15)] transition-all group border border-white/5 relative overflow-hidden text-center flex flex-col items-center justify-center cursor-pointer shrink-0'
-                        : 'glass-panel p-2.5 sm:p-3 rounded-xl hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(0,243,255,0.15)] transition-all group border border-white/5 relative overflow-hidden text-left w-full cursor-pointer flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 min-h-[96px] sm:min-h-[104px]'}
+                        ? 'glass-panel w-[30%] sm:w-44 h-auto sm:h-44 rounded-xl sm:rounded-full py-3 px-1.5 sm:p-4 hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(0,243,255,0.15)] transition-all group border border-white/5 relative overflow-hidden text-center flex flex-col items-center justify-center cursor-pointer shrink-0'
+                        : 'glass-panel p-3.5 sm:p-4 rounded-xl hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(0,243,255,0.15)] transition-all group border border-white/5 relative overflow-hidden text-left w-full cursor-pointer flex flex-row items-center gap-3.5 min-h-[100px] sm:min-h-[104px]'}
                     >
                       {team !== 'Core Leadership' && team !== 'General Members' && team !== 'Support Team' && (
                         idx === 0 ? (
@@ -90,7 +90,7 @@ export default function Members() {
                   {openPositions.map(member => (
                     <div
                       key={`${team}-open-${member.slot}`}
-                      className="glass-panel p-2.5 sm:p-3 rounded-xl border border-dashed border-white/15 bg-black/15 hover:border-white/30 transition-all group relative overflow-hidden text-left w-full flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 min-h-[96px] sm:min-h-[104px] opacity-75 hover:opacity-100"
+                      className="glass-panel p-3.5 sm:p-4 rounded-xl border border-dashed border-white/15 bg-black/15 hover:border-white/30 transition-all group relative overflow-hidden text-left w-full flex flex-row items-center gap-3.5 min-h-[100px] sm:min-h-[104px] opacity-75 hover:opacity-100"
                     >
                       <div className="absolute top-0 right-0 w-12 h-12 bg-gradient-to-br from-white/5 to-transparent rounded-bl-full -mr-6 -mt-6"></div>
                       <div className="w-9 h-9 sm:w-11 sm:h-11 bg-gradient-to-br from-[#1c1d24] to-[#121318] rounded-full flex items-center justify-center border border-white/10 shrink-0 text-gray-400 font-mono text-sm sm:text-lg font-bold">
