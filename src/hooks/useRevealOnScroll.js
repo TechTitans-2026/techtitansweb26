@@ -17,10 +17,13 @@ export function useRevealOnScroll(threshold = 0.05, rootMargin = '0px 0px 0px 0p
       });
     };
 
+    // Instant execution on next animation frame
+    requestAnimationFrame(handleObserver);
     handleObserver();
+
     window.addEventListener('scroll', handleObserver, { passive: true });
     window.addEventListener('resize', handleObserver, { passive: true });
-    const timer = setInterval(handleObserver, 300);
+    const timer = setInterval(handleObserver, 150);
 
     return () => {
       window.removeEventListener('scroll', handleObserver);
