@@ -114,11 +114,6 @@ const Auth = () => {
         if (!mounted) return;
 
         if (session?.user) {
-          localStorage.setItem(
-            'user',
-            JSON.stringify(session.user)
-          );
-
           const oauthRedirectPath =
             sessionStorage.getItem('oauthRedirectPath');
 
@@ -153,20 +148,7 @@ const Auth = () => {
   useEffect(() => {
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        if (session?.user) {
-          localStorage.setItem(
-            'user',
-            JSON.stringify(session.user)
-          );
-        }
-
-        if (event === 'SIGNED_OUT') {
-          localStorage.removeItem('user');
-        }
-      }
-    );
+    } = supabase.auth.onAuthStateChange(() => {});
 
     return () => {
       subscription.unsubscribe();
@@ -306,12 +288,6 @@ const Auth = () => {
           );
         }
 
-        // Save user for compatibility
-        localStorage.setItem(
-          'user',
-          JSON.stringify(data.user)
-        );
-
         setNotice(
           'Login successful! Redirecting...'
         );
@@ -362,11 +338,6 @@ const Auth = () => {
       // ======================================================
 
       if (data?.session && data?.user) {
-        localStorage.setItem(
-          'user',
-          JSON.stringify(data.user)
-        );
-
         setNotice(
           'Registration successful! Redirecting...'
         );
@@ -377,69 +348,37 @@ const Auth = () => {
 
         return;
       }
-      
-     // ======================================================
-    // CHECK FOR EXISTING EMAIL / EMAIL CONFIRMATION
-    //  ======================================================
 
-       // Supabase may return an empty identities array when
-       // the email is already registered.
-       if (
-         data?.user &&
-         Array.isArray(data.user.identities) &&
-         data.user.identities.length === 0
-   ) {
-     setError(
-        'This email is already registered. Please Sign In instead. If you forgot your password, use Forgot Password.'
-      );
-
-         setIsLogin(true);
-         setPassword('');
-         setConfirmPassword('');
-         return;
-      }
-
-        // New user - email confirmation required
-        setNotice(
-           'Registration successful! Please check your email and confirm your account.'
-        );
-
-        setIsLogin(true);
-
-        setPassword('');
-         setConfirmPassword('');
-      
       // ======================================================
       // CHECK FOR EXISTING EMAIL / EMAIL CONFIRMATION
       // ======================================================
 
       // Supabase may return an empty identities array when
       // the email is already registered.
-       if (
-          data?.user &&
-          Array.isArray(data.user.identities) &&
-          data.user.identities.length === 0
-       ) {
+      if (
+        data?.user &&
+        Array.isArray(data.user.identities) &&
+        data.user.identities.length === 0
+      ) {
         setError(
-            'This email is already registered. Please Sign In instead. If you forgot your password, use Forgot Password.'
-          );
-
-           setIsLogin(true);
-           setPassword('');
-           setConfirmPassword('');
-           return;
-          }
-
-        // New user - email confirmation required
-        setNotice(
-            'Registration successful! Please check your email and confirm your account.'
+          'This email is already registered. Please Sign In instead. If you forgot your password, use Forgot Password.'
         );
 
         setIsLogin(true);
-
         setPassword('');
         setConfirmPassword('');
-            } catch (err) {
+        return;
+      }
+
+      // New user - email confirmation required
+      setNotice(
+        'Registration successful! Please check your email and confirm your account.'
+      );
+
+      setIsLogin(true);
+      setPassword('');
+      setConfirmPassword('');
+    } catch (err) {
               console.error(
                 'Authentication error:',
                    err

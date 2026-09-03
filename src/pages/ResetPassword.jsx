@@ -25,6 +25,7 @@ const ResetPassword = () => {
           );
         }
       } catch (err) {
+        console.error('Password reset session check failed:', err);
         setError('Unable to verify password reset link.');
       } finally {
         setCheckingSession(false);

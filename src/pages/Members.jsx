@@ -6,7 +6,6 @@ import './Home.css';
 const MEMBERS_PER_TEAM = 5;
 
 export default function Members() {
-  const [loading, setLoading] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
 
   useEffect(() => {

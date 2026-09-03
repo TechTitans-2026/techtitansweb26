@@ -56,7 +56,7 @@ const BackgroundEffects = () => {
   const containerRef = useRef(null);
 
   // Initialize loop mode: cycles on every page reload
-  const [activeLoop, setActiveLoop] = useState(() => {
+  const [activeLoop] = useState(() => {
     try {
       const stored = parseInt(sessionStorage.getItem('tt_bg_loop_idx') || '-1', 10);
       const next = (stored + 1) % 4;
