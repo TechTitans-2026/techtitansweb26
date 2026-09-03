@@ -17,6 +17,27 @@ export default function Events() {
 
   const [isFormLoaded, setIsFormLoaded] = useState(false);
 
+  // Fetch published events from Supabase database on mount
+  useEffect(() => {
+    let isMounted = true;
+    const loadEvents = async () => {
+      try {
+        const data = await eventService.fetchEvents();
+        if (isMounted) {
+          setPublishedEvents(data || []);
+        }
+      } catch (error) {
+        console.error('Failed to load events:', error);
+      }
+    };
+
+    loadEvents();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   const handleCloseFormModal = () => {
     setIsFormModalOpen(false);
     setIsRegistrationFlipped(false);
