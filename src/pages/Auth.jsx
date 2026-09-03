@@ -242,32 +242,50 @@ const Auth = () => {
         </div>
 
         {/* RESET PASSWORD SECTION */}
-        <div className="mb-6 border-t border-white/10 pt-6">
-          <form
-            onSubmit={handleForgotPassword}
-            className="p-4 bg-black/40 border border-[#00f3ff]/30 rounded-xl space-y-3 text-left transition-all"
-          >
-            <label className="block text-[11px] font-mono text-gray-300 uppercase tracking-wider">
-              Reset Account Password via Email
-            </label>
-            <div className="flex flex-col sm:flex-row gap-2">
+        <div className="mb-6">
+          {!showForgotPassword ? (
+            <button
+              type="button"
+              onClick={() => setShowForgotPassword(true)}
+              className="text-xs font-mono text-[#00f3ff] hover:text-white transition-colors inline-flex items-center gap-2 cursor-pointer py-1.5 px-3 rounded-lg border border-[#00f3ff]/20 hover:border-[#00f3ff]/50 bg-[#00f3ff]/5"
+            >
+              <i className="fas fa-key text-xs"></i>
+              <span>Forgot password / Need to reset?</span>
+            </button>
+          ) : (
+            <form
+              onSubmit={handleForgotPassword}
+              className="p-4 bg-black/50 border border-[#00f3ff]/40 rounded-xl space-y-3 text-left transition-all shadow-lg"
+            >
+              <label className="block text-[11px] font-mono text-gray-300 uppercase tracking-wider">
+                Send Reset Link to Email
+              </label>
               <input
                 type="email"
                 required
                 value={resetEmail}
                 onChange={(e) => setResetEmail(e.target.value)}
-                placeholder="Enter your email"
-                className="input-glass flex-1 text-xs font-mono"
+                placeholder="name@example.com"
+                className="input-glass w-full text-xs font-mono"
               />
-              <button
-                type="submit"
-                disabled={loading}
-                className="btn-keycap py-2.5 px-4 text-xs font-mono font-bold shrink-0"
-              >
-                {loading ? 'SENDING...' : 'RESET 🔑'}
-              </button>
-            </div>
-          </form>
+              <div className="flex gap-2 pt-1">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="btn-keycap flex-1 py-2.5 text-xs font-mono font-bold"
+                >
+                  {loading ? 'SENDING...' : 'SEND RESET LINK 📩'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowForgotPassword(false)}
+                  className="px-3 py-2 text-xs font-mono text-gray-400 hover:text-white transition-colors cursor-pointer"
+                >
+                  CANCEL
+                </button>
+              </div>
+            </form>
+          )}
         </div>
 
         {/* SECURITY FOOTER NOTE */}
