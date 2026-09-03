@@ -425,6 +425,39 @@ const Auth = () => {
   };
 
   // ============================================================
+  // GITHUB LOGIN
+  // ============================================================
+
+  const handleGithubLogin = async () => {
+    if (loading) return;
+
+    setError('');
+    setNotice('');
+    setLoading(true);
+
+    try {
+      sessionStorage.setItem('oauthRedirectPath', fromPath);
+
+      const { error: oauthError } =
+        await supabase.auth.signInWithOAuth({
+          provider: 'github',
+          options: {
+            redirectTo: `${window.location.origin}/auth`,
+          },
+        });
+
+      if (oauthError) {
+        throw oauthError;
+      }
+    } catch (err) {
+      sessionStorage.removeItem('oauthRedirectPath');
+      console.error('GitHub authentication error:', err);
+      setError(getFriendlyError(err.message));
+      setLoading(false);
+    }
+  };
+
+  // ============================================================
 // SEND PASSWORD RESET EMAIL
 // ============================================================
 
@@ -597,18 +630,44 @@ const { error: resetError } =
           </div>
         )}
 
-        <button
-          type="button"
-          onClick={handleGoogleLogin}
-          disabled={loading}
-          className={`btn-keycap w-full py-3.5 mb-4 text-sm ${
-            loading
-              ? 'opacity-60 cursor-not-allowed'
-              : 'cursor-pointer'
-          }`}
-        >
-          {loading ? 'PROCESSING...' : 'CONTINUE WITH GOOGLE'}
-        </button>
+        {/* OAUTH SOCIAL BUTTONS */}
+        <div className="grid grid-cols-2 gap-3 mb-6">
+          <button
+            type="button"
+            onClick={handleGoogleLogin}
+            disabled={loading}
+            className={`btn-keycap py-3 px-3 text-xs font-mono font-bold flex items-center justify-center gap-2 border border-white/10 hover:border-[#00f3ff]/50 transition-all ${
+              loading
+                ? 'opacity-60 cursor-not-allowed'
+                : 'cursor-pointer'
+            }`}
+          >
+            <i className="fab fa-google text-sm text-[#ea4335]"></i>
+            <span>GOOGLE</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handleGithubLogin}
+            disabled={loading}
+            className={`btn-keycap py-3 px-3 text-xs font-mono font-bold flex items-center justify-center gap-2 border border-white/10 hover:border-[#b89eff]/50 transition-all ${
+              loading
+                ? 'opacity-60 cursor-not-allowed'
+                : 'cursor-pointer'
+            }`}
+          >
+            <i className="fab fa-github text-sm text-white"></i>
+            <span>GITHUB</span>
+          </button>
+        </div>
+
+        {/* DIVIDER */}
+        <div className="relative flex items-center justify-center mb-6">
+          <div className="border-t border-white/10 w-full"></div>
+          <span className="bg-[#10121b] px-3 text-[10px] font-mono text-gray-400 uppercase tracking-widest absolute">
+            OR WITH EMAIL
+          </span>
+        </div>
 
         {/* FORM */}
 
