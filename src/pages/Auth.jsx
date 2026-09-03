@@ -173,15 +173,15 @@ const Auth = () => {
     const text = message?.toLowerCase() || '';
 
     if (text.includes('invalid login credentials')) {
-      return 'Incorrect email or password.';
+      return 'Incorrect email or password. (If you created your account with Google, please click "Sign in with Google" below).';
     }
 
     if (text.includes('email not confirmed')) {
-      return 'Please confirm your email before signing in.';
+      return 'Your email has not been confirmed yet. Please check your email inbox (and spam folder), or click below to resend the confirmation link.';
     }
 
     if (text.includes('user already registered')) {
-      return 'An account with this email already exists.';
+      return 'An account with this email already exists. Please sign in or click "Forgot Password".';
     }
 
     if (text.includes('password')) {
@@ -582,8 +582,18 @@ const { error: resetError } =
         {/* ERROR */}
 
         {error && (
-          <div className="bg-red-500/10 border border-red-500/50 text-red-400 p-3 rounded-lg mb-6 text-xs font-mono text-center">
-            {error}
+          <div className="bg-red-500/10 border border-red-500/50 text-red-400 p-3 rounded-lg mb-6 text-xs font-mono text-center flex flex-col items-center gap-2">
+            <span>{error}</span>
+            {error.toLowerCase().includes('confirm') && (
+              <button
+                type="button"
+                onClick={handleResendConfirmation}
+                disabled={loading}
+                className="text-[#00f3ff] underline hover:text-white transition-colors cursor-pointer text-xs font-bold mt-1"
+              >
+                📩 Resend Confirmation Email
+              </button>
+            )}
           </div>
         )}
 
