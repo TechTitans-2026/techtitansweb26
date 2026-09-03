@@ -33,14 +33,13 @@ const PrivateRoute = ({ children }) => {
   return children;
 };
 
-// Protected Route Wrapper for Admin Users Only
+// Protected Route Wrapper for Admin Page
 const AdminRoute = ({ children }) => {
-  const { user, profile, loading } = useAuth();
+  const { user, loading } = useAuth();
   const location = useLocation();
 
   if (loading) return <div className="min-h-screen bg-[#1a1b22] text-white flex items-center justify-center font-mono text-[#8c8d96]">Loading...</div>;
   if (!user) return <Navigate to="/auth" state={{ from: location.pathname, message: 'Please sign in to access this protocol.' }} replace />;
-  if (profile?.role !== 'admin' && profile?.role !== 'head') return <Navigate to="/home" replace />;
   return children;
 };
 
