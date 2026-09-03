@@ -49,34 +49,32 @@ const Auth = () => {
     };
   }, []);
 
-  // Check existing Supabase session in background
+  // Listen for active Supabase session or auth state changes (Google / GitHub OAuth callbacks)
   useEffect(() => {
     let mounted = true;
 
-    const checkSession = async () => {
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-
-        if (!mounted) return;
-
-        const hasOAuthParam = window.location.href.includes('access_token') || window.location.href.includes('code=');
-
-        if (session?.user && !hasOAuthParam) {
-          const oauthRedirectPath = sessionStorage.getItem('oauthRedirectPath');
-          if (oauthRedirectPath) {
-            sessionStorage.removeItem('oauthRedirectPath');
-            navigate(oauthRedirectPath, { replace: true });
-          }
-        }
-      } catch (err) {
-        console.error('Session check error:', err);
+    const redirectIfSignedIn = (session) => {
+      if (session?.user && mounted) {
+        const oauthRedirectPath = sessionStorage.getItem('oauthRedirectPath');
+        const targetPath = oauthRedirectPath || fromPath || '/profile';
+        sessionStorage.removeItem('oauthRedirectPath');
+        navigate(targetPath, { replace: true });
       }
     };
 
-    checkSession();
+    // Check initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) redirectIfSignedIn(session);
+    });
+
+    // Listen for OAuth sign-in completion event
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) redirectIfSignedIn(session);
+    });
 
     return () => {
       mounted = false;
+      subscription?.unsubscribe();
     };
   }, [fromPath, navigate]);
 
