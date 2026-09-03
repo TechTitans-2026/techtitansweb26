@@ -23,11 +23,15 @@ export function useRevealOnScroll(threshold = 0.05, rootMargin = '0px 0px 0px 0p
 
     window.addEventListener('scroll', handleObserver, { passive: true });
     window.addEventListener('resize', handleObserver, { passive: true });
+    window.addEventListener('pageshow', handleObserver);
+    window.addEventListener('popstate', handleObserver);
     const timer = setInterval(handleObserver, 150);
 
     return () => {
       window.removeEventListener('scroll', handleObserver);
       window.removeEventListener('resize', handleObserver);
+      window.removeEventListener('pageshow', handleObserver);
+      window.removeEventListener('popstate', handleObserver);
       clearInterval(timer);
     };
   }, [threshold, rootMargin]);

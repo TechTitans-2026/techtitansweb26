@@ -24,6 +24,31 @@ const Auth = () => {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [resetEmail, setResetEmail] = useState('');
 
+  // Handle bfcache restoration (browser Back button navigation)
+  useEffect(() => {
+    const handleBfcacheRestoration = (event) => {
+      setLoading(false);
+      setError('');
+
+      // Instantly reveal all elements in DOM
+      const reveals = document.querySelectorAll('.reveal');
+      reveals.forEach((el) => el.classList.add('in-view'));
+
+      // Trigger scroll/resize to awaken background animations
+      window.dispatchEvent(new Event('scroll'));
+      window.dispatchEvent(new Event('resize'));
+    };
+
+    window.addEventListener('pageshow', handleBfcacheRestoration);
+    window.addEventListener('popstate', handleBfcacheRestoration);
+
+    return () => {
+      setLoading(false);
+      window.removeEventListener('pageshow', handleBfcacheRestoration);
+      window.removeEventListener('popstate', handleBfcacheRestoration);
+    };
+  }, []);
+
   // Check existing Supabase session in background
   useEffect(() => {
     let mounted = true;

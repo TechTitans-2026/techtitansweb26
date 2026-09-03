@@ -67,7 +67,7 @@ const BackgroundEffects = () => {
     }
   });
 
-  // Cursor spotlight tracking
+  // Cursor spotlight tracking & bfcache initialization
   useEffect(() => {
     const handleMouseMove = (e) => {
       if (cursorRef.current && window.matchMedia('(pointer: fine)').matches) {
@@ -76,8 +76,25 @@ const BackgroundEffects = () => {
       }
     };
 
+    const handleInitCursor = () => {
+      if (cursorRef.current) {
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 3;
+        cursorRef.current.style.setProperty('--x', centerX + 'px');
+        cursorRef.current.style.setProperty('--y', centerY + 'px');
+      }
+    };
+
+    handleInitCursor();
     window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    window.addEventListener('pageshow', handleInitCursor);
+    window.addEventListener('popstate', handleInitCursor);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('pageshow', handleInitCursor);
+      window.removeEventListener('popstate', handleInitCursor);
+    };
   }, []);
 
   // Parallax Depth Animation Engine
