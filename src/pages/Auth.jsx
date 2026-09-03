@@ -20,6 +20,10 @@ const Auth = () => {
   const [loading, setLoading] = useState(false);
   const [checkingSession, setCheckingSession] = useState(false);
 
+  // Forgot Password Modal/Form State
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
+
   // Check existing Supabase session in background
   useEffect(() => {
     let mounted = true;
@@ -110,6 +114,39 @@ const Auth = () => {
     }
   };
 
+  // Handle Reset Password Email Verification Link
+  const handleForgotPassword = async (e) => {
+    e.preventDefault();
+    if (!resetEmail.trim()) {
+      setError('Please enter your account email address.');
+      return;
+    }
+
+    setError('');
+    setNotice('');
+    setLoading(true);
+
+    try {
+      const { error: resetErr } = await supabase.auth.resetPasswordForEmail(
+        resetEmail.trim().toLowerCase(),
+        {
+          redirectTo: `${window.location.origin}/reset-password`,
+        }
+      );
+
+      if (resetErr) throw resetErr;
+
+      setNotice('📩 Password reset link sent! Please check your email inbox.');
+      setResetEmail('');
+      setShowForgotPassword(false);
+    } catch (err) {
+      console.error('Password reset error:', err);
+      setError(err.message || 'Unable to send reset email. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (checkingSession) {
     return (
       <div className="home-body min-h-screen flex items-center justify-center">
@@ -178,7 +215,7 @@ const Auth = () => {
         )}
 
         {/* OAUTH BUTTONS */}
-        <div className="flex flex-col gap-4 mb-8">
+        <div className="flex flex-col gap-4 mb-6">
           <button
             type="button"
             onClick={handleGoogleLogin}
@@ -202,6 +239,52 @@ const Auth = () => {
             <i className="fab fa-github text-base text-white"></i>
             <span>CONTINUE WITH GITHUB</span>
           </button>
+        </div>
+
+        {/* RESET PASSWORD SECTION */}
+        <div className="mb-6">
+          {!showForgotPassword ? (
+            <button
+              type="button"
+              onClick={() => setShowForgotPassword(true)}
+              className="text-xs font-mono text-[#00f3ff] hover:underline transition-colors inline-flex items-center gap-1.5 cursor-pointer"
+            >
+              🔑 <span>Forgot password / Need to reset?</span>
+            </button>
+          ) : (
+            <form
+              onSubmit={handleForgotPassword}
+              className="p-4 bg-black/40 border border-[#00f3ff]/30 rounded-xl space-y-3 text-left transition-all"
+            >
+              <label className="block text-[11px] font-mono text-gray-300 uppercase tracking-wider">
+                Send Reset Link to Email
+              </label>
+              <input
+                type="email"
+                required
+                value={resetEmail}
+                onChange={(e) => setResetEmail(e.target.value)}
+                placeholder="name@example.com"
+                className="input-glass w-full text-xs font-mono"
+              />
+              <div className="flex gap-2 pt-1">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="btn-keycap flex-1 py-2.5 text-xs font-mono font-bold"
+                >
+                  {loading ? 'SENDING...' : 'SEND RESET LINK 📩'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowForgotPassword(false)}
+                  className="px-3 py-2 text-xs font-mono text-gray-400 hover:text-white transition-colors"
+                >
+                  CANCEL
+                </button>
+              </div>
+            </form>
+          )}
         </div>
 
         {/* SECURITY FOOTER NOTE */}
