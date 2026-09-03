@@ -58,6 +58,7 @@ const Auth = () => {
     setError('');
     setNotice('');
     setLoading(true);
+    setTimeout(() => setLoading(false), 3500);
 
     try {
       sessionStorage.setItem('oauthRedirectPath', fromPath);
@@ -88,6 +89,7 @@ const Auth = () => {
     setError('');
     setNotice('');
     setLoading(true);
+    setTimeout(() => setLoading(false), 3500);
 
     try {
       sessionStorage.setItem('oauthRedirectPath', fromPath);
