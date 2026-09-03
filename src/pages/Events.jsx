@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 import { eventService } from '../services/eventService';
 import './Home.css';
@@ -13,49 +13,43 @@ export default function Events() {
   // NEW: Events published by admin
   const [publishedEvents, setPublishedEvents] = useState([]);
 
-  // NEW: Fetch published events from Supabase
-  useEffect(() => {
-    const loadEvents = async () => {
-      try {
-        const data = await eventService.fetchEvents();
-        setPublishedEvents(data || []);
-      } catch (error) {
-        console.error('Failed to load events:', error);
-      }
-    };
+  const modalContainerRef = useRef(null);
 
-    loadEvents();
-  }, []);
+  const [isFormLoaded, setIsFormLoaded] = useState(false);
 
-  // Intercept browser back button when form modal is open so it closes modal instead of leaving Events page
+  const handleCloseFormModal = () => {
+    setIsFormModalOpen(false);
+    setIsRegistrationFlipped(false);
+    setIsFormLoaded(false);
+  };
+
+  // Lock body scroll and handle Escape key when modal is open
   useEffect(() => {
     if (!isFormModalOpen) return;
 
-    window.history.pushState({ modalOpen: true }, '');
+    if (modalContainerRef.current) {
+      modalContainerRef.current.scrollTop = 0;
+    }
 
-    const handlePopState = () => {
-      setIsFormModalOpen(false);
-      setIsRegistrationFlipped(false);
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        handleCloseFormModal();
+      }
     };
 
-    window.addEventListener('popstate', handlePopState);
+    window.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      window.removeEventListener('popstate', handlePopState);
-      if (window.history.state?.modalOpen) {
-        window.history.back();
-      }
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
     };
   }, [isFormModalOpen]);
 
   const handleRegistrationCardClick = () => {
-    if (isRegistrationFlipped) {
-      setIsRegistrationFlipped(false);
-      return;
-    }
-
-    setIsRegistrationFlipped(true);
-    setIsFormModalOpen(true);
+    setIsRegistrationFlipped(!isRegistrationFlipped);
   };
 
   useRevealOnScroll();
@@ -67,6 +61,72 @@ export default function Events() {
 
       <div id="view-events" className="page-view active flex-grow">
         <div className="max-w-6xl mx-auto px-6 py-16 relative z-10 flex flex-col gap-20">
+
+          {/* ADMIN PUBLISHED EVENTS */}
+          {publishedEvents.length > 0 && (
+            <div className="w-full">
+              <h2 className="section-heading text-3xl mb-6">Published Events</h2>
+
+              <div className="grid grid-cols-1 gap-8">
+                {publishedEvents.map((event) => (
+                  <div
+                    key={event.id}
+                    className="glass-panel overflow-hidden border border-accent/20 rounded-2xl shadow-xl"
+                  >
+                    <div className="flex flex-col md:flex-row items-stretch min-h-[260px]">
+
+                      {/* Event Image */}
+                      {event.image_url ? (
+                        <div className="w-full md:w-5/12 min-h-[240px] md:min-h-[280px] shrink-0 overflow-hidden relative bg-black/40 border-b md:border-b-0 md:border-r border-white/5">
+                          <img
+                            src={event.image_url}
+                            alt={event.title}
+                            className="w-full h-full object-cover block"
+                            onError={(e) => {
+                              console.warn('Image failed to render:', event.image_url);
+                              e.target.style.display = 'none';
+                            }}
+                          />
+                        </div>
+                      ) : (
+                        <div className="w-full md:w-5/12 min-h-[180px] md:min-h-[280px] shrink-0 bg-gradient-to-br from-[#161821] to-[#0d0e14] flex items-center justify-center p-6 border-b md:border-b-0 md:border-r border-white/5">
+                          <i className="fas fa-calendar-alt text-5xl text-accent/40"></i>
+                        </div>
+                      )}
+
+                      {/* Event Details */}
+                      <div className="w-full md:w-7/12 p-6 sm:p-8 md:p-10 bg-[#161821]/60 flex flex-col justify-between flex-1">
+
+                        <div>
+                          <div className="flex items-center gap-3 mb-4">
+                            <span className="inline-block px-3 py-1 bg-accent/10 text-accent font-bold text-[10px] rounded tracking-wider uppercase border border-accent/20">
+                              {event.status || 'Upcoming'}
+                            </span>
+                          </div>
+
+                          <h3 className="text-2xl sm:text-3xl font-black text-white mb-3 leading-tight tracking-tight">
+                            {event.title}
+                          </h3>
+
+                          <p className="text-gray-300 text-sm mb-6 leading-relaxed whitespace-pre-wrap">
+                            {event.description || 'No description available for this event.'}
+                          </p>
+                        </div>
+
+                        {event.event_date && (
+                          <div className="flex items-center text-xs font-semibold text-gray-300 gap-2 bg-black/30 p-3 rounded-lg border border-white/5 mt-4">
+                            <i className="fas fa-calendar text-accent"></i>
+                            <span>Date: {new Date(event.event_date).toLocaleString()}</span>
+                          </div>
+                        )}
+
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Upcoming Event Highlight */}
           <div className="reveal">
@@ -143,60 +203,6 @@ export default function Events() {
               </div>
             </div>
           </div>
-
-          {/* ADMIN PUBLISHED EVENTS */}
-          {publishedEvents.length > 0 && (
-            <div className="reveal in-view">
-              <h2 className="section-heading text-2xl">Published Events</h2>
-
-              <div className="grid grid-cols-1 gap-6">
-                {publishedEvents.map((event) => (
-                  <div
-                    key={event.id}
-                    className="glass-panel overflow-hidden border border-accent/20"
-                  >
-                    <div className="flex flex-col md:flex-row">
-
-                      {/* Event Image */}
-                      {event.image_url && (
-                        <div className="w-full md:w-5/12">
-                          <img
-                            src={event.image_url}
-                            alt={event.title}
-                            className="w-full h-full min-h-[240px] object-cover"
-                          />
-                        </div>
-                      )}
-
-                      {/* Event Details */}
-                      <div className="w-full md:flex-1 p-8 md:p-10 bg-[#161821]/50">
-
-                        <span className="inline-block px-3 py-1 bg-accent/10 text-accent font-bold text-[10px] rounded mb-4 tracking-wider uppercase border border-accent/20">
-                          {event.status || 'Upcoming'}
-                        </span>
-
-                        <h3 className="text-3xl font-black text-white mb-3 leading-tight tracking-tight">
-                          {event.title}
-                        </h3>
-
-                        <p className="text-gray-400 text-sm mb-6 leading-relaxed">
-                          {event.description}
-                        </p>
-
-                        {event.event_date && (
-                          <div className="flex items-center text-xs font-semibold text-gray-300 gap-2 bg-black/20 p-3 rounded-lg border border-white/5">
-                            <i className="fas fa-calendar text-accent"></i>
-                            {new Date(event.event_date).toLocaleString()}
-                          </div>
-                        )}
-
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
 
           {/* Participation Form */}
           <div className="max-w-3xl mx-auto w-full reveal">
@@ -280,34 +286,35 @@ export default function Events() {
 
           {isFormModalOpen && (
             <div
-              className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/85 backdrop-blur-md"
+              className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md"
               role="dialog"
               aria-modal="true"
               aria-labelledby="registration-form-title"
-              onClick={() => setIsFormModalOpen(false)}
+              onClick={handleCloseFormModal}
             >
               <div
-                className="event-form-modal relative flex h-[92vh] max-w-4xl w-full flex-col overflow-hidden rounded-2xl bg-[#10121b] border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.8)]"
+                ref={modalContainerRef}
+                className="event-form-modal relative flex h-[85vh] sm:h-[90vh] max-w-4xl w-full flex-col overflow-hidden rounded-2xl bg-[#10121b] border border-white/15 shadow-[0_20px_60px_rgba(0,0,0,0.9)]"
                 onClick={(event) => event.stopPropagation()}
               >
-                <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
+                <div className="flex items-center justify-between border-b border-white/10 px-5 py-4 bg-[#10121b] shrink-0">
                   <div>
                     <h3
                       id="registration-form-title"
-                      className="font-bold text-white"
+                      className="font-bold text-white text-base sm:text-lg"
                     >
                       Event Registration
                     </h3>
 
                     <p className="text-xs text-gray-400">
-                      Complete the form without leaving Tech Titans.
+                      Complete the form below to register.
                     </p>
                   </div>
 
                   <button
                     type="button"
-                    className="flex h-9 w-9 items-center justify-center rounded-full text-xl text-gray-400 transition-colors hover:bg-white/10 hover:text-white"
-                    onClick={() => setIsFormModalOpen(false)}
+                    className="flex h-9 w-9 items-center justify-center rounded-full text-xl text-gray-400 transition-colors hover:bg-white/10 hover:text-white cursor-pointer"
+                    onClick={handleCloseFormModal}
                     aria-label="Close registration form"
                   >
                     &times;
@@ -315,17 +322,16 @@ export default function Events() {
                 </div>
 
                 <div className="relative flex-1 w-full min-h-0 bg-[#10121b]">
-                  {isIframeLoading && (
+                  {!isFormLoaded && (
                     <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#10121b] text-[#00f3ff] font-mono text-sm gap-3 z-10 px-4 text-center">
                       <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-[#00f3ff] mb-1"></div>
 
-                      <span className="flex items-center justify-center gap-2 font-bold tracking-wide">
-                        <span className="text-xl animate-bounce">⏳</span>
-                        CONNECTING TO REGISTRATION PROTOCOL...
+                      <span className="font-bold tracking-wide text-white text-base">
+                        INITIALIZING REGISTRATION FORM...
                       </span>
 
-                      <span className="text-xs text-gray-400 font-mono animate-pulse mt-1">
-                        ⌛ Fetching live form servers... thanks for waiting! ⚡
+                      <span className="text-xs text-gray-400 font-mono animate-pulse">
+                        Connecting to Google Servers ⚡
                       </span>
                     </div>
                   )}
@@ -333,9 +339,9 @@ export default function Events() {
                   <iframe
                     title="Tech Titans event registration Google Form"
                     src={GOOGLE_FORM_URL}
-                    onLoad={() => setIsIframeLoading(false)}
-                    className={`w-full h-full border-none bg-white transition-opacity duration-300 ${
-                      isIframeLoading ? 'opacity-0' : 'opacity-100'
+                    onLoad={() => setIsFormLoaded(true)}
+                    className={`w-full h-full border-none bg-white transition-opacity duration-500 ${
+                      isFormLoaded ? 'opacity-100' : 'opacity-0'
                     }`}
                   />
                 </div>
