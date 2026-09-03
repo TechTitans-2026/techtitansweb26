@@ -26,15 +26,7 @@ export default function Members() {
           </p>
         </div>
         
-        {loading ? (
-          <div className="flex flex-col items-center justify-center my-20 gap-3">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#b89eff]"></div>
-            <span className="text-sm font-mono text-[#b89eff] flex items-center gap-2">
-              <span className="text-lg animate-bounce">⏳</span> Loading operatives... please wait ⚡
-            </span>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-6 gap-y-16">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-6 gap-y-16">
             {teams.map(team => {
               const teamMembers = membersData.filter((member) => member.team === team);
               const openPositions = team === 'Core Leadership'
@@ -110,8 +102,7 @@ export default function Members() {
               );
             })}
           </div>
-        )}
-      </div>
+        </div>
 
       {/* Member Modal */}
       {selectedMember && (
