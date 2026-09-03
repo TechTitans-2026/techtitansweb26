@@ -83,72 +83,6 @@ export default function Events() {
       <div id="view-events" className="page-view active flex-grow">
         <div className="max-w-6xl mx-auto px-6 py-16 relative z-10 flex flex-col gap-20">
 
-          {/* ADMIN PUBLISHED EVENTS */}
-          {publishedEvents.length > 0 && (
-            <div className="w-full">
-              <h2 className="section-heading text-3xl mb-6">Published Events</h2>
-
-              <div className="grid grid-cols-1 gap-8">
-                {publishedEvents.map((event) => (
-                  <div
-                    key={event.id}
-                    className="glass-panel overflow-hidden border border-accent/20 rounded-2xl shadow-xl"
-                  >
-                    <div className="flex flex-col md:flex-row items-stretch min-h-[260px]">
-
-                      {/* Event Image */}
-                      {event.image_url ? (
-                        <div className="w-full md:w-5/12 min-h-[240px] md:min-h-[280px] shrink-0 overflow-hidden relative bg-black/40 border-b md:border-b-0 md:border-r border-white/5">
-                          <img
-                            src={event.image_url}
-                            alt={event.title}
-                            className="w-full h-full object-cover block"
-                            onError={(e) => {
-                              console.warn('Image failed to render:', event.image_url);
-                              e.target.style.display = 'none';
-                            }}
-                          />
-                        </div>
-                      ) : (
-                        <div className="w-full md:w-5/12 min-h-[180px] md:min-h-[280px] shrink-0 bg-gradient-to-br from-[#161821] to-[#0d0e14] flex items-center justify-center p-6 border-b md:border-b-0 md:border-r border-white/5">
-                          <i className="fas fa-calendar-alt text-5xl text-accent/40"></i>
-                        </div>
-                      )}
-
-                      {/* Event Details */}
-                      <div className="w-full md:w-7/12 p-6 sm:p-8 md:p-10 bg-[#161821]/60 flex flex-col justify-between flex-1">
-
-                        <div>
-                          <div className="flex items-center gap-3 mb-4">
-                            <span className="inline-block px-3 py-1 bg-accent/10 text-accent font-bold text-[10px] rounded tracking-wider uppercase border border-accent/20">
-                              {event.status || 'Upcoming'}
-                            </span>
-                          </div>
-
-                          <h3 className="text-2xl sm:text-3xl font-black text-white mb-3 leading-tight tracking-tight">
-                            {event.title}
-                          </h3>
-
-                          <p className="text-gray-300 text-sm mb-6 leading-relaxed whitespace-pre-wrap">
-                            {event.description || 'No description available for this event.'}
-                          </p>
-                        </div>
-
-                        {event.event_date && (
-                          <div className="flex items-center text-xs font-semibold text-gray-300 gap-2 bg-black/30 p-3 rounded-lg border border-white/5 mt-4">
-                            <i className="fas fa-calendar text-accent"></i>
-                            <span>Date: {new Date(event.event_date).toLocaleString()}</span>
-                          </div>
-                        )}
-
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
           {/* Upcoming Event Highlight */}
           <div className="reveal">
             <h2 className="section-heading text-3xl">Active Deployment</h2>
@@ -224,6 +158,72 @@ export default function Events() {
               </div>
             </div>
           </div>
+
+          {/* ADMIN PUBLISHED EVENTS */}
+          {publishedEvents.length > 0 && (
+            <div className="w-full">
+              <h2 className="section-heading text-3xl mb-6">Published Events</h2>
+
+              <div className="grid grid-cols-1 gap-8">
+                {publishedEvents.map((event) => (
+                  <div
+                    key={event.id}
+                    className="glass-panel overflow-hidden border border-accent/20 rounded-2xl shadow-xl"
+                  >
+                    <div className="flex flex-col md:flex-row items-stretch min-h-[260px]">
+
+                      {/* Event Image */}
+                      {event.image_url ? (
+                        <div className="w-full md:w-5/12 min-h-[240px] md:min-h-[280px] shrink-0 overflow-hidden relative bg-black/40 border-b md:border-b-0 md:border-r border-white/5">
+                          <img
+                            src={event.image_url}
+                            alt={event.title}
+                            className="w-full h-full object-cover block"
+                            onError={(e) => {
+                              console.warn('Image failed to render:', event.image_url);
+                              e.target.style.display = 'none';
+                            }}
+                          />
+                        </div>
+                      ) : (
+                        <div className="w-full md:w-5/12 min-h-[180px] md:min-h-[280px] shrink-0 bg-gradient-to-br from-[#161821] to-[#0d0e14] flex items-center justify-center p-6 border-b md:border-b-0 md:border-r border-white/5">
+                          <i className="fas fa-calendar-alt text-5xl text-accent/40"></i>
+                        </div>
+                      )}
+
+                      {/* Event Details */}
+                      <div className="w-full md:w-7/12 p-6 sm:p-8 md:p-10 bg-[#161821]/60 flex flex-col justify-between flex-1">
+
+                        <div>
+                          <div className="flex items-center gap-3 mb-4">
+                            <span className="inline-block px-3 py-1 bg-accent/10 text-accent font-bold text-[10px] rounded tracking-wider uppercase border border-accent/20">
+                              {event.status || 'Upcoming'}
+                            </span>
+                          </div>
+
+                          <h3 className="text-2xl sm:text-3xl font-black text-white mb-3 leading-tight tracking-tight">
+                            {event.title}
+                          </h3>
+
+                          <p className="text-gray-300 text-sm mb-6 leading-relaxed whitespace-pre-wrap">
+                            {event.description || 'No description available for this event.'}
+                          </p>
+                        </div>
+
+                        {event.event_date && (
+                          <div className="flex items-center text-xs font-semibold text-gray-300 gap-2 bg-black/30 p-3 rounded-lg border border-white/5 mt-4">
+                            <i className="fas fa-calendar text-accent"></i>
+                            <span>Date: {new Date(event.event_date).toLocaleString()}</span>
+                          </div>
+                        )}
+
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Participation Form */}
           <div className="max-w-3xl mx-auto w-full reveal">
