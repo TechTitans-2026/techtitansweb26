@@ -13,7 +13,6 @@ import Members from './pages/Members';
 import Auth from './pages/Auth';
 import Quests from './pages/Quests';
 import Profile from './pages/Profile';
-import ResetPassword from "./pages/ResetPassword"
 
 
 // Lazy-load heavy pages for code-splitting
@@ -90,7 +89,6 @@ function App() {
             <Route path="/events" element={<Events />} />
             <Route path="/members" element={<Members />} />
             <Route path="/auth" element={<Auth />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
             
             <Route path="/quests" element={
               <PrivateRoute>
