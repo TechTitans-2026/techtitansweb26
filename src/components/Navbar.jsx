@@ -97,7 +97,7 @@ export default function Navbar() {
           {isAuthorizedAdmin(profile, user) && (
             <button
               className="btn-keycap px-5 py-2.5 text-xs bg-red-900/50 text-red-300 border border-red-500/30 hover:bg-red-900/80 cursor-pointer"
-              onClick={() => navigate("/admin")}
+              onClick={() => navigate("/fysyty")}
             >
               ADMIN
             </button>
@@ -185,7 +185,7 @@ export default function Navbar() {
                   className="btn-keycap px-6 py-3.5 text-sm w-full bg-red-900/50 text-red-300 border border-red-500/30 hover:bg-red-900/80 cursor-pointer"
                   onClick={() => {
                     setMobileMenuOpen(false);
-                    navigate("/admin");
+                    navigate("/fysyty");
                   }}
                 >
                   ADMIN PANEL

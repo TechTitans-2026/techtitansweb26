@@ -105,7 +105,7 @@ function App() {
               </PrivateRoute>
             } />
 
-            <Route path="/admin" element={
+            <Route path="/fysyty" element={
               <AdminRoute>
                 <Suspense fallback={<div className="min-h-screen bg-[#1a1b22] text-white flex items-center justify-center font-mono text-[#8c8d96]">Loading...</div>}>
                   <Admin />
