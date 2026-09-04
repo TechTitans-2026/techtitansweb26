@@ -14,6 +14,8 @@ export default function Events() {
   const [publishedEvents, setPublishedEvents] = useState([]);
 
   const modalContainerRef = useRef(null);
+  const modalOverlayRef = useRef(null);
+  const modalHeaderTitleRef = useRef(null);
 
   const [isFormLoaded, setIsFormLoaded] = useState(false);
 
@@ -44,13 +46,33 @@ export default function Events() {
     setIsFormLoaded(false);
   };
 
-  // Lock body scroll and handle Escape key when modal is open
+  // Lock body scroll and anchor modal to top of mobile screen when opened
   useEffect(() => {
     if (!isFormModalOpen) return;
 
-    if (modalContainerRef.current) {
-      modalContainerRef.current.scrollTop = 0;
+    const savedScrollY = window.scrollY;
+
+    const resetModalScroll = () => {
+      if (modalContainerRef.current) {
+        modalContainerRef.current.scrollTop = 0;
+      }
+      if (modalOverlayRef.current) {
+        modalOverlayRef.current.scrollTop = 0;
+      }
+      window.scrollTo(0, 0);
+    };
+
+    resetModalScroll();
+    requestAnimationFrame(resetModalScroll);
+
+    // Focus modal header to prevent iframe from scrolling viewport down
+    if (modalHeaderTitleRef.current) {
+      modalHeaderTitleRef.current.focus({ preventScroll: true });
     }
+
+    // Interval reset to counteract delayed Google Form input autofocus
+    const intervalId = setInterval(resetModalScroll, 80);
+    const stopTimer = setTimeout(() => clearInterval(intervalId), 1200);
 
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
@@ -64,7 +86,10 @@ export default function Events() {
     window.addEventListener('keydown', handleKeyDown);
 
     return () => {
+      clearInterval(intervalId);
+      clearTimeout(stopTimer);
       document.body.style.overflow = originalOverflow;
+      window.scrollTo(0, savedScrollY);
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [isFormModalOpen]);
@@ -307,7 +332,8 @@ export default function Events() {
 
           {isFormModalOpen && (
             <div
-              className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md"
+              ref={modalOverlayRef}
+              className="fixed inset-0 z-[100] flex items-start sm:items-center justify-center p-2 sm:p-6 pt-2 sm:pt-6 bg-black/90 backdrop-blur-md overflow-y-auto"
               role="dialog"
               aria-modal="true"
               aria-labelledby="registration-form-title"
@@ -315,14 +341,16 @@ export default function Events() {
             >
               <div
                 ref={modalContainerRef}
-                className="event-form-modal relative flex h-[85vh] sm:h-[90vh] max-w-4xl w-full flex-col overflow-hidden rounded-2xl bg-[#10121b] border border-white/15 shadow-[0_20px_60px_rgba(0,0,0,0.9)]"
+                className="event-form-modal relative flex h-[92dvh] sm:h-[90vh] max-w-4xl w-full flex-col overflow-hidden rounded-t-2xl sm:rounded-2xl bg-[#10121b] border border-white/15 shadow-[0_20px_60px_rgba(0,0,0,0.9)] m-0 sm:my-auto self-start sm:self-auto"
                 onClick={(event) => event.stopPropagation()}
               >
                 <div className="flex items-center justify-between border-b border-white/10 px-5 py-4 bg-[#10121b] shrink-0">
                   <div>
                     <h3
+                      ref={modalHeaderTitleRef}
+                      tabIndex={-1}
                       id="registration-form-title"
-                      className="font-bold text-white text-base sm:text-lg"
+                      className="font-bold text-white text-base sm:text-lg focus:outline-none"
                     >
                       Event Registration
                     </h3>
@@ -342,28 +370,15 @@ export default function Events() {
                   </button>
                 </div>
 
-                <div className="relative flex-1 w-full min-h-0 bg-[#10121b]">
-                  {!isFormLoaded && (
-                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#10121b] text-[#00f3ff] font-mono text-sm gap-3 z-10 px-4 text-center">
-                      <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-[#00f3ff] mb-1"></div>
-
-                      <span className="font-bold tracking-wide text-white text-base">
-                        INITIALIZING REGISTRATION FORM...
-                      </span>
-
-                      <span className="text-xs text-gray-400 font-mono animate-pulse">
-                        Connecting to Google Servers ⚡
-                      </span>
-                    </div>
-                  )}
-
+                <div className="relative flex-1 w-full min-h-0 bg-white">
                   <iframe
                     title="Tech Titans event registration Google Form"
                     src={GOOGLE_FORM_URL}
-                    onLoad={() => setIsFormLoaded(true)}
-                    className={`w-full h-full border-none bg-white transition-opacity duration-500 ${
-                      isFormLoaded ? 'opacity-100' : 'opacity-0'
-                    }`}
+                    onLoad={() => {
+                      if (modalContainerRef.current) modalContainerRef.current.scrollTop = 0;
+                      if (modalOverlayRef.current) modalOverlayRef.current.scrollTop = 0;
+                    }}
+                    className="w-full h-full border-none bg-white block"
                   />
                 </div>
               </div>
