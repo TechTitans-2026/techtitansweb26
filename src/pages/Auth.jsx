@@ -18,6 +18,7 @@ const Auth = () => {
         : '')
   );
   const [loading, setLoading] = useState(false);
+  const [loadingProvider, setLoadingProvider] = useState(null);
   const [checkingSession, setCheckingSession] = useState(false);
 
   // Forgot Password Modal/Form State
@@ -28,6 +29,7 @@ const Auth = () => {
   useEffect(() => {
     const handleBfcacheRestoration = (event) => {
       setLoading(false);
+      setLoadingProvider(null);
       setError('');
 
       // Instantly reveal all elements in DOM
@@ -44,6 +46,7 @@ const Auth = () => {
 
     return () => {
       setLoading(false);
+      setLoadingProvider(null);
       window.removeEventListener('pageshow', handleBfcacheRestoration);
       window.removeEventListener('popstate', handleBfcacheRestoration);
     };
@@ -80,12 +83,12 @@ const Auth = () => {
 
   // Handle Google OAuth Sign In
   const handleGoogleLogin = async () => {
-    if (loading) return;
+    if (loadingProvider) return;
 
     setError('');
     setNotice('');
-    setLoading(true);
-    setTimeout(() => setLoading(false), 3500);
+    setLoadingProvider('google');
+    setTimeout(() => setLoadingProvider(null), 3500);
 
     try {
       sessionStorage.setItem('oauthRedirectPath', fromPath);
@@ -105,18 +108,18 @@ const Auth = () => {
       sessionStorage.removeItem('oauthRedirectPath');
       console.error('Google authentication error:', err);
       setError(err.message || 'Google sign-in failed. Please try again.');
-      setLoading(false);
+      setLoadingProvider(null);
     }
   };
 
   // Handle GitHub OAuth Sign In
   const handleGithubLogin = async () => {
-    if (loading) return;
+    if (loadingProvider) return;
 
     setError('');
     setNotice('');
-    setLoading(true);
-    setTimeout(() => setLoading(false), 3500);
+    setLoadingProvider('github');
+    setTimeout(() => setLoadingProvider(null), 3500);
 
     try {
       sessionStorage.setItem('oauthRedirectPath', fromPath);
@@ -133,7 +136,7 @@ const Auth = () => {
       sessionStorage.removeItem('oauthRedirectPath');
       console.error('GitHub authentication error:', err);
       setError(err.message || 'GitHub sign-in failed. Please try again.');
-      setLoading(false);
+      setLoadingProvider(null);
     }
   };
 
@@ -242,25 +245,29 @@ const Auth = () => {
           <button
             type="button"
             onClick={handleGoogleLogin}
-            disabled={loading}
+            disabled={!!loadingProvider}
             className={`btn-keycap w-full py-4 px-6 text-xs sm:text-sm font-mono font-bold flex items-center justify-center gap-3 border border-white/10 hover:border-[#00f3ff]/60 transition-all ${
-              loading ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'
+              loadingProvider === 'google'
+                ? 'opacity-40 cursor-wait scale-[0.98]'
+                : 'cursor-pointer opacity-100'
             }`}
           >
             <i className="fab fa-google text-base text-[#ea4335]"></i>
-            <span>CONTINUE WITH GOOGLE</span>
+            <span>{loadingProvider === 'google' ? 'CONNECTING TO GOOGLE...' : 'CONTINUE WITH GOOGLE'}</span>
           </button>
 
           <button
             type="button"
             onClick={handleGithubLogin}
-            disabled={loading}
+            disabled={!!loadingProvider}
             className={`btn-keycap w-full py-4 px-6 text-xs sm:text-sm font-mono font-bold flex items-center justify-center gap-3 border border-white/10 hover:border-[#b89eff]/60 transition-all ${
-              loading ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'
+              loadingProvider === 'github'
+                ? 'opacity-40 cursor-wait scale-[0.98]'
+                : 'cursor-pointer opacity-100'
             }`}
           >
             <i className="fab fa-github text-base text-white"></i>
-            <span>CONTINUE WITH GITHUB</span>
+            <span>{loadingProvider === 'github' ? 'CONNECTING TO GITHUB...' : 'CONTINUE WITH GITHUB'}</span>
           </button>
         </div>
 
