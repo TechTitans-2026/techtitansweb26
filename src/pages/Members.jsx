@@ -3,7 +3,12 @@ import { membersData } from '../data/members';
 import { X, User } from 'lucide-react';
 import './Home.css';
 
-const MEMBERS_PER_TEAM = 5;
+const getTeamSlots = (teamName) => {
+  if (teamName === 'Cybersecurity') return 7;
+  if (teamName === 'Events') return 6;
+  if (teamName === 'Support Team' || teamName === 'General Members') return null;
+  return 5;
+};
 
 export default function Members() {
   const [selectedMember, setSelectedMember] = useState(null);
@@ -29,10 +34,11 @@ export default function Members() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-6 gap-y-16">
             {teams.map(team => {
               const teamMembers = membersData.filter((member) => member.team === team);
-              const openPositions = team === 'Core Leadership'
+              const maxSlots = getTeamSlots(team);
+              const openPositions = (team === 'Core Leadership' || !maxSlots)
                 ? []
                 : Array.from(
-                    { length: Math.max(0, MEMBERS_PER_TEAM - teamMembers.length) },
+                    { length: Math.max(0, maxSlots - teamMembers.length) },
                     (_, index) => ({ isOpenPosition: true, slot: teamMembers.length + index + 1 })
                   );
 
@@ -40,7 +46,7 @@ export default function Members() {
               <div key={team} className={`reveal in-view flex flex-col h-full ${team === 'Core Leadership' ? 'lg:col-span-3' : ''}`}>
                 <h3 className="text-xl font-bold text-white mb-6 border-b border-[#31333e] pb-4 flex items-center gap-3 min-h-[48px]">
                   <span className="w-2 h-6 bg-[#00f3ff] inline-block rounded shrink-0"></span>
-                  <span className="truncate">{team}{team !== 'Core Leadership' && ` (${MEMBERS_PER_TEAM} SLOTS)`}</span>
+                  <span className="truncate">{team}{team !== 'Core Leadership' && maxSlots ? ` (${maxSlots} SLOTS)` : ''}</span>
                 </h3>
                 <div className={team === 'Core Leadership' ? 'flex flex-row items-center justify-between sm:justify-evenly w-full max-w-3xl mx-auto px-1 sm:px-6 gap-2 sm:gap-6' : 'grid grid-cols-1 gap-3.5 w-full flex-1'}>
                   {teamMembers.map((member, idx) => (
