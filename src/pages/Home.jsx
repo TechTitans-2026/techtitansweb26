@@ -140,9 +140,11 @@ export default function Home() {
   };
 
   return (
-    <div
-      className={`home-body transition-opacity duration-1000 ease-out ${isEntering ? "opacity-0" : "opacity-100"}`}
-    >
+    <div className="home-body">
+      <div
+        className={'transition-opacity duration-1000 ease-out ${isEntering ? "opacity-0" : "opacity-100"}'}
+      >
+      </div>
       {/* Back to top button */}
       <button
         id="back-to-top"
