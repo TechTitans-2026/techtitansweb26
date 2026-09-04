@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
   Shield,
-  Activity,
-  CheckCircle,
-  XCircle,
-  Star,
   Plus,
   Image as ImageIcon,
   Trash2,
@@ -12,33 +8,40 @@ import {
 } from 'lucide-react';
 
 import { useAuth } from '../hooks/useAuth';
+import { isAuthorizedAdmin, canClaimAdminAccess } from '../utils/adminCheck';
 import { questService } from '../services/questService';
 import { eventService } from '../services/eventService';
 import { supabase } from '../lib/supabase';
 
 export default function Admin() {
-  const { profile } = useAuth();
+  const { user, profile } = useAuth();
 
   const [members, setMembers] = useState([]);
   const [history, setHistory] = useState([]);
   const [events, setEvents] = useState([]);
+  const [quests, setQuests] = useState([]);
 
   const [loading, setLoading] = useState(true);
   const [eventsLoading, setEventsLoading] = useState(false);
+  const [questsLoading, setQuestsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // New Quest Form State
+  // QUEST FORM STATE
   const [questForm, setQuestForm] = useState({
     title: '',
     description: '',
     difficulty: 'Beginner',
     base_xp: 0,
-    rewards: ''
+    rewards: '',
+    status: 'Active'
   });
 
   const [questStatus, setQuestStatus] = useState('');
 
-  // New Event Form State
+  // EDIT QUEST STATE
+  const [editingQuest, setEditingQuest] = useState(null);
+
+  // EVENT FORM STATE
   const [eventForm, setEventForm] = useState({
     title: '',
     description: '',
@@ -52,12 +55,14 @@ export default function Admin() {
   // EDIT EVENT STATE
   const [editingEvent, setEditingEvent] = useState(null);
 
-  // Access Code State
+  // ACCESS CODE STATE
   const [accessCode, setAccessCode] = useState('');
   const [accessStatus, setAccessStatus] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
+  // =========================
   // FETCH EVENTS
+  // =========================
   const fetchEvents = async () => {
     try {
       setEventsLoading(true);
@@ -65,6 +70,7 @@ export default function Admin() {
       const eventsData = await eventService.fetchEvents();
 
       setEvents(eventsData || []);
+
     } catch (err) {
       console.error('Failed to fetch events:', err);
     } finally {
@@ -72,10 +78,30 @@ export default function Admin() {
     }
   };
 
+  // =========================
+  // FETCH ALL QUESTS
+  // =========================
+  const fetchQuests = async () => {
+    try {
+      setQuestsLoading(true);
+
+      const questsData = await questService.fetchAllQuests();
+
+      setQuests(questsData || []);
+
+    } catch (err) {
+      console.error('Failed to fetch quests:', err);
+    } finally {
+      setQuestsLoading(false);
+    }
+  };
+
+  // =========================
   // FETCH ADMIN DATA
+  // =========================
   useEffect(() => {
     async function fetchAdminData() {
-      if (profile?.role !== 'admin' && profile?.role !== 'head') {
+      if (!isAuthorizedAdmin(profile, user)) {
         setLoading(false);
         return;
       }
@@ -84,19 +110,25 @@ export default function Admin() {
         setLoading(true);
         setError(null);
 
-        const [profilesData, historyData, eventsData] =
-          await Promise.all([
-            questService.fetchAllProfiles(),
-            questService.fetchAllQuestHistory(),
-            eventService.fetchEvents()
-          ]);
+        const [
+          profilesData,
+          historyData,
+          eventsData,
+          questsData
+        ] = await Promise.all([
+          questService.fetchAllProfiles(),
+          questService.fetchAllQuestHistory(),
+          eventService.fetchEvents(),
+          questService.fetchAllQuests()
+        ]);
 
         setMembers(profilesData || []);
         setHistory(historyData || []);
         setEvents(eventsData || []);
+        setQuests(questsData || []);
 
       } catch (err) {
-        console.error("Failed to fetch admin data:", err);
+        console.error('Failed to fetch admin data:', err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -104,59 +136,158 @@ export default function Admin() {
     }
 
     fetchAdminData();
-  }, [profile?.role]);
 
-  // CREATE QUEST
+  }, [profile, user]);
+
+  // =========================
+  // CREATE OR UPDATE QUEST
+  // =========================
   const handleCreateQuest = async (e) => {
     e.preventDefault();
 
-    setQuestStatus('Submitting...');
+    setQuestStatus(
+      editingQuest
+        ? 'Updating quest...'
+        : 'Submitting...'
+    );
 
     try {
-      await questService.insertQuest({
+      const questData = {
         ...questForm,
-        base_xp: parseInt(questForm.base_xp, 10) || 0,
-        status: 'Active'
-      });
+        base_xp: parseInt(questForm.base_xp, 10) || 0
+      };
 
-      setQuestStatus('Quest created successfully!');
+      if (editingQuest) {
+        // UPDATE QUEST
+        await questService.updateQuest(
+          editingQuest.id,
+          questData
+        );
 
+        setQuestStatus('Quest updated successfully!');
+
+      } else {
+        // CREATE QUEST
+        await questService.insertQuest({
+          ...questData,
+          status: questForm.status || 'Active'
+        });
+
+        setQuestStatus('Quest created successfully!');
+      }
+
+      // REFRESH QUEST LIST
+      await fetchQuests();
+
+      // RESET FORM
       setQuestForm({
         title: '',
         description: '',
         difficulty: 'Beginner',
         base_xp: 0,
-        rewards: ''
+        rewards: '',
+        status: 'Active'
       });
 
-      setTimeout(() => setQuestStatus(''), 3000);
+      setEditingQuest(null);
+
+      setTimeout(() => {
+        setQuestStatus('');
+      }, 3000);
 
     } catch (err) {
-      setQuestStatus('Error: ' + err.message);
+      console.error('Quest operation failed:', err);
+
+      setQuestStatus(
+        'Error: ' + err.message
+      );
     }
   };
 
+  // =========================
+  // EDIT QUEST
+  // =========================
+  const handleEditQuest = (quest) => {
+    setEditingQuest(quest);
+
+    setQuestForm({
+      title: quest.title || '',
+      description: quest.description || '',
+      difficulty: quest.difficulty || 'Beginner',
+      base_xp: quest.base_xp || 0,
+      rewards: quest.rewards || '',
+      status: quest.status || 'Active'
+    });
+
+    // Scroll to quest form
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: 'smooth'
+    });
+  };
+
+  // =========================
+  // DELETE QUEST
+  // =========================
+  const handleDeleteQuest = async (id, title) => {
+    const confirmDelete = window.confirm(
+      `Are you sure you want to delete "${title}"?`
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      setQuestStatus('Deleting quest...');
+
+      await questService.deleteQuest(id);
+
+      // REMOVE FROM SCREEN IMMEDIATELY
+      setQuests(prevQuests =>
+        prevQuests.filter(quest => quest.id !== id)
+      );
+
+      setQuestStatus('Quest deleted successfully!');
+
+      setTimeout(() => {
+        setQuestStatus('');
+      }, 3000);
+
+    } catch (err) {
+      console.error('Failed to delete quest:', err);
+
+      setQuestStatus(
+        'Error deleting quest: ' + err.message
+      );
+    }
+  };
+
+  // =========================
   // CREATE OR UPDATE EVENT
+  // =========================
   const handleCreateEvent = async (e) => {
     e.preventDefault();
 
     setEventStatus(
-      editingEvent ? 'Updating event...' : 'Submitting...'
+      editingEvent
+        ? 'Updating event...'
+        : 'Submitting...'
     );
 
     try {
-      // Keep old image when editing unless a new image is selected
+      // KEEP OLD IMAGE WHEN EDITING
       let image_url = editingEvent?.image_url || null;
 
-      // Upload new image only if selected
+      // UPLOAD NEW IMAGE ONLY IF SELECTED
       if (eventImage) {
         setEventStatus('Uploading image...');
 
-        image_url = await eventService.uploadImage(eventImage);
+        image_url = await eventService.uploadImage(
+          eventImage
+        );
       }
 
       if (editingEvent) {
-        // UPDATE EXISTING EVENT
+        // UPDATE EVENT
         setEventStatus('Updating event...');
 
         await eventService.updateEvent(
@@ -167,10 +298,12 @@ export default function Admin() {
           }
         );
 
-        setEventStatus('Event updated successfully!');
+        setEventStatus(
+          'Event updated successfully!'
+        );
 
       } else {
-        // CREATE NEW EVENT
+        // CREATE EVENT
         setEventStatus('Saving event...');
 
         await eventService.insertEvent({
@@ -178,10 +311,12 @@ export default function Admin() {
           image_url
         });
 
-        setEventStatus('Event published successfully!');
+        setEventStatus(
+          'Event published successfully!'
+        );
       }
 
-      // REFRESH EVENTS LIST
+      // REFRESH EVENTS
       await fetchEvents();
 
       // RESET FORM
@@ -195,15 +330,25 @@ export default function Admin() {
       setEventImage(null);
       setEditingEvent(null);
 
-      setTimeout(() => setEventStatus(''), 3000);
+      setTimeout(() => {
+        setEventStatus('');
+      }, 3000);
 
     } catch (err) {
-      console.error('Event operation failed:', err);
-      setEventStatus('Error: ' + err.message);
+      console.error(
+        'Event operation failed:',
+        err
+      );
+
+      setEventStatus(
+        'Error: ' + err.message
+      );
     }
   };
 
+  // =========================
   // EDIT EVENT
+  // =========================
   const handleEditEvent = (event) => {
     setEditingEvent(event);
 
@@ -211,16 +356,19 @@ export default function Admin() {
       title: event.title || '',
       description: event.description || '',
       event_date: event.event_date
-        ? new Date(event.event_date).toISOString().slice(0, 16)
+        ? new Date(event.event_date)
+            .toISOString()
+            .slice(0, 16)
         : '',
       status: event.status || 'upcoming'
     });
 
-    // Keep old image unless admin selects a new one
     setEventImage(null);
   };
 
+  // =========================
   // DELETE EVENT
+  // =========================
   const handleDeleteEvent = async (id, title) => {
     const confirmDelete = window.confirm(
       `Are you sure you want to delete "${title}"?`
@@ -233,39 +381,62 @@ export default function Admin() {
 
       await eventService.deleteEvent(id);
 
-      // REMOVE EVENT FROM SCREEN IMMEDIATELY
       setEvents(prevEvents =>
-        prevEvents.filter(event => event.id !== id)
+        prevEvents.filter(
+          event => event.id !== id
+        )
       );
 
-      setEventStatus('Event deleted successfully!');
+      setEventStatus(
+        'Event deleted successfully!'
+      );
 
-      setTimeout(() => setEventStatus(''), 3000);
+      setTimeout(() => {
+        setEventStatus('');
+      }, 3000);
 
     } catch (err) {
-      console.error('Failed to delete event:', err);
+      console.error(
+        'Failed to delete event:',
+        err
+      );
 
       setEventStatus(
-        'Error deleting event: ' + err.message
+        'Error deleting event: ' +
+        err.message
       );
     }
   };
 
+  // =========================
   // ADMIN ACCESS CODE
+  // =========================
   const handleAccessCode = async (e) => {
     e.preventDefault();
+
+    if (!canClaimAdminAccess(profile, user)) {
+      setAccessStatus('Access Denied: Admin access is restricted to authorized Titan leadership.');
+      return;
+    }
 
     setAccessStatus('Verifying...');
 
     try {
-      const { data: rpcData, error: rpcError } =
-        await supabase.rpc('verify_admin_code', {
-          code: accessCode.trim(),
-        });
+      const {
+        data: rpcData,
+        error: rpcError
+      } = await supabase.rpc(
+        'verify_admin_code',
+        {
+          code: accessCode.trim()
+        }
+      );
 
       if (!rpcError && rpcData) {
         if (rpcData.success) {
-          setAccessStatus('Access Granted! Refreshing...');
+          setAccessStatus(
+            'Access Granted! Refreshing...'
+          );
 
           setTimeout(() => {
             window.location.reload();
@@ -278,11 +449,17 @@ export default function Admin() {
         }
       }
 
-      // FALLBACK EDGE FUNCTION
-      const { data, error: fnError } =
-        await supabase.functions.invoke('grant-admin', {
-          body: { code: accessCode.trim() },
-        });
+      const {
+        data,
+        error: fnError
+      } = await supabase.functions.invoke(
+        'grant-admin',
+        {
+          body: {
+            code: accessCode.trim()
+          }
+        }
+      );
 
       if (fnError) throw fnError;
 
@@ -290,7 +467,9 @@ export default function Admin() {
         throw new Error(data.error);
       }
 
-      setAccessStatus('Access Granted! Refreshing...');
+      setAccessStatus(
+        'Access Granted! Refreshing...'
+      );
 
       setTimeout(() => {
         window.location.reload();
@@ -298,15 +477,37 @@ export default function Admin() {
 
     } catch (err) {
       setAccessStatus(
-        err.message?.includes('Invalid access code')
+        err.message?.includes(
+          'Invalid access code'
+        )
           ? 'Invalid Access Code'
           : 'Error: ' + err.message
       );
     }
   };
 
+  // =========================
   // NOT ADMIN SCREEN
-  if (profile?.role !== 'admin' && profile?.role !== 'head') {
+  // =========================
+  if (!isAuthorizedAdmin(profile, user)) {
+    if (!canClaimAdminAccess(profile, user)) {
+      return (
+        <div className="home-body min-h-screen flex items-center justify-center p-4 pt-24 relative overflow-hidden">
+          <div className="max-w-md w-full glass-panel p-8 relative overflow-hidden z-10 text-center">
+            <span className="text-red-400 font-mono text-xs font-bold uppercase tracking-[0.3em] mb-2 block">
+              SECURITY PROTOCOL
+            </span>
+            <h2 className="text-2xl font-black text-white tracking-tight mb-4">
+              ACCESS RESTRICTED
+            </h2>
+            <p className="text-gray-400 font-mono text-xs leading-relaxed">
+              Admin privileges are strictly reserved for authorized Titan leadership personnel.
+            </p>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="home-body min-h-screen flex items-center justify-center p-4 pt-24 relative overflow-hidden">
 
@@ -338,6 +539,7 @@ export default function Admin() {
         <div className="max-w-md w-full glass-panel p-8 relative overflow-hidden z-10">
 
           <div className="text-center mb-6">
+
             <span className="text-accent font-mono text-xs font-bold uppercase tracking-[0.3em] mb-2 block">
               SECURITY PROTOCOL
             </span>
@@ -345,6 +547,7 @@ export default function Admin() {
             <h2 className="text-3xl font-black text-white tracking-tight">
               ADMIN ACCESS
             </h2>
+
           </div>
 
           {accessStatus && (
@@ -360,19 +563,32 @@ export default function Admin() {
             </div>
           )}
 
-          <form onSubmit={handleAccessCode} className="space-y-5">
+          <form
+            onSubmit={handleAccessCode}
+            className="space-y-5"
+          >
 
             <div>
+
               <label className="block text-gray-400 font-mono text-xs uppercase tracking-wider mb-2">
                 Access Code
               </label>
 
               <div className="relative">
+
                 <input
-                  type={showPassword ? "text" : "password"}
+                  type={
+                    showPassword
+                      ? 'text'
+                      : 'password'
+                  }
                   required
                   value={accessCode}
-                  onChange={(e) => setAccessCode(e.target.value)}
+                  onChange={(e) =>
+                    setAccessCode(
+                      e.target.value
+                    )
+                  }
                   className="input-glass w-full pr-10 font-mono tracking-widest text-center text-lg"
                   placeholder="••••••"
                 />
@@ -380,47 +596,18 @@ export default function Admin() {
                 <button
                   type="button"
                   className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-white"
-                  onClick={() => setShowPassword(!showPassword)}
+                  onClick={() =>
+                    setShowPassword(
+                      !showPassword
+                    )
+                  }
                   aria-label="Toggle access code visibility"
                 >
-                  {showPassword ? (
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"
-                      />
-                    </svg>
-                  ) : (
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                      />
-
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                      />
-                    </svg>
-                  )}
+                  {showPassword ? '🙈' : '👁️'}
                 </button>
+
               </div>
+
             </div>
 
             <button
@@ -431,17 +618,21 @@ export default function Admin() {
             </button>
 
           </form>
+
         </div>
       </div>
     );
   }
 
+  // =========================
   // ADMIN DASHBOARD
+  // =========================
   return (
     <div className="home-body min-h-screen pt-24 pb-16 px-6">
 
       <div className="max-w-7xl mx-auto">
 
+        {/* HEADER */}
         <div className="mb-10">
 
           <span className="text-accent font-mono text-xs font-bold uppercase tracking-[0.3em] mb-2 flex items-center gap-2">
@@ -480,7 +671,7 @@ export default function Admin() {
 
           <div className="flex flex-col gap-10">
 
-            {/* MEMBER DIRECTORY + QUEST ACTIVITY */}
+            {/* MEMBER + ACTIVITY */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
               {/* MEMBER DIRECTORY */}
@@ -494,58 +685,28 @@ export default function Admin() {
 
                   <div className="overflow-y-auto flex-1 pr-2 space-y-3 custom-scrollbar">
 
-                    {members.length === 0 ? (
+                    {members.map(member => (
+                      <div
+                        key={member.id}
+                        className="p-3.5 bg-black/40 rounded-lg border border-white/5 flex justify-between items-center"
+                      >
+                        <div>
+                          <h3 className="font-bold text-white text-sm">
+                            {member.full_name ||
+                              'Unknown User'}
+                          </h3>
 
-                      <p className="text-sm text-[#8c8d96] font-mono py-8 text-center">
-                        No member records located.
-                      </p>
-
-                    ) : (
-
-                      members.map(member => (
-
-                        <div
-                          key={member.id}
-                          className="p-3.5 bg-black/40 rounded-lg border border-white/5 hover:border-[#ae97d6]/40 transition-colors flex justify-between items-center"
-                        >
-
-                          <div>
-                            <h3 className="font-bold text-white flex items-center gap-2 text-sm">
-
-                              {member.full_name || 'Unknown User'}
-
-                              {member.role === 'admin' && (
-                                <Shield
-                                  size={14}
-                                  className="text-yellow-400"
-                                />
-                              )}
-
-                            </h3>
-
-                            <p className="text-xs text-[#8c8d96] font-mono mt-0.5">
-                              ID: {member.id?.substring(0, 8)}...
-                            </p>
-                          </div>
-
-                          <div className="text-right">
-                            <span
-                              className={`text-[10px] uppercase font-mono px-2 py-0.5 rounded font-bold tracking-widest ${
-                                member.role === 'admin' ||
-                                member.role === 'head'
-                                  ? 'bg-[#ae97d6]/20 text-[#ae97d6] border border-[#ae97d6]/30'
-                                  : 'bg-[#31333e] text-gray-400 border border-white/10'
-                              }`}
-                            >
-                              {member.role}
-                            </span>
-                          </div>
-
+                          <p className="text-xs text-[#8c8d96] font-mono">
+                            ID:{' '}
+                            {member.id?.substring(0, 8)}...
+                          </p>
                         </div>
 
-                      ))
-
-                    )}
+                        <span className="text-[10px] uppercase font-mono text-[#ae97d6]">
+                          {member.role}
+                        </span>
+                      </div>
+                    ))}
 
                   </div>
                 </div>
@@ -562,97 +723,35 @@ export default function Admin() {
 
                   <div className="overflow-y-auto flex-1 pr-2 space-y-3 custom-scrollbar">
 
-                    {history.length === 0 ? (
+                    {history.map((record, idx) => (
+                      <div
+                        key={record.id || idx}
+                        className="p-3.5 rounded-lg border border-white/5 flex justify-between items-center bg-black/40"
+                      >
+                        <div>
+                          <span className="font-bold text-white text-sm">
+                            {record.quests?.title ||
+                              'Unknown Quest'}
+                          </span>
 
-                      <p className="text-sm text-[#8c8d96] font-mono py-8 text-center">
-                        No quest deployments recorded yet.
-                      </p>
+                          <p className="text-xs text-[#8c8d96] font-mono">
+                            Operative:{' '}
+                            {record.profiles?.full_name ||
+                              'Unknown'}
+                          </p>
+                        </div>
 
-                    ) : (
+                        <div className="text-right">
+                          <span className="text-xs text-yellow-400">
+                            {record.status}
+                          </span>
 
-                      history.map((record, idx) => {
-
-                        const isWon = record.status === 'won';
-                        const isLost = record.status === 'lost';
-
-                        let statusClass = "text-gray-400";
-                        let borderClass = "border-[#31333e]";
-                        let Icon = Star;
-
-                        if (isWon) {
-                          statusClass = "text-green-400";
-                          borderClass =
-                            "border-green-500/30 bg-green-500/5";
-                          Icon = CheckCircle;
-
-                        } else if (isLost) {
-                          statusClass = "text-red-400";
-                          borderClass =
-                            "border-red-500/30 bg-red-500/5";
-                          Icon = XCircle;
-
-                        } else {
-                          statusClass = "text-yellow-400";
-                          Icon = Activity;
-                        }
-
-                        return (
-
-                          <div
-                            key={record.id || idx}
-                            className={`p-3.5 rounded-lg border ${borderClass} flex justify-between items-center bg-black/40`}
-                          >
-
-                            <div>
-
-                              <div className="flex items-center gap-2 mb-0.5">
-
-                                <Icon
-                                  className={statusClass}
-                                  size={15}
-                                />
-
-                                <span className="font-bold text-white text-xs sm:text-sm font-['Orbitron']">
-                                  {record.quests?.title ||
-                                    'Unknown Quest'}
-                                </span>
-
-                              </div>
-
-                              <div className="text-xs text-[#8c8d96] font-mono pl-5">
-
-                                Operative:{' '}
-
-                                <span className="text-white">
-                                  {record.profiles?.full_name ||
-                                    'Unknown'}
-                                </span>
-
-                              </div>
-
-                            </div>
-
-                            <div className="text-right">
-
-                              <span
-                                className={`text-[10px] uppercase font-mono font-bold tracking-widest ${statusClass}`}
-                              >
-                                {record.status}
-                              </span>
-
-                              <div className="text-[10px] text-[#00f3ff] mt-0.5 font-mono font-bold">
-                                +{record.xp_awarded} XP
-                              </div>
-
-                            </div>
-
+                          <div className="text-[10px] text-[#00f3ff]">
+                            +{record.xp_awarded} XP
                           </div>
-
-                        );
-
-                      })
-
-                    )}
+                        </div>
+                      </div>
+                    ))}
 
                   </div>
                 </div>
@@ -660,25 +759,26 @@ export default function Admin() {
 
             </div>
 
-            {/* MANAGEMENT FORMS */}
+            {/* MANAGEMENT */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-              {/* SETUP NEW QUEST */}
+              {/* QUEST MANAGEMENT */}
               <div>
 
                 <h2 className="section-heading text-lg">
-                  SETUP NEW QUEST
+                  QUEST MANAGEMENT
                 </h2>
 
                 <div className="glass-panel rounded-xl p-6 sm:p-8">
 
+                  {/* CREATE / UPDATE QUEST */}
                   <form
                     onSubmit={handleCreateQuest}
                     className="space-y-4"
                   >
 
+                    {/* TITLE */}
                     <div>
-
                       <label className="block text-xs font-mono text-[#8c8d96] uppercase tracking-wider mb-1.5">
                         Title
                       </label>
@@ -687,20 +787,18 @@ export default function Admin() {
                         required
                         type="text"
                         value={questForm.title}
-                        onChange={e =>
+                        onChange={(e) =>
                           setQuestForm({
                             ...questForm,
                             title: e.target.value
                           })
                         }
                         className="input-glass w-full text-sm"
-                        placeholder="e.g. Algorithmic Optimization"
                       />
-
                     </div>
 
+                    {/* DESCRIPTION */}
                     <div>
-
                       <label className="block text-xs font-mono text-[#8c8d96] uppercase tracking-wider mb-1.5">
                         Description
                       </label>
@@ -708,45 +806,41 @@ export default function Admin() {
                       <textarea
                         required
                         value={questForm.description}
-                        onChange={e =>
+                        onChange={(e) =>
                           setQuestForm({
                             ...questForm,
                             description: e.target.value
                           })
                         }
                         className="input-glass w-full h-24 text-sm resize-none"
-                        placeholder="Provide quest requirements..."
                       />
-
                     </div>
 
+                    {/* DIFFICULTY + XP */}
                     <div className="grid grid-cols-2 gap-4">
 
                       <div>
-
                         <label className="block text-xs font-mono text-[#8c8d96] uppercase tracking-wider mb-1.5">
                           Difficulty
                         </label>
 
                         <select
                           value={questForm.difficulty}
-                          onChange={e =>
+                          onChange={(e) =>
                             setQuestForm({
                               ...questForm,
                               difficulty: e.target.value
                             })
                           }
-                          className="input-glass w-full text-sm [color-scheme:dark]"
+                          className="input-glass w-full text-sm"
                         >
                           <option>Beginner</option>
                           <option>Intermediate</option>
                           <option>Advanced</option>
                         </select>
-
                       </div>
 
                       <div>
-
                         <label className="block text-xs font-mono text-[#8c8d96] uppercase tracking-wider mb-1.5">
                           Base XP
                         </label>
@@ -755,7 +849,7 @@ export default function Admin() {
                           required
                           type="number"
                           value={questForm.base_xp}
-                          onChange={e =>
+                          onChange={(e) =>
                             setQuestForm({
                               ...questForm,
                               base_xp: e.target.value
@@ -763,13 +857,12 @@ export default function Admin() {
                           }
                           className="input-glass w-full text-sm"
                         />
-
                       </div>
 
                     </div>
 
+                    {/* REWARDS */}
                     <div>
-
                       <label className="block text-xs font-mono text-[#8c8d96] uppercase tracking-wider mb-1.5">
                         Rewards
                       </label>
@@ -777,24 +870,66 @@ export default function Admin() {
                       <input
                         type="text"
                         value={questForm.rewards}
-                        onChange={e =>
+                        onChange={(e) =>
                           setQuestForm({
                             ...questForm,
                             rewards: e.target.value
                           })
                         }
                         className="input-glass w-full text-sm"
-                        placeholder="e.g. Profile Badge & Certificate"
                       />
-
                     </div>
 
+                    {/* STATUS */}
+                    <div>
+                      <label className="block text-xs font-mono text-[#8c8d96] uppercase tracking-wider mb-1.5">
+                        Status
+                      </label>
+
+                      <select
+                        value={questForm.status}
+                        onChange={(e) =>
+                          setQuestForm({
+                            ...questForm,
+                            status: e.target.value
+                          })
+                        }
+                        className="input-glass w-full text-sm"
+                      >
+                        <option value="Active">
+                          Active
+                        </option>
+
+                        <option value="Upcoming">
+                          Upcoming
+                        </option>
+
+                        <option value="Completed">
+                          Completed
+                        </option>
+                      </select>
+                    </div>
+
+                    {/* BUTTON */}
                     <button
                       type="submit"
                       className="btn-keycap w-full py-3 text-xs mt-2"
                     >
-                      <Plus size={15} className="mr-1.5" />
-                      CREATE QUEST
+                      {editingQuest ? (
+                        <Edit
+                          size={15}
+                          className="mr-1.5"
+                        />
+                      ) : (
+                        <Plus
+                          size={15}
+                          className="mr-1.5"
+                        />
+                      )}
+
+                      {editingQuest
+                        ? 'UPDATE QUEST'
+                        : 'CREATE QUEST'}
                     </button>
 
                     {questStatus && (
@@ -804,6 +939,93 @@ export default function Admin() {
                     )}
 
                   </form>
+
+                  {/* QUEST LIST */}
+                  <div className="mt-8 border-t border-white/10 pt-6">
+
+                    <h3 className="text-xs font-mono text-[#8c8d96] uppercase tracking-wider mb-4">
+                      CREATED QUESTS
+                    </h3>
+
+                    {questsLoading ? (
+
+                      <p className="text-xs text-[#8c8d96] font-mono">
+                        Loading quests...
+                      </p>
+
+                    ) : quests.length === 0 ? (
+
+                      <p className="text-xs text-[#8c8d96] font-mono">
+                        No quests found.
+                      </p>
+
+                    ) : (
+
+                      <div className="space-y-3 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+
+                        {quests.map((quest) => (
+
+                          <div
+                            key={quest.id}
+                            className="flex items-center justify-between gap-3 p-3 bg-black/40 border border-white/5 rounded-lg"
+                          >
+
+                            <div className="min-w-0">
+
+                              <h4 className="text-sm font-bold text-white truncate">
+                                {quest.title}
+                              </h4>
+
+                              <p className="text-[10px] text-[#8c8d96] font-mono mt-1">
+                                {quest.difficulty} • {quest.base_xp} XP
+                              </p>
+
+                              <span className="inline-block mt-1 text-[9px] uppercase font-mono text-[#00f3ff]">
+                                {quest.status}
+                              </span>
+
+                            </div>
+
+                            {/* EDIT + DELETE */}
+                            <div className="flex items-center gap-2 shrink-0">
+
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleEditQuest(quest)
+                                }
+                                className="flex items-center justify-center w-9 h-9 rounded-lg bg-[#ae97d6]/10 border border-[#ae97d6]/30 text-[#ae97d6] hover:bg-[#ae97d6]/20 transition-colors"
+                                title="Edit Quest"
+                              >
+                                <Edit size={16} />
+                              </button>
+
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleDeleteQuest(
+                                    quest.id,
+                                    quest.title
+                                  )
+                                }
+                                className="flex items-center justify-center w-9 h-9 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 hover:bg-red-500/20 transition-colors"
+                                title="Delete Quest"
+                              >
+                                <Trash2 size={16} />
+                              </button>
+
+                            </div>
+
+                          </div>
+
+                        ))}
+
+                      </div>
+
+                    )}
+
+                  </div>
+
                 </div>
               </div>
 
@@ -816,14 +1038,12 @@ export default function Admin() {
 
                 <div className="glass-panel rounded-xl p-6 sm:p-8">
 
-                  {/* CREATE / UPDATE EVENT FORM */}
                   <form
                     onSubmit={handleCreateEvent}
                     className="space-y-4"
                   >
 
                     <div>
-
                       <label className="block text-xs font-mono text-[#8c8d96] uppercase tracking-wider mb-1.5">
                         Event Title
                       </label>
@@ -832,20 +1052,17 @@ export default function Admin() {
                         required
                         type="text"
                         value={eventForm.title}
-                        onChange={e =>
+                        onChange={(e) =>
                           setEventForm({
                             ...eventForm,
                             title: e.target.value
                           })
                         }
                         className="input-glass w-full text-sm"
-                        placeholder="e.g. Inauguration Day"
                       />
-
                     </div>
 
                     <div>
-
                       <label className="block text-xs font-mono text-[#8c8d96] uppercase tracking-wider mb-1.5">
                         Description
                       </label>
@@ -853,22 +1070,19 @@ export default function Admin() {
                       <textarea
                         required
                         value={eventForm.description}
-                        onChange={e =>
+                        onChange={(e) =>
                           setEventForm({
                             ...eventForm,
                             description: e.target.value
                           })
                         }
                         className="input-glass w-full h-24 text-sm resize-none"
-                        placeholder="Event overview and schedule..."
                       />
-
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
 
                       <div>
-
                         <label className="block text-xs font-mono text-[#8c8d96] uppercase tracking-wider mb-1.5">
                           Event Date
                         </label>
@@ -877,7 +1091,7 @@ export default function Admin() {
                           required
                           type="datetime-local"
                           value={eventForm.event_date}
-                          onChange={e =>
+                          onChange={(e) =>
                             setEventForm({
                               ...eventForm,
                               event_date: e.target.value
@@ -885,44 +1099,38 @@ export default function Admin() {
                           }
                           className="input-glass w-full text-sm [color-scheme:dark]"
                         />
-
                       </div>
 
                       <div>
-
                         <label className="block text-xs font-mono text-[#8c8d96] uppercase tracking-wider mb-1.5">
                           Status
                         </label>
 
                         <select
                           value={eventForm.status}
-                          onChange={e =>
+                          onChange={(e) =>
                             setEventForm({
                               ...eventForm,
                               status: e.target.value
                             })
                           }
-                          className="input-glass w-full text-sm [color-scheme:dark]"
+                          className="input-glass w-full text-sm"
                         >
                           <option value="upcoming">
                             Upcoming
                           </option>
-
                           <option value="ongoing">
                             Ongoing
                           </option>
-
                           <option value="completed">
                             Completed
                           </option>
                         </select>
-
                       </div>
 
                     </div>
 
                     <div>
-
                       <label className="block text-xs font-mono text-[#8c8d96] uppercase tracking-wider mb-1.5">
                         Event Cover Image
                       </label>
@@ -937,8 +1145,10 @@ export default function Admin() {
                             type="file"
                             className="hidden"
                             accept="image/*"
-                            onChange={e =>
-                              setEventImage(e.target.files[0])
+                            onChange={(e) =>
+                              setEventImage(
+                                e.target.files[0]
+                              )
                             }
                           />
 
@@ -948,8 +1158,8 @@ export default function Admin() {
                           {eventImage
                             ? eventImage.name
                             : editingEvent?.image_url
-                            ? "Current image (select new image to replace)"
-                            : "No image file selected"}
+                            ? 'Current image (select new image to replace)'
+                            : 'No image file selected'}
                         </span>
 
                       </div>
@@ -960,12 +1170,20 @@ export default function Admin() {
                       className="btn-keycap w-full py-3 text-xs mt-2"
                     >
                       {editingEvent ? (
-                        <Edit size={15} className="mr-1.5" />
+                        <Edit
+                          size={15}
+                          className="mr-1.5"
+                        />
                       ) : (
-                        <Plus size={15} className="mr-1.5" />
+                        <Plus
+                          size={15}
+                          className="mr-1.5"
+                        />
                       )}
 
-                      {editingEvent ? 'UPDATE EVENT' : 'PUBLISH EVENT'}
+                      {editingEvent
+                        ? 'UPDATE EVENT'
+                        : 'PUBLISH EVENT'}
                     </button>
 
                     {eventStatus && (
@@ -976,7 +1194,7 @@ export default function Admin() {
 
                   </form>
 
-                  {/* PUBLISHED EVENTS LIST */}
+                  {/* PUBLISHED EVENTS */}
                   <div className="mt-8 border-t border-white/10 pt-6">
 
                     <h3 className="text-xs font-mono text-[#8c8d96] uppercase tracking-wider mb-4">
@@ -1026,20 +1244,19 @@ export default function Admin() {
 
                             </div>
 
-                            {/* EDIT + DELETE BUTTONS */}
                             <div className="flex items-center gap-2 shrink-0">
 
-                              {/* EDIT BUTTON */}
                               <button
                                 type="button"
-                                onClick={() => handleEditEvent(event)}
-                                className="flex items-center justify-center w-9 h-9 rounded-lg bg-[#ae97d6]/10 border border-[#ae97d6]/30 text-[#ae97d6] hover:bg-[#ae97d6]/20 transition-colors cursor-pointer"
+                                onClick={() =>
+                                  handleEditEvent(event)
+                                }
+                                className="flex items-center justify-center w-9 h-9 rounded-lg bg-[#ae97d6]/10 border border-[#ae97d6]/30 text-[#ae97d6] hover:bg-[#ae97d6]/20 transition-colors"
                                 title="Edit Event"
                               >
                                 <Edit size={16} />
                               </button>
 
-                              {/* DELETE BUTTON */}
                               <button
                                 type="button"
                                 onClick={() =>
@@ -1048,7 +1265,7 @@ export default function Admin() {
                                     event.title
                                   )
                                 }
-                                className="flex items-center justify-center w-9 h-9 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 hover:bg-red-500/20 transition-colors cursor-pointer"
+                                className="flex items-center justify-center w-9 h-9 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 hover:bg-red-500/20 transition-colors"
                                 title="Delete Event"
                               >
                                 <Trash2 size={16} />
@@ -1070,6 +1287,7 @@ export default function Admin() {
               </div>
 
             </div>
+
           </div>
 
         )}

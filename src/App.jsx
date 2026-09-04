@@ -13,10 +13,10 @@ import Members from './pages/Members';
 import Auth from './pages/Auth';
 import Quests from './pages/Quests';
 import Profile from './pages/Profile';
-
+import { canClaimAdminAccess } from './utils/adminCheck';
 
 // Lazy-load heavy pages for code-splitting
-const Admin = lazy(() => import('./pages/Admin'));
+const Admin = lazy(() => import('./pages/fysyty'));
 const TechTitansLanding = lazy(() => import('./pages/TechTitansLanding'));
 
 // Read once at module level — stable across renders, consistent with Scene.jsx prop pattern
@@ -34,11 +34,14 @@ const PrivateRoute = ({ children }) => {
 
 // Protected Route Wrapper for Admin Page
 const AdminRoute = ({ children }) => {
-  const { user, loading } = useAuth();
+  const { user, profile, loading } = useAuth();
   const location = useLocation();
 
   if (loading) return <div className="min-h-screen bg-[#1a1b22] text-white flex items-center justify-center font-mono text-[#8c8d96]">Loading...</div>;
   if (!user) return <Navigate to="/auth" state={{ from: location.pathname, message: 'Please sign in to access this protocol.' }} replace />;
+  if (!canClaimAdminAccess(profile, user)) {
+    return <Navigate to="/home" state={{ message: 'Access Denied: Only authorized Titan leadership can access the admin panel.' }} replace />;
+  }
   return children;
 };
 

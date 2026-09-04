@@ -144,8 +144,8 @@ CREATE OR REPLACE FUNCTION public.verify_admin_code(code text)
 RETURNS jsonb AS $$
 DECLARE
     current_user_id uuid;
-    -- Pre-calculated SHA-256 digest string
-    target_hash text := 'c0282b8a6a2c0c7d42398555e5f385c3f9ff70a597a7605d8f6350d7543f0556';
+    -- Pre-calculated SHA-256 digest string for 16-char code: Tt#92!kP$84@mQ1X
+    target_hash text := '519d2321ee65d2dd689fffa9e3b0d04c0a580cd0c4922e407e7c6bef4989ad27';
 BEGIN
     current_user_id := auth.uid();
     

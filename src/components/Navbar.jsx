@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import { isAuthorizedAdmin } from "../utils/adminCheck";
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -93,7 +94,7 @@ export default function Navbar() {
         </div>
 
         <div className="hidden md:flex items-center gap-3 shrink-0">
-          {(profile?.role === "admin" || profile?.role === "head") && (
+          {isAuthorizedAdmin(profile, user) && (
             <button
               className="btn-keycap px-5 py-2.5 text-xs bg-red-900/50 text-red-300 border border-red-500/30 hover:bg-red-900/80 cursor-pointer"
               onClick={() => navigate("/admin")}
@@ -179,7 +180,7 @@ export default function Navbar() {
             </Link>
 
             <div className="pt-4 border-t border-white/10 flex flex-col gap-3">
-              {(profile?.role === "admin" || profile?.role === "head") && (
+              {isAuthorizedAdmin(profile, user) && (
                 <button
                   className="btn-keycap px-6 py-3.5 text-sm w-full bg-red-900/50 text-red-300 border border-red-500/30 hover:bg-red-900/80 cursor-pointer"
                   onClick={() => {
