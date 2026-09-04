@@ -1,8 +1,8 @@
 export const membersData = [
   // CORE LEADERSHIP
-  { id: 101, name: "Hemang", course: "IT", year: "TY", github: "#", linkedin: "#", insta: "#", details: "President", team: "Core Leadership" },
-  { id: 102, name: "Jeet", course: "CS", year: "TY", github: "#", linkedin: "#", insta: "#", details: "Vice President", team: "Core Leadership" },
-  { id: 103, name: "Aadi", course: "DS", year: "TY", github: "#", linkedin: "#", insta: "#", details: "Student Councilor", team: "Core Leadership" },
+  { id: 101, name: "Hemang", course: "CS", year: "TY", github: "#", linkedin: "#", insta: "#", details: "President", team: "Core Leadership" },
+  { id: 102, name: "Jeet", course: "IT", year: "SY", github: "#", linkedin: "#", insta: "#", details: "Vice President", team: "Core Leadership" },
+  { id: 103, name: "Aadi", course: "DS", year: "SY", github: "#", linkedin: "#", insta: "#", details: "Student Councilor", team: "Core Leadership" },
 
   // DEVELOPMENT
   { id: 1, name: "Khushi Singh", course: "CS", year: "SY", github: "#", linkedin: "#", insta: "#", team: "Development" },
