@@ -127,7 +127,7 @@ export default function Events() {
                     <div className="bg-[#0f1015] border border-white/5 p-4 rounded-lg">
 
                       <h5 className="text-white font-bold text-sm mb-1">
-                        Prompt Counter
+                        Prompt Battle
                       </h5>
 
                       <p className="text-xs text-gray-500">
@@ -151,7 +151,7 @@ export default function Events() {
                     <div className="bg-[#0f1015] border border-white/5 p-4 rounded-lg">
 
                       <h5 className="text-white font-bold text-sm mb-1">
-                        AI vs Human
+                        Bot or Brain
                       </h5>
 
                       <p className="text-xs text-gray-500">
@@ -163,7 +163,7 @@ export default function Events() {
                     <div className="bg-[#0f1015] border border-white/5 p-4 rounded-lg">
 
                       <h5 className="text-white font-bold text-sm mb-1">
-                        Tech Pictionary
+                        TechSketch
                       </h5>
 
                       <p className="text-xs text-gray-500">
