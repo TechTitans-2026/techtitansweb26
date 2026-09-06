@@ -8,6 +8,12 @@ export const ALLOWED_ADMIN_NAMES = [
   'armaan',
   'aryan',
   'mohammad',
+  'aadi',
+  'jeet',
+  'hu1253102@sjchs.edu.in',
+  'hu1253102',
+  'hu12512005@sjchs.edu.in',
+  'hu12512005',
 ];
 
 /**

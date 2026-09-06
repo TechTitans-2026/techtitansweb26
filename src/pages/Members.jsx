@@ -46,7 +46,7 @@ export default function Members() {
               <div key={team} className={`reveal in-view flex flex-col h-full ${team === 'Core Leadership' ? 'lg:col-span-3' : ''}`}>
                 <h3 className="text-xl font-bold text-white mb-6 border-b border-[#31333e] pb-4 flex items-center gap-3 min-h-[48px]">
                   <span className="w-2 h-6 bg-[#00f3ff] inline-block rounded shrink-0"></span>
-                  <span className="truncate">{team}{team !== 'Core Leadership' && maxSlots ? ` (${maxSlots} SLOTS)` : ''}</span>
+                  <span className="truncate">{team}</span>
                 </h3>
                 <div className={team === 'Core Leadership' ? 'flex flex-row items-center justify-between sm:justify-evenly w-full max-w-3xl mx-auto px-1 sm:px-6 gap-2 sm:gap-6' : 'grid grid-cols-1 gap-3.5 w-full flex-1'}>
                   {teamMembers.map((member, idx) => (
