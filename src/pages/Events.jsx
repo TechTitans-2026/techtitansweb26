@@ -494,37 +494,7 @@ export default function Events() {
             <h2 className="section-heading text-2xl">
               Archived Events
             </h2>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-
-              <div className="flex gap-4 group items-center glass-panel p-4 bg-transparent border-dashed border-white/10">
-
-                <div className="w-16 h-16 rounded bg-[#161821] flex items-center justify-center text-gray-600 group-hover:text-accent transition-colors shrink-0">
-
-                  <i className="fas fa-lock text-xl"></i>
-
-                </div>
-
-                <div>
-
-                  <p className="font-mono text-accent text-[10px] mb-1">
-                    WAITING FOR DEPLOYMENT
-                  </p>
-
-                  <h4 className="text-white font-bold text-sm tracking-wide">
-                    Inauguration Wrap-up
-                  </h4>
-
-                  <p className="text-xs text-gray-500 mt-1">
-                    Media pending execution of final wrap-up.
-                  </p>
-
-                </div>
-
-              </div>
-
-            </div>
-
+            
           </div>
 
         </div>
