@@ -6,7 +6,6 @@ import './Home.css';
 const getTeamSlots = (teamName) => {
   if (teamName === 'Cybersecurity') return 7;
   if (teamName === 'Events') return 6;
-  if (teamName === 'Support Team' || teamName === 'General Members') return null;
   return 5;
 };
 
