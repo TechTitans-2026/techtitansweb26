@@ -27,7 +27,7 @@ const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth();
   const location = useLocation();
   
-  if (loading) return <div className="min-h-screen bg-[#1a1b22] text-white flex items-center justify-center font-mono text-[#8c8d96]">Loading...</div>;
+  if (loading) return <div className="min-h-screen bg-[#1a1b22] flex items-center justify-center font-mono text-[#8c8d96]">Loading...</div>;
   if (!user) return <Navigate to="/auth" state={{ from: location.pathname, message: 'Please sign in to access this protocol.' }} replace />;
   return children;
 };
@@ -37,7 +37,7 @@ const AdminRoute = ({ children }) => {
   const { user, profile, loading } = useAuth();
   const location = useLocation();
 
-  if (loading) return <div className="min-h-screen bg-[#1a1b22] text-white flex items-center justify-center font-mono text-[#8c8d96]">Loading...</div>;
+  if (loading) return <div className="min-h-screen bg-[#1a1b22] flex items-center justify-center font-mono text-[#8c8d96]">Loading...</div>;
   if (!user) return <Navigate to="/auth" state={{ from: location.pathname, message: 'Please sign in to access this protocol.' }} replace />;
   if (!canClaimAdminAccess(profile, user)) {
     return <Navigate to="/home" state={{ message: 'Access Denied: Only authorized Titan leadership can access the admin panel.' }} replace />;
@@ -107,7 +107,7 @@ function App() {
 
             <Route path="/fysyty" element={
               <AdminRoute>
-                <Suspense fallback={<div className="min-h-screen bg-[#1a1b22] text-white flex items-center justify-center font-mono text-[#8c8d96]">Loading...</div>}>
+                <Suspense fallback={<div className="min-h-screen bg-[#1a1b22] flex items-center justify-center font-mono text-[#8c8d96]">Loading...</div>}>
                   <Admin />
                 </Suspense>
               </AdminRoute>
